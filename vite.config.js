@@ -12,13 +12,7 @@ export default defineConfig({
       }
     }
   },
-  plugins: [
-    vue(),
-    AutoImport({
-      imports: ['vue', 'vue-router', 'pinia'],
-      dts: 'auto-imports.d.ts'
-    })
-  ],
+  plugins: [vue()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
