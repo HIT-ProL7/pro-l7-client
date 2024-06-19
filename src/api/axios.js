@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const api = axios.create({
+const apiInst = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}`,
   headers: {
     'Content-Type': 'application/json'
   }
 });
 
-api.interceptors.request.use(
+apiInst.interceptors.request.use(
   function (config) {
     const token = localStorage.getItem('prol7-vuejs:access-token');
     config.headers.Authorization = `Bearer ${token}`;
@@ -18,7 +18,7 @@ api.interceptors.request.use(
   }
 );
 
-api.interceptors.response.use(
+apiInst.interceptors.response.use(
   function (response) {
     return response;
   },
@@ -30,4 +30,4 @@ api.interceptors.response.use(
   }
 );
 
-export const $api = api;
+export const api = apiInst;
