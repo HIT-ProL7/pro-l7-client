@@ -69,7 +69,7 @@
             background-color: #F06C25;
             color: white; 
             cursor: pointer;
-            // transition: 0.5s;
+            transition: 0.5s;
         }
         .icon{
            padding: 16px 0;
