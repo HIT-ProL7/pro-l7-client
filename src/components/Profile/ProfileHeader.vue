@@ -12,26 +12,32 @@ const props = defineProps({
     <div class="banner">
       <img :src="userImg.banner" alt="" />
     </div>
-    <div class="avatar">
+    <div class="avatar center">
       <div class="avatar-img">
         <div class="img-wrap">
           <img :src="userImg.avatar" alt="" />
         </div>
-        <div class="change-avatar center">
-          <Icon icon="bi:camera-fill" font-size="28px" />
+        <div class="change-avatar icon-setting center">
+          <div class="icon-wrap center">
+            <Icon icon="bi:camera-fill" font-size="28px" />
+          </div>
         </div>
       </div>
       <p class="profile-name">Vũ Gia Chiến</p>
     </div>
     <div class="change-banner center">
-      <div class="change-banner--icon center">
-        <Icon icon="bi:camera-fill" font-size="28px" />
+      <div class="change-banner--icon icon-setting center">
+        <div class="icon-wrap center">
+          <Icon icon="bi:camera-fill" font-size="28px" />
+        </div>
       </div>
       <p>Chỉnh sửa ảnh</p>
     </div>
     <div class="setting-profile center">
-      <div class="setting-profile--icon center">
-        <Icon icon="icon-park-solid:setting-two" font-size="24px"></Icon>
+      <div class="setting-profile--icon icon-setting center">
+        <div class="icon-wrap center">
+          <Icon icon="icon-park-solid:setting-two" font-size="24px" />
+        </div>
       </div>
       <p>Cài đặt</p>
     </div>
@@ -43,6 +49,24 @@ const props = defineProps({
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.icon-setting {
+  padding: 6px;
+  width: 40px;
+  height: 40px;
+  @include small-tablet {
+    width: 30px;
+    height: 30px;
+  }
+  .icon-wrap {
+    width: 100%;
+    height: 100%;
+    svg {
+      color: #535353;
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 .profile--header-wrap {
   width: 100%;
@@ -77,8 +101,8 @@ const props = defineProps({
       top: 50%;
     }
     @include mobile {
-      left: 25px;
-      top: 65%;
+      left: 50%;
+      transform: translate(-50%, 40%);
     }
     .avatar-img {
       position: absolute;
@@ -93,10 +117,6 @@ const props = defineProps({
           width: 90px;
           height: 90px;
         }
-        @include mobile {
-          width: 60px;
-          height: 60px;
-        }
         img {
           width: 100%;
           height: 100%;
@@ -109,30 +129,14 @@ const props = defineProps({
         right: 20px;
         bottom: 0;
         background-color: #b0b0b0;
-        padding: 6px;
         border-radius: 50%;
+        cursor: pointer;
         @include tablet {
           right: 0;
         }
         @include mobile {
           bottom: -5px;
           right: -5px;
-        }
-        cursor: pointer;
-        svg {
-          color: #535353;
-          @include tablet {
-            width: 20px;
-            height: 20px;
-          }
-          @include small-tablet {
-            width: 16px;
-            height: 16px;
-          }
-          @include mobile {
-            width: 12px;
-            height: 12px;
-          }
         }
       }
     }
@@ -148,48 +152,31 @@ const props = defineProps({
         font-size: 20px;
       }
       @include mobile {
-        font-size: 14px;
+        font-size: 18px;
+        bottom: 0;
+        top: 140%;
+        left: 0;
       }
     }
   }
   .change-banner {
     position: absolute;
     background-color: #fff;
-    padding: 8px;
     border-radius: 10px;
-    right: 10px;
-    height: 40px;
+    right: 7px;
     bottom: 14px;
     cursor: pointer;
+    padding-right: 6px;
     @include tablet {
+      right: 4px;
       font-size: 12px;
-    }
-    @include small-tablet {
-      height: 32px;
+      bottom: 11px;
     }
     @include mobile {
-      height: 24px;
-      padding: 4px;
+      padding-right: 0;
       border-radius: 50%;
-      bottom: 4px;
+      bottom: 2px;
       right: 5px;
-    }
-    .change-banner--icon {
-      margin-right: 8px;
-      @include mobile {
-        margin-right: 0;
-      }
-      svg {
-        color: #535353;
-        @include tablet {
-          width: 20px;
-          height: 20px;
-        }
-        @include small-tablet {
-          width: 16px;
-          height: 16px;
-        }
-      }
     }
     p {
       @include mobile {
@@ -200,42 +187,24 @@ const props = defineProps({
   .setting-profile {
     position: absolute;
     background-color: #bfbfbf;
-    padding: 8px;
     border-radius: 10px;
-    right: 10px;
-    height: 40px;
+    right: 7px;
     bottom: -42px;
+    padding-right: 6px;
     cursor: pointer;
     @include tablet {
+      right: 4px;
+      bottom: -38px;
       font-size: 12px;
     }
     @include small-tablet {
-      height: 32px;
-      bottom: -32px;
+      bottom: -20px;
     }
     @include mobile {
-      height: 24px;
-      bottom: -28px;
+      padding-right: 0;
+      bottom: -32px;
       right: 5px;
       border-radius: 50%;
-      padding: 4px;
-    }
-    .setting-profile--icon {
-      margin-right: 8px;
-      @include mobile {
-        margin-right: 0;
-      }
-      svg {
-        color: #535353;
-        @include tablet {
-          width: 20px;
-          height: 20px;
-        }
-        @include small-tablet {
-          width: 16px;
-          height: 16px;
-        }
-      }
     }
     p {
       @include mobile {

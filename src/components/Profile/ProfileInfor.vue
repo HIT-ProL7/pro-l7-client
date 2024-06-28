@@ -12,53 +12,87 @@ const props = defineProps({
       <p class="heading">Giới thiệu</p>
       <div class="content">
         <div>
-          <Icon font-size="24px" icon="mdi:clipboard-text-date" />
+          <div class="icon-wrap center">
+            <Icon font-size="24px" icon="mdi:clipboard-text-date" />
+          </div>
           <p>Ngày tham gia:</p>
           <span>{{ userInfor.joinDate }}</span>
         </div>
-        <div>
-          <Icon font-size="24px" icon="ic:baseline-email" />
-          <p>Email:</p>
-          <span>{{ userInfor.email }}</span>
+        <div class="wrap">
+          <div class="left">
+            <div class="icon-wrap center">
+              <Icon font-size="24px" icon="ic:baseline-email" />
+            </div>
+            <p>Email:</p>
+          </div>
+          <span class="word-wrap">{{ userInfor.email }}</span>
         </div>
-        <div>
-          <Icon font-size="24px" icon="mdi:github" />
-          <p>Github:</p>
-          <span
+        <div class="wrap">
+          <div class="left">
+            <div class="icon-wrap center">
+              <Icon font-size="24px" icon="mdi:github" />
+            </div>
+            <p>Github:</p>
+          </div>
+          <span class="word-wrap"
             ><a :href="userInfor.github" target="_blank">{{ userInfor.github }}</a></span
           >
         </div>
         <div>
-          <Icon font-size="24px" icon="tabler:id" />
+          <div class="icon-wrap center">
+            <Icon font-size="24px" icon="tabler:id" />
+          </div>
           <p>Mã SV:</p>
           <span>{{ userInfor.id }}</span>
         </div>
         <div>
-          <Icon font-size="24px" icon="ph:student-bold" />
+          <div class="icon-wrap center">
+            <Icon font-size="24px" icon="ph:student-bold" />
+          </div>
           <p>Khóa:</p>
           <span>{{ userInfor.term }}</span>
         </div>
       </div>
     </div>
     <div class="desc">
-      <div class="icon icon--left"><span>“</span></div>
-      <div class="content">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas odit dolor possimus amet
-        reprehenderit cum sint velit, blanditiis earum tenetur delectus sapiente labore. Quaerat
-        assumenda recusandae obcaecati, illum modi vel.
-      </div>
-      <div class="icon icon--right"><span>”</span></div>
+      <span class="icon icon--left">“</span>
+      <div class="content">{{ userInfor.desc }}</div>
+      <span class="icon icon--left">”</span>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-wrap {
+  width: 40px;
+  height: 40px;
+  margin-right: 8px;
+  @include small-tablet {
+    width: 30px;
+    height: 30px;
+  }
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
 .profile-infor {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: 40px;
+  @include tablet {
+    gap: 32px;
+  }
+  @include small-tablet {
+    gap: 28px;
+  }
   .infor,
   .desc {
     padding: 24px;
@@ -69,22 +103,52 @@ const props = defineProps({
     box-shadow: 2px 4px 3px 0px rgba(0, 0, 0, 0.35);
     background-color: $body-color;
     font-size: 24px;
+    @include mobile {
+      padding: 18px;
+    }
   }
   .infor {
     .heading {
       font-size: 36px;
       font-weight: 500;
       margin-bottom: 8px;
+      @include tablet {
+        font-size: 32px;
+      }
+      @include mobile {
+        font-size: 22px;
+      }
+    }
+    .content {
+      @include mobile {
+        > div.wrap {
+          align-items: flex-start;
+        }
+      }
     }
     .content > div {
       display: flex;
       align-items: center;
-      svg {
-        margin-right: 8px;
+      .left {
+        display: flex;
+        align-items: center;
+      }
+      @include tablet {
+        font-size: 22px;
+      }
+      @include mobile {
+        font-size: 18px;
+        span.word-wrap {
+          margin-top: 4px;
+        }
       }
       span {
+        overflow-wrap: break-word;
         font-weight: 500;
         margin-left: 8px;
+      }
+      span.word-wrap {
+        word-break: break-word;
       }
     }
   }
@@ -92,13 +156,26 @@ const props = defineProps({
     display: flex;
     align-items: flex-start;
     gap: 8px;
-    .icon span {
+    span.icon {
+      line-height: 24px;
       font-size: 96px;
       position: relative;
-      top: -24px;
+      top: 16px;
+      @include small-tablet {
+        font-size: 72px;
+      }
+      @include mobile {
+        font-size: 56px;
+      }
     }
     .content {
       text-align: justify;
+      @include tablet {
+        font-size: 22px;
+      }
+      @include mobile {
+        font-size: 18px;
+      }
     }
   }
 }

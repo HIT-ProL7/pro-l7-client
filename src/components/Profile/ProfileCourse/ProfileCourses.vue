@@ -32,6 +32,12 @@ const props = defineProps({
     font-size: 36px;
     font-weight: 500;
     margin-bottom: 22px;
+    @include tablet {
+      font-size: 32px;
+    }
+    @include mobile {
+      font-size: 22px;
+    }
   }
   .content {
     width: 100%;
