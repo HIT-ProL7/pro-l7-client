@@ -15,14 +15,19 @@ const routes = [
         component: () => import('@pages/index.vue')
       },
       {
-        path: 'personal-infor',
-        name: 'PersonalInfor',
+        path: 'profile',
+        name: 'Profile',
         meta: {
           title: 'Trang cá nhân'
         },
-        component: () => import('@pages/Personal.vue')
+        component: () => import('@/pages/Profile.vue')
       }
     ]
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@pages/Login.vue')
   }
 ];
 const router = createRouter({
