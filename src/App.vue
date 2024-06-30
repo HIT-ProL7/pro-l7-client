@@ -1,7 +1,11 @@
-<script setup></script>
+<script setup>
+import MessageProvider from './components/Message/MessageProvider.vue';
+</script>
 
 <template>
-  <router-view></router-view>
+  <MessageProvider>
+    <router-view></router-view>
+  </MessageProvider>
 </template>
 
 <style scoped></style>
