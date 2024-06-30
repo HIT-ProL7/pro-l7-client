@@ -35,14 +35,18 @@ input {
 }
 
 body {
-  background: #fff;
+  background: $body-color;
   font-size: 14px;
   line-height: 1.5;
   color: $text-color;
   margin: 0 auto;
-  font-family: 'Poppins', sans-serif;
+  font-family: $text-font;
   -webkit-font-smoothing: antialiased !important;
   -moz-osx-font-smoothing: grayscale !important;
   position: relative;
-  min-height: 100%;
+  min-height: 100vh;
+}
+
+#app {
+  height: 100vh;
 }
