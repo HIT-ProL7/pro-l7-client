@@ -1,6 +1,5 @@
 <script setup lang="js">
-import { reactive} from 'vue';
-
+import { reactive } from 'vue';
 
 const user = reactive({
   username: '',
@@ -20,19 +19,20 @@ const error = reactive({
 
 const rgxUsername = /^\d{10}$/;
 const usernameValidate = () => {
-  if (user.username == '') {
+  if (user.username.trim() == '') {
     error.username.error = true;
     error.username.errorMsg = 'Tài khoản không được để trống';
     return false;
   } else {
     if (!rgxUsername.test(user.username)) {
       error.username.error = true;
-      error.username.errorMsg = 'Tài khoản sai định dạng';
+      error.username.errorMsg = 'Tài khoản phải gồm 10 ký tự số';
       return false;
     } else {
       error.username.error = false;
     }
   }
+  return true;
 };
 
 const rgxPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
@@ -44,17 +44,22 @@ const passwordValidate = () => {
   } else {
     if (!rgxPassword.test(user.password)) {
       error.password.error = true;
-      error.password.errorMsg = 'Mật khẩu sai định dạng';
+      error.password.errorMsg = 'Mật khẩu phải bao gồm ký tự in hoa, thường, số và ký tự đặc biệt';
       return false;
     } else {
       error.password.error = false;
     }
   }
+  return true;
 };
 
 function loginHandler() {
   passwordValidate();
   usernameValidate();
+  
+  if(!usernameValidate() || !passwordValidate()){
+    return 0;
+  }
   
 }
 </script>
@@ -64,7 +69,7 @@ function loginHandler() {
     <form class="login-con">
       <img class="logo" style="width: 88px; height: 88px" src="../assets/logo.png" alt="logo" />
       <div class="user-name">
-        <p>Username</p>
+        <p>Tài khoản</p>
         <div class="login">
           <svg
             class="ic"
@@ -81,7 +86,7 @@ function loginHandler() {
           <input
             id="u-name"
             type="text"
-            placeholder="Enter your user name"
+            placeholder="Nhập tài khoản"
             v-model="user.username"
             required
             autofocus
@@ -90,7 +95,7 @@ function loginHandler() {
         <p class="errorMsg" v-if="error.username.error">{{ error.username.errorMsg }}</p>
       </div>
       <div class="password">
-        <p>Password</p>
+        <p>Mật khẩu</p>
         <div class="login">
           <svg
             class="ic"
@@ -104,24 +109,19 @@ function loginHandler() {
               d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2m-6 9c-1.1 0-2-.9-2-2s.9-2 2-2s2 .9 2 2s-.9 2-2 2m3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1c1.71 0 3.1 1.39 3.1 3.1z"
             />
           </svg>
-          <input
-            id="pw"
-            type="password"
-            placeholder="Enter your password"
-            v-model="user.password"
-          />
+          <input id="pw" type="password" placeholder="Nhập mật khẩu" v-model="user.password" />
         </div>
         <p class="errorMsg" v-if="error.password.error">{{ error.password.errorMsg }}</p>
       </div>
-      <a href="#">Forgot password? </a>
-      <button @click.prevent="loginHandler()">Log In</button>
+      <a href="#">Quên mật khẩu? </a>
+      <button @click.prevent="loginHandler()">Đăng nhập</button>
     </form>
   </div>
 </template>
 
 <style lang="scss" scoped>
 template {
-  height: 100%;
+  height: 100vh;
   margin: 0;
 }
 
@@ -150,6 +150,8 @@ template {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  border-radius: 25px;
+  overflow: hidden;
   p.errorMsg {
     color: rgb(238, 59, 59);
     padding-bottom: 0px;
