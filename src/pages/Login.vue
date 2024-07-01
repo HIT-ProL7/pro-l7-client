@@ -54,13 +54,9 @@ const passwordValidate = () => {
 };
 
 function loginHandler() {
-  passwordValidate();
-  usernameValidate();
-  
-  if(!usernameValidate() || !passwordValidate()){
-    return 0;
+  if (!usernameValidate() || !passwordValidate()) {
+    return;
   }
-  
 }
 </script>
 
