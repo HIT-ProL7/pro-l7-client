@@ -20,7 +20,9 @@ export default defineConfig({
       '@layout': path.resolve(__dirname, './src/layouts'),
       '@styles': path.resolve(__dirname, './src/styles'),
       '@stores': path.resolve(__dirname, './src/stores'),
-      '@router': path.resolve(__dirname, './src/router')
+      '@router': path.resolve(__dirname, './src/router'),
+      '@assets': path.resolve(__dirname, './src/assets'),
+      '@api': path.resolve(__dirname, './src/api')
     }
   }
 });
