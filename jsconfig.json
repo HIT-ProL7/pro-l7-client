@@ -11,7 +11,9 @@
       "@layout/*": ["./src/layouts/*"],
       "@styles/*": ["./src/styles/*"],
       "@stores/*": ["./src/stores/*"],
-      "@router/*": ["./src/router/*"]
+      "@router/*": ["./src/router/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@api/*": ["./src/api/*"]
     }
   },
   "include": ["src/**/*.vue", "src/**/*.js"],
