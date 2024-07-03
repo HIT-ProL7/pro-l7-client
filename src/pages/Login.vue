@@ -122,9 +122,9 @@ template {
 }
 
 .login-cha {
+  background-image: url(../assets/anhsinhnhat.png);
   width: 100%;
   height: 100%;
-  background-image: url(../assets/anhsinhnhat.png);
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
@@ -148,6 +148,15 @@ template {
   flex-direction: column;
   border-radius: 25px;
   overflow: hidden;
+  @include tablet {
+    width: 470px;
+    height: 490px;
+  }
+  @include mobile {
+    width: 380px;
+    height: 480px;
+    
+  }
   p.errorMsg {
     color: rgb(238, 59, 59);
     padding-bottom: 0px;
@@ -166,6 +175,13 @@ template {
       height: 35px;
       border-radius: 20px;
       border: none;
+      @include tablet {
+        width: 380px;
+      }
+      @include mobile {
+        width: 250px;
+        height: 32px;
+      }
     }
     .ic {
       position: absolute;
@@ -197,6 +213,14 @@ template {
     background-color: #ff7e57;
     color: white;
     margin-top: 70px;
+    @include tablet {
+      margin-top: 40px;
+      width: 400px;
+    }
+    @include mobile {
+      margin-top: 32px;
+      width: 280px;
+    }
   }
 }
 </style>
