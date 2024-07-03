@@ -21,6 +21,14 @@ const routes = [
           title: 'Trang cá nhân'
         },
         component: () => import('@/pages/Profile.vue')
+      },
+      {
+        path: 'class/:id',
+        name: 'Class',
+        // meta: {
+        //   title: 'Chi tiết lớp'
+        // },
+        component: () => import('@/pages/Class.vue')
       }
     ]
   },
