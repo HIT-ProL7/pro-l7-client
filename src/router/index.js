@@ -25,9 +25,6 @@ const routes = [
       {
         path: 'class/:id',
         name: 'Class',
-        // meta: {
-        //   title: 'Chi tiết lớp'
-        // },
         component: () => import('@/pages/Class.vue')
       }
     ]
