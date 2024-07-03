@@ -1,14 +1,14 @@
 <script setup></script>
 
 <template>
-  <div class="class-learningPath-wrap">
+  <div class="class-roadmap-wrap">
     <p class="heading">Lộ trình lớp học</p>
-    <div class="learning-path"></div>
+    <div class="roadmap"></div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.class-learningPath-wrap {
+.class-roadmap-wrap {
   .heading {
     font-size: 36px;
     margin: 32px 0;

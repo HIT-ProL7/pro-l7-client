@@ -1,9 +1,9 @@
 <script setup>
 import ClassInfor from '@components/ClassDetails/ClassInfor.vue';
 import ClassLesson from '@components/ClassDetails/ClassLesson.vue';
-import ClassLearningPath from '@components/ClassDetails/ClassLearningPath.vue';
+import ClassRoadmap from '@components/ClassDetails/ClassRoadmap.vue';
 import ClassMember from '@/components/ClassDetails/ClassMember.vue';
-import { NTabs, NTabPane, NConfigProvider } from 'naive-ui';
+import { NTabs, NTabPane } from 'naive-ui';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
@@ -68,26 +68,24 @@ onMounted(() => {
   document.title = `${classDetails.value.name} | ProL7`;
 });
 
-const themeOverrides = ref({
-  Tabs: {
-    barColor: '#F06C25FF',
-    tabTextColorActiveLine: '#F06C25FF',
-    tabTextColorHoverLine: '#F06C25FF',
-    tabTextColorHoverBar: '#F06C25FF',
-    tabTextColorActiveBar: '#F06C25FF',
-    tabTextColorActiveCard: '#F06C25FF',
-    tabFontSizeSmall: '24px',
-    tabFontSizeMedium: '36px'
-  }
+const tabsThemeOverrides = ref({
+  barColor: '#F06C25FF',
+  tabTextColorActiveLine: '#F06C25FF',
+  tabTextColorHoverLine: '#F06C25FF',
+  tabTextColorHoverBar: '#F06C25FF',
+  tabTextColorActiveBar: '#F06C25FF',
+  tabTextColorActiveCard: '#F06C25FF',
+  tabFontSizeSmall: '24px',
+  tabFontSizeMedium: '36px'
 });
 
 const setResponsiveTheme = () => {
   if (window.innerWidth > 768 && window.innerWidth <= 1025)
-    themeOverrides.value.Tabs.tabFontSizeMedium = '36px';
+    tabsThemeOverrides.value.tabFontSizeMedium = '36px';
   else if (window.innerWidth >= 480 && window.innerWidth <= 768)
-    themeOverrides.value.Tabs.tabFontSizeMedium = '24px';
-  else if (window.innerWidth < 480) themeOverrides.value.Tabs.tabFontSizeMedium = '18px';
-  else themeOverrides.value.Tabs.tabFontSizeMedium = '36px';
+    tabsThemeOverrides.value.tabFontSizeMedium = '24px';
+  else if (window.innerWidth < 480) tabsThemeOverrides.value.tabFontSizeMedium = '18px';
+  else tabsThemeOverrides.value.tabFontSizeMedium = '36px';
 };
 
 const justify = ref('');
@@ -105,33 +103,32 @@ justifyCenter();
 </script>
 
 <template>
-  <n-config-provider :theme-overrides="themeOverrides">
-    <div class="class-wrap">
-      <div class="back" @click="router.go(-1)">
-        <Icon icon="ep:arrow-left-bold" color="#fff" />
-      </div>
-      <ClassInfor :classInfor="classDetails" />
-      <div class="class-nav">
-        <n-tabs
-          type="line"
-          animated
-          class="custom-nav"
-          tab-class="custom-tab"
-          :justify-content="justify"
-        >
-          <n-tab-pane name="Bài học" tab="Bài học">
-            <ClassLesson :classLesson="classDetails.lessons" />
-          </n-tab-pane>
-          <n-tab-pane name="Lộ trình" tab="Lộ trình">
-            <ClassLearningPath />
-          </n-tab-pane>
-          <n-tab-pane name="Thành viên" tab="Thành viên">
-            <ClassMember :classMembers="classDetails.members" />
-          </n-tab-pane>
-        </n-tabs>
-      </div>
+  <div class="class-wrap">
+    <div class="back" @click="router.go(-1)">
+      <Icon icon="ep:arrow-left-bold" color="#fff" />
     </div>
-  </n-config-provider>
+    <ClassInfor :classInfor="classDetails" />
+    <div class="class-nav">
+      <n-tabs
+        type="line"
+        animated
+        class="custom-nav"
+        tab-class="custom-tab"
+        :justify-content="justify"
+        :theme-overrides="tabsThemeOverrides"
+      >
+        <n-tab-pane name="Bài học" tab="Bài học">
+          <ClassLesson :classLesson="classDetails.lessons" />
+        </n-tab-pane>
+        <n-tab-pane name="Lộ trình" tab="Lộ trình">
+          <ClassRoadmap />
+        </n-tab-pane>
+        <n-tab-pane name="Thành viên" tab="Thành viên">
+          <ClassMember :classMembers="classDetails.members" />
+        </n-tab-pane>
+      </n-tabs>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
