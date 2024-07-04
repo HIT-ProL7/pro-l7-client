@@ -107,7 +107,7 @@ justifyCenter();
     <div class="back" @click="router.go(-1)">
       <Icon icon="ep:arrow-left-bold" color="#fff" />
     </div>
-    <ClassInfor :classInfor="classDetails" />
+    <ClassInfor :class-infor="classDetails" />
     <div class="class-nav">
       <n-tabs
         type="line"
@@ -118,13 +118,13 @@ justifyCenter();
         :theme-overrides="tabsThemeOverrides"
       >
         <n-tab-pane name="Bài học" tab="Bài học">
-          <ClassLesson :classLesson="classDetails.lessons" />
+          <ClassLesson :class-lesson="classDetails.lessons" />
         </n-tab-pane>
         <n-tab-pane name="Lộ trình" tab="Lộ trình">
           <ClassRoadmap />
         </n-tab-pane>
         <n-tab-pane name="Thành viên" tab="Thành viên">
-          <ClassMember :classMembers="classDetails.members" />
+          <ClassMember :class-members="classDetails.members" />
         </n-tab-pane>
       </n-tabs>
     </div>
