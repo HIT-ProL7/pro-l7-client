@@ -21,6 +21,11 @@ const routes = [
           title: 'Trang cá nhân'
         },
         component: () => import('@/pages/Profile.vue')
+      },
+      {
+        path: 'class/:id',
+        name: 'Class',
+        component: () => import('@/pages/Class.vue')
       }
     ]
   },
