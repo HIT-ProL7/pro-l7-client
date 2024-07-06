@@ -125,7 +125,7 @@ template {
   background-image: url(../assets/anhsinhnhat.png);
   width: 100%;
   height: 100%;
-  background-size: 100% 100%;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   display: flex;
