@@ -32,6 +32,9 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
+    meta: {
+      title: 'Trang đăng nhập'
+    },
     component: () => import('@pages/Login.vue')
   }
 ];
