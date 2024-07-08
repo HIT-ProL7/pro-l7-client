@@ -1,9 +1,67 @@
 <script setup>
 import { Icon } from '@iconify/vue';
-import { defineProps } from 'vue';
+import { defineProps, ref, watch, onMounted, onBeforeUnmount } from 'vue';
+import { NModal, NCard } from 'naive-ui';
+import InforUpdate from '@/components/Profile/ProfileUpdate/InforUpdate.vue';
+import ImageUpdate from '@/components/Profile/ProfileUpdate/ImageUpdate.vue';
 
 const props = defineProps({
   userImg: { type: Object, require: true }
+});
+
+const showModal = ref(false);
+const bodyStyle = ref({
+  width: '40%',
+  'text-align': 'center',
+  'border-radius': '20px',
+  background: 'linear-gradient(135deg, rgba(255, 126, 87, 1) 0%, rgba(254, 180, 123, 1) 100%)'
+});
+
+const inforUpdate = ref(false);
+const avatar = ref(false);
+const title = ref('');
+function toggleSetting(name) {
+  showModal.value = true;
+  if (name === 'setting') {
+    inforUpdate.value = true;
+  } else {
+    inforUpdate.value = false;
+    if (name === 'avatar') {
+      avatar.value = true;
+      title.value = 'avatar';
+    } else if (name === 'banner') {
+      avatar.value = false;
+      title.value = 'banner';
+    }
+  }
+}
+
+const setWidth = () => {
+  if (!inforUpdate.value) {
+    if (window.innerWidth < 480) {
+      bodyStyle.value.width = '100%';
+    } else bodyStyle.value.width = 'fit-content';
+  } else {
+    if (window.innerWidth >= 480 && window.innerWidth <= 1440) {
+      bodyStyle.value.width = '80%';
+    } else if (window.innerWidth < 480) {
+      bodyStyle.value.width = '100%';
+    } else {
+      bodyStyle.value.width = '40%';
+    }
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('resize', setWidth);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', setWidth);
+});
+
+watch([showModal, inforUpdate, avatar], () => {
+  setWidth();
 });
 </script>
 
@@ -17,7 +75,7 @@ const props = defineProps({
         <div class="img-wrap">
           <img :src="userImg.avatar" alt="" />
         </div>
-        <div class="change-avatar icon-setting center">
+        <div class="change-avatar icon-setting center" @click="toggleSetting('avatar')">
           <div class="icon-wrap center">
             <Icon icon="bi:camera-fill" font-size="28px" />
           </div>
@@ -25,7 +83,7 @@ const props = defineProps({
       </div>
       <p class="profile-name">Vũ Gia Chiến</p>
     </div>
-    <div class="change-banner center">
+    <div class="change-banner center" @click="toggleSetting('banner')">
       <div class="change-banner--icon icon-setting center">
         <div class="icon-wrap center">
           <Icon icon="bi:camera-fill" font-size="28px" />
@@ -33,7 +91,7 @@ const props = defineProps({
       </div>
       <p>Chỉnh sửa ảnh</p>
     </div>
-    <div class="setting-profile center">
+    <div class="setting-profile center" @click="toggleSetting('setting')">
       <div class="setting-profile--icon icon-setting center">
         <div class="icon-wrap center">
           <Icon icon="icon-park-solid:setting-two" font-size="24px" />
@@ -42,6 +100,22 @@ const props = defineProps({
       <p>Cài đặt</p>
     </div>
   </div>
+  <n-modal v-model:show="showModal" class="custom-card" size="huge" title="Cài đặt">
+    <n-card :style="bodyStyle" :bordered="false" size="huge">
+      <template #header>
+        <div class="custom-header" v-if="inforUpdate">
+          <p>Cài đặt</p>
+          <div class="close-modal" @click="showModal = false">x</div>
+        </div>
+        <div class="custom-header-setting" v-if="!inforUpdate">
+          <p>Cập nhật {{ title }} của bạn</p>
+          <div class="close-modal" @click="showModal = false">x</div>
+        </div>
+      </template>
+      <InforUpdate v-if="inforUpdate" />
+      <ImageUpdate :avatar="avatar" v-if="!inforUpdate" />
+    </n-card>
+  </n-modal>
 </template>
 
 <style lang="scss" scoped>
@@ -65,6 +139,58 @@ const props = defineProps({
       color: #535353;
       width: 100%;
       height: 100%;
+    }
+  }
+}
+.close-modal {
+  color: #5e5e5e;
+  font-size: 28px;
+  cursor: pointer;
+  @include mobile {
+    font-size: 24px;
+  }
+}
+.custom-header {
+  width: 100%;
+  padding: 16px;
+  font-size: 36px;
+  text-align: center;
+  font-weight: bold;
+  color: #fff;
+  border-bottom: 1px solid #fff;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @include mobile {
+    font-size: 28px;
+  }
+  p {
+    flex: 1;
+  }
+}
+.custom-header-setting {
+  width: 100%;
+  padding: 16px;
+  background: #fff;
+  border-radius: 20px;
+  font-size: 36px;
+  text-align: center;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @include mobile {
+    font-size: 28px;
+  }
+  p {
+    background-image: linear-gradient(to right, #fd5c63, #ff9966);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    flex: 1;
+    @include mobile {
+      font-size: 24px;
     }
   }
 }
@@ -143,7 +269,7 @@ const props = defineProps({
     .profile-name {
       font-size: 42px;
       position: relative;
-      left: 80%;
+      left: 90%;
       top: 100%;
       @include tablet {
         font-size: 28px;
