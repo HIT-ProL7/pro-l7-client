@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  app:
+    container_name: prol7
+    image: prol7
+    build:
+      context: .
+    ports:
+      - '80:80'
