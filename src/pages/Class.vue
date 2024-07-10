@@ -137,6 +137,7 @@ justifyCenter();
   width: 100%;
   margin-bottom: 32px;
   position: relative;
+  min-height: 1000px;
   .back {
     width: 28px;
     height: 28px;
