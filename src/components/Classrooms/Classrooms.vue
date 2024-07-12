@@ -16,7 +16,7 @@ function goToClassDetail(classId) {
 <template>
   <div class="class-list-wrap">
     <div class="class-title">
-      <p class="my-class">Lớp học của tôi</p>
+      <p class="my-class">Lớp học của tôi - Jenkins</p>
     </div>
 
     <div class="class-list">
