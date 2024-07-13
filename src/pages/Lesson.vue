@@ -24,45 +24,6 @@ const lessons = [
       { id: 'ls2D2', name: 'Video bài học 2', content: 'Content5' },
       { id: 'ls2D3', name: 'BTVN 2', content: 'Content6' }
     ]
-  },
-  {
-    id: 'ls3',
-    name: 'Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2',
-    lessonDetails: [
-      {
-        id: 'ls2D1',
-        name: 'Giới thiệu 2',
-        content: 'Content4'
-      },
-      { id: 'ls2D2', name: 'Video bài học 2', content: 'Content5' },
-      { id: 'ls2D3', name: 'BTVN 2', content: 'Content6' }
-    ]
-  },
-  {
-    id: 'ls4',
-    name: 'Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2',
-    lessonDetails: [
-      {
-        id: 'ls2D1',
-        name: 'Giới thiệu 2',
-        content: 'Content4'
-      },
-      { id: 'ls2D2', name: 'Video bài học 2', content: 'Content5' },
-      { id: 'ls2D3', name: 'BTVN 2', content: 'Content6' }
-    ]
-  },
-  {
-    id: 'ls5',
-    name: 'Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2 Giới thiệu 2',
-    lessonDetails: [
-      {
-        id: 'ls2D1',
-        name: 'Giới thiệu 2',
-        content: 'Content4'
-      },
-      { id: 'ls2D2', name: 'Video bài học 2', content: 'Content5' },
-      { id: 'ls2D3', name: 'BTVN 2', content: 'Content6' }
-    ]
   }
 ];
 
