@@ -70,7 +70,6 @@ const setResponsive = () => {
 
 onMounted(() => {
   window.addEventListener('resize', setResponsive);
-  document.title = `Bài học | ProL7`;
 });
 
 onBeforeUnmount(() => {

@@ -47,6 +47,8 @@ watch(
 onMounted(() => {
   getLesson(route.params.lsId);
   getLessonDetail(route.params.lsdId);
+
+  document.title = `${lessonDetail.value.name} | ProL7`;
 });
 </script>
 
