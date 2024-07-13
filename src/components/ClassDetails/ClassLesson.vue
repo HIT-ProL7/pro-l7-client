@@ -1,6 +1,9 @@
 <script setup>
 import { Icon } from '@iconify/vue';
 import { ref, defineProps } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const props = defineProps({
   classLesson: { type: Array, require: true }
@@ -25,7 +28,9 @@ function toggleLesson(index) {
           <div class="lesson-detail" v-if="show[index]">
             <div v-for="(lsd, i) in ls.lessonDetails" :key="i">
               <div class="icon-wrap"><Icon icon="fluent:document-one-page-24-filled" /></div>
-              <p>{{ i + 1 }}. {{ lsd.name }}</p>
+              <router-link :to="{ name: 'Lesson-detail', params: { lsId: ls.id, lsdId: lsd.id } }">
+                <p>{{ i + 1 }}. {{ lsd.name }}</p>
+              </router-link>
             </div>
           </div>
         </transition>
