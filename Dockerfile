@@ -6,7 +6,7 @@ COPY . .
 RUN yarn
 RUN yarn build
 
-FROM nginx:1.21.0-alpine as production
+FROM nginx:1.21.0-alpine AS production
 RUN touch /var/run/nginx.pid && \
     mkdir -p /var/cache/nginx && \
     chown -R nginx:nginx /var/cache/nginx /var/run/nginx.pid
