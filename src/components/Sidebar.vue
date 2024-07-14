@@ -1,19 +1,74 @@
 <script setup lang="js">
 import { useRouter } from 'vue-router';
-
+import {ref, onMounted, onBeforeUnmount} from 'vue'
 const router = useRouter();
+const toggleMenu= ref(false);
+const toggleSidebar = ref(false);
+
+const res = ref(false);
+const setRes = () => {
+  if (window.innerWidth < 480) {
+    toggleSidebar.value = true;
+    res.value = true;
+  } else {
+    toggleSidebar.value = false;
+    res.value = false;
+  }
+};
+
+function toggleMenuHandler() {
+  if (res.value) {
+    router.replace({name: "Profile"});
+    toggleSidebar.value = !toggleSidebar.value;
+  }
+  else  toggleMenu.value=!toggleMenu.value
+}
+
+function autoCloseSidebar(action) {
+  if (res.value) {
+    action;
+    toggleSidebar.value = !toggleSidebar.value;
+    console.log("object");
+  } else action
+}
+
+onMounted(() => {
+  window.addEventListener('resize', setRes);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', setRes);
+});
+
+setRes();
 </script>
 
 <template>
-  <div class="side-bar">
-    <div class="logo" @click="router.push('/')">
+  <div class="bar" v-if="res" @click="toggleSidebar = !toggleSidebar"><svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1em" viewBox="0 0 1536 1280"><path fill="currentColor" d="M1536 1088v128q0 26-19 45t-45 19H64q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h1408q26 0 45 19t19 45m0-512v128q0 26-19 45t-45 19H64q-26 0-45-19T0 704V576q0-26 19-45t45-19h1408q26 0 45 19t19 45m0-512v128q0 26-19 45t-45 19H64q-26 0-45-19T0 192V64q0-26 19-45T64 0h1408q26 0 45 19t19 45"/></svg></div>
+  <transition name="slide">
+    <div class="side-bar" v-if="!toggleSidebar">
+    <div class="exit-side-bar" v-if="res" @click="toggleSidebar = !toggleSidebar">x</div>
+    <div class="logo" @click="autoCloseSidebar(router.push('/'))">
       <img src="../assets/logo.png" alt="logo" />
     </div>
     <br />
-    <div class="avatar" @click="router.push('profile')">
-      <img src="../assets/avatar.png" alt="" />
+    <div class="drop-down">
+    <div class="avatar" @click="toggleMenuHandler">
+      <img src="../assets/avatar.png" alt="avartar" />
     </div>
-    <div class="icon-cha" @click="router.push('/')">
+    
+    <ul class="menu" v-if="toggleMenu">
+      <li class="fist">
+        <img src="../assets/avatar.png" alt="avartar">
+        <span>Vũ Gia Chiến<p>User name</p></span>
+      </li>
+      <li @click="router.replace({name: 'Profile'})">Trang cá nhân</li>
+      <li>Chế độ sáng/ tối</li>
+      <li>Đăng xuất</li>
+    </ul>
+    </div>
+    
+    <div class="icon-cha" @click="autoCloseSidebar(router.push('/'))">
       <div class="icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
           <path
@@ -40,11 +95,17 @@ const router = useRouter();
             />
             <path
               fill="currentColor"
-              d="M13 13a4 4 0 0 1 4 4v1.5a1.5 1.5 0 0 1-1.5 1.5h-12A1.5 1.5 0 0 1 2 18.5V17a4 4 0 0 1 4-4zm6 0a3 3 0 0 1 3 3v1.5a1.5 1.5 0 0 1-1.5 1.5H19v-2a5 5 0 0 0-2-4zM9.5 3a4.5 4.5 0 1 1 0 9a4.5 4.5 0 0 1 0-9M18 6a3 3 0 1 1 0 6a3 3 0 0 1 0-6"
-            />
+              d="M13 13a4 4 0 0 1 4 4v1.5a1.5 1.5 0 0 1-1.5 1.5h-12A1.5 1.5 0 0 1 2 18.5V17a4 4 0 0 1 4-4zm6 0a3 3 0 0 1 3 3v1.5a1.5 1.5 0 0 1-1.5 1.5H19v-2a5 5 0 0 0-2-4zM9.5 3a4.5 4.5 0 1 1 0 9a4.5 4.5 0 0 1 0-9M18 6a3 3 0 1 1 0 6a3 3 0 0 1 0-6"/>
           </g>
         </svg>
         <p>Bạn bè</p>
+      </div>
+      <div class="icon" v-if="res">
+        <p>Chế độ sáng tối</p>
+      </div>
+      <div class="icon" v-if="res">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 14 14"><path fill="black" fill-rule="evenodd" d="M0 1.5A1.5 1.5 0 0 1 1.5 0h7A1.5 1.5 0 0 1 10 1.5v1.939a2 2 0 0 0-.734 1.311H5.75a2.25 2.25 0 1 0 0 4.5h3.516A2 2 0 0 0 10 10.561V12.5A1.5 1.5 0 0 1 8.5 14h-7A1.5 1.5 0 0 1 0 12.5zm10.963 2.807A.75.75 0 0 0 10.5 5v1H5.75a1 1 0 0 0 0 2h4.75v1a.75.75 0 0 0 1.28.53l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-.817-.163" clip-rule="evenodd"/></svg>
+        <p>Đăng xuất</p>
       </div>
     </div>
     <div class="chuong">
@@ -69,46 +130,89 @@ const router = useRouter();
       </svg>
     </div>
   </div>
+  </transition>
 </template>
-
 <style lang="scss" scoped>
+.bar{
+  width: 50px;
+  height: 50px;
+  color: $color-primary;
+  padding: 8px;
+  border-radius: 50%;
+  border: 3px solid $color-primary;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1001;
+}
 .side-bar {
   width: 90px;
   height: 100vh;
   background-color: white;
   font-size: 13px;
   text-align: center;
+  // position: fixed;
   display: flex;
   flex-direction: column;
   align-items: center;
   @include mobile {
-    display: none;
+    width: 100%;
+    position: fixed;
+    z-index: 1002;
+  }
+  .exit-side-bar {
+    font-size: 24px;
+    @include mobile {
+      position: absolute;
+      top: 10px;
+      right: 25px;
+    }
   }
   .logo {
     border-bottom: 1px solid #777575;
     width: 90px;
     height: 90px;
     padding: 15px;
+    @include mobile {
+      width: 100%;
+      height: fit-content;
+    }
     img {
       height: 100%;
       width: 100%;
       object-fit: cover;
+      @include mobile {
+        height: 50px;
+        width: 50px;
+      }
     }
   }
   .avatar {
     width: 72px;
     height: 72px;
     margin-bottom: 16px;
+    cursor: pointer;
+
     img {
       height: 100%;
       width: 100%;
       object-fit: cover;
+
     }
   }
   .icon-cha {
-    width: 80px;
+    width: 100%;
     height: 296px;
-    padding: 4px 4px 56px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @include mobile {
+      width: 100%;
+    }
   }
   .icon:hover {
     background-color: #f06c25;
@@ -117,15 +221,24 @@ const router = useRouter();
     transition: 0.5s;
   }
   .icon {
+    width: 80%;
     padding: 16px 0;
-    padding-left: 4px;
-    padding-right: 4px;
-    margin-bottom: 16px;
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
     border-radius: 8px;
+    @include mobile {
+      flex-direction: row;
+    }
+    svg {
+      @include mobile {
+        margin-right: 8px;
+      }
+    }
+    &:not(:last-child) {
+      margin-bottom: 8px;
+    }
   }
   .chuong {
     border-radius: 100%;
@@ -134,7 +247,55 @@ const router = useRouter();
     height: 56px;
     padding: 10px;
     bottom: 25px;
+    position: fixed;
+  }
+  .menu{
+    width: 250px;
+    height: 230px;
+    border: 1px solid #f06c25;
     position: absolute;
+    left: 100px;
+    top: 90px;
+    font-size: 15px;
+    padding: 0 30px;
+    border-radius: 4px;
+    background-color: #Fff;
+    text-align: start;
+    z-index: 999;
+    span{
+      margin-left: 10px;
+      p{
+        font-size: 12px;
+      }
+    }
+    .fist{
+      display: flex;
+      align-items: center;
+      
+    }
+    li{
+      padding: 13px 0;
+      cursor: pointer;
+    }
+    li:not(:last-child){
+      border-bottom: 1px solid #949494;
+      
+    }
+    img{width: 40px;
+      height: 40px;
+    }
+
   }
 }
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.5s ease-in-out;
+}
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(-30px);
+  opacity: 0;
+  padding: 0;
+}
 </style>
+              
