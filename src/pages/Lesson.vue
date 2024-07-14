@@ -1,0 +1,305 @@
+<script setup>
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { Icon } from '@iconify/vue';
+const lessons = [
+  {
+    id: 'ls1',
+    name: 'Giới thiệu',
+    lessonDetails: [
+      { id: 'ls1D1', name: 'Giới thiệu lớp học', content: 'Content1' },
+      { id: 'ls1D2', name: 'Video bài học', content: 'Content2' },
+      { id: 'ls1D3', name: 'BTVN', content: 'Content3' }
+    ]
+  },
+  {
+    id: 'ls2',
+    name: 'Giới thiệu 2',
+    lessonDetails: [
+      {
+        id: 'ls2D1',
+        name: 'Giới thiệu 2',
+        content: 'Content4'
+      },
+      { id: 'ls2D2', name: 'Video bài học 2', content: 'Content5' },
+      { id: 'ls2D3', name: 'BTVN 2', content: 'Content6' }
+    ]
+  }
+];
+
+const show = ref([0]);
+function toggleLesson(index) {
+  show.value[index] = !show.value[index];
+}
+
+const router = useRouter();
+
+const lesson = ref({});
+function getLesson(lsId) {
+  lesson.value = lessons.find((ls) => ls.id === lsId);
+}
+
+const lessonDetail = ref({});
+function getLessonDetail(lsdId) {
+  lessonDetail.value = lesson.value.lessonDetails.find((lsd) => lsd.id === lsdId);
+}
+
+function goToLessonDetail(lsId, lsdId) {
+  getLesson(lsId);
+  getLessonDetail(lsdId);
+
+  router.push({ name: 'Lesson-detail', params: { lsId: lsId, lsdId: lsdId } });
+  if (!responsive.value) showLessonList.value = false;
+}
+
+const showLessonList = ref(true);
+const responsive = ref(true);
+function toggleLessonList() {
+  showLessonList.value = !showLessonList.value;
+}
+
+const setResponsive = () => {
+  if (window.innerWidth >= 1440) {
+    showLessonList.value = true;
+    responsive.value = true;
+  } else {
+    showLessonList.value = false;
+    responsive.value = false;
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('resize', setResponsive);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', setResponsive);
+});
+
+setResponsive();
+</script>
+
+<template>
+  <div class="lesson-wrap">
+    <div class="lesson-content-wrap">
+      <router-view :lesson-details="lesson.lessonDetails"></router-view>
+    </div>
+    <transition name="slide-right">
+      <div class="lesson-list-wrap" v-if="showLessonList">
+        <div class="lesson-list">
+          <div class="heading">
+            <div class="close-list" @click="toggleLessonList" v-if="!responsive">x</div>
+            <p>Nội dung khóa học</p>
+          </div>
+          <div class="lesson" v-for="(ls, index) in lessons" :key="index">
+            <div class="lesson-title" @click="toggleLesson(index)">
+              <div class="icon-title-wrap"><Icon icon="ic:round-play-arrow" color="#F06C25" /></div>
+              <p>{{ index + 1 }}. {{ ls.name }}</p>
+            </div>
+            <transition name="slide">
+              <div class="lesson-detail" v-if="show[index]">
+                <div
+                  v-for="(lsd, i) in ls.lessonDetails"
+                  :key="i"
+                  @click="goToLessonDetail(ls.id, lsd.id)"
+                >
+                  <div class="icon-wrap">
+                    <Icon icon="fluent:document-one-page-24-filled" />
+                  </div>
+                  <p>{{ i + 1 }}. {{ lsd.name }}</p>
+                </div>
+              </div>
+            </transition>
+          </div>
+        </div>
+      </div>
+    </transition>
+    <div class="toggle-lesson-list" @click="toggleLessonList" v-if="!responsive">
+      <div class="icon-wrap">
+        <Icon icon="material-symbols:play-lesson" />
+      </div>
+    </div>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+::-webkit-scrollbar {
+  width: 10px;
+  @include tablet {
+    width: 0px;
+  }
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+.lesson-wrap {
+  display: flex;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  .lesson-content-wrap {
+    width: 100%;
+    height: 100vh;
+  }
+  .toggle-lesson-list {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid $color-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    cursor: pointer;
+    @include mobile {
+      width: 50px;
+      height: 50px;
+    }
+    .icon-wrap {
+      width: 32px;
+      height: 32px;
+      color: $color-primary;
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  .lesson-list-wrap {
+    width: 30%;
+    height: 100vh;
+    background-color: #fff;
+    overflow-y: scroll;
+    @media (max-width: 1440px) {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 9999;
+      width: 100%;
+    }
+  }
+  .lesson-list {
+    display: flex;
+    flex-direction: column;
+    padding: 24px 6px;
+    overflow-y: auto;
+    background-color: #fff;
+    z-index: 9999;
+    .heading {
+      font-size: 36px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      @include mobile {
+        font-size: 28px;
+        justify-content: center;
+      }
+      .close-list {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        border-radius: 50%;
+        border: 1px solid;
+        width: 50px;
+        height: 50px;
+        margin-right: 8px;
+      }
+    }
+    .lesson {
+      background-color: #fff;
+      overflow: hidden;
+      padding: 0 12px;
+      &:not(:last-child) {
+        margin-bottom: 8px;
+      }
+      .lesson-title {
+        font-size: 32px;
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        border: 1px solid $color-primary;
+        border-radius: 8px;
+        cursor: pointer;
+        @include mobile {
+          font-size: 24px;
+        }
+        .icon-title-wrap {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+      .lesson-detail {
+        transition: all 0.5s;
+        padding: 32px 0 32px 32px;
+        cursor: pointer;
+        @include mobile {
+          font-size: 18px;
+          padding: 16px 0 16px 16px;
+        }
+        > div {
+          display: flex;
+          align-items: center;
+          font-size: 24px;
+          &:not(:last-child) {
+            margin-bottom: 8px;
+          }
+          .icon-wrap {
+            margin-right: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 24px;
+            height: 24px;
+            flex: 1;
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          }
+          p {
+            flex: 10;
+            &:hover {
+              color: $color-primary;
+            }
+            @include mobile {
+              font-size: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.5s ease-in-out;
+}
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(-30px);
+  opacity: 0;
+  padding: 0;
+}
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: all 0.5s ease-in-out;
+}
+.slide-right-enter-from,
+.slide-right-leave-to {
+  transform: translateX(60px);
+  opacity: 0;
+  padding: 0;
+}
+</style>
