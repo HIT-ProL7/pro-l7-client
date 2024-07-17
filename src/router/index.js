@@ -31,6 +31,14 @@ const routes = [
       title: 'Trang đăng nhập'
     },
     component: () => import('@pages/Login.vue')
+  },
+  {
+    path: '/forgot',
+    name: 'Forgot_password',
+    meta: {
+      title: 'Quên mật khẩu'
+    },
+    component: () => import('@pages/Forgot.vue')
   }
 ];
 const router = createRouter({
