@@ -1,7 +1,15 @@
 <script setup>
 import { Icon } from '@iconify/vue';
-import { NModal, NCard } from 'naive-ui';
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { NModal, NCard, useMessage } from 'naive-ui';
+import { ref, onMounted, onBeforeUnmount, defineProps } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+
+const userStore = useUserStore();
+const props = defineProps({
+  email: { type: String, require: true },
+  githubUrl: { type: String, require: true },
+  desc: { type: String, require: true }
+});
 
 const showModal = ref(false);
 const bodyStyle = ref({
@@ -38,6 +46,42 @@ const setWidth = () => {
   }
 };
 
+const updateInfor = ref('');
+const message = useMessage();
+
+function alertResult(status) {
+  if (status === 'success') {
+    message.success('Cập nhật thông tin thành công');
+  } else {
+    message.error('Cập nhật thông tin thất bại');
+  }
+}
+
+async function updateInforHandler() {
+  if (inputInfor.value === 'Email') {
+    try {
+      await userStore.updateInfor({ email: updateInfor.value });
+      alertResult('success');
+    } catch (error) {
+      alertResult('fail');
+    }
+  } else if (inputInfor.value === 'Github') {
+    try {
+      await userStore.updateInfor({ githubUrl: updateInfor.value });
+      alertResult('success');
+    } catch (error) {
+      alertResult('fail');
+    }
+  } else {
+    try {
+      await userStore.updateInfor({ description: updateInfor.value });
+      alertResult('success');
+    } catch (error) {
+      alertResult('fail');
+    }
+  }
+}
+
 onMounted(() => {
   window.addEventListener('resize', setWidth);
 });
@@ -54,7 +98,9 @@ onBeforeUnmount(() => {
         <div class="icon-wrap">
           <Icon icon="ic:baseline-email" />
         </div>
-        <p>Email: <span>Vugiachien2004@gmail.com</span></p>
+        <p>
+          Email: <span>{{ props.email }}</span>
+        </p>
       </div>
       <div class="content-right">
         <div class="icon-wrap icon-wrap--huge">
@@ -67,7 +113,9 @@ onBeforeUnmount(() => {
         <div class="icon-wrap">
           <Icon icon="mdi:github" />
         </div>
-        <p>Github: <span>https://github.com/vugiachien</span></p>
+        <p>
+          Github: <span>{{ props.githubUrl }}</span>
+        </p>
       </div>
       <div class="content-right">
         <div class="icon-wrap icon-wrap--huge">
@@ -79,8 +127,7 @@ onBeforeUnmount(() => {
       <p>Mô tả bản thân</p>
       <div class="content">
         <p>
-          Là sinh viên của trường Đại học Công Nghiệp Hà Nội với chuyên ngành KHMT. Tưởng rằng ra
-          trường là một coder chăm chỉ không ngờ cuộc sống đưa anh đến với ngành bán giày
+          {{ props.desc }}
         </p>
       </div>
       <div class="option-v2-footer">
@@ -104,16 +151,16 @@ onBeforeUnmount(() => {
             <p>
               <label :for="inputInfor">{{ inputInfor }}</label>
             </p>
-            <input type="text" placeholder="Nhập tại đây" />
+            <input type="text" placeholder="Nhập tại đây" v-model="updateInfor" />
           </div>
           <div v-if="showTextarea">
             <p>
               <label :for="inputInfor">{{ inputInfor }}</label>
             </p>
-            <textarea type="text" placeholder="Nhập tại đây" />
+            <textarea type="text" placeholder="Nhập tại đây" v-model="updateInfor" />
           </div>
         </form>
-        <button>Lưu</button>
+        <button @click="updateInforHandler">Lưu</button>
       </div>
     </n-card>
   </n-modal>

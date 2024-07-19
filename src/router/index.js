@@ -64,3 +64,13 @@ router.afterEach((to, from) => {
     document.title = appName;
   }
 });
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('prol7-vuejs:access-token');
+
+  if (to.meta.requiresAuth && !token) {
+    next('/login');
+  } else {
+    next();
+  }
+});

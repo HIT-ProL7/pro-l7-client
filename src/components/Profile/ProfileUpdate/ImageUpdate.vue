@@ -1,12 +1,15 @@
 <script setup>
 import { Icon } from '@iconify/vue';
 import { ref, defineProps } from 'vue';
+import { useUserStore } from '@/stores/userStore';
 
+const userStore = useUserStore();
 const props = defineProps({
   avatar: Boolean
 });
 
 const fileUrl = ref('');
+
 function getFile(event) {
   const file = event.target.files[0];
   showFile(file);
@@ -22,8 +25,13 @@ function showFile(file) {
     };
     fileReader.readAsDataURL(file);
   } else {
-    alert('Đây kh phải là file ảnh');
+    alert('Đây không phải là file ảnh');
   }
+}
+
+function updateImageHandler() {
+  console.log(typeof fileUrl.value);
+  userStore.updateInfor({ description: fileUrl.value });
 }
 </script>
 
@@ -44,7 +52,7 @@ function showFile(file) {
         <img :src="fileUrl" alt="" />
       </div>
       <input id="file" type="file" accept="image/png, image/jpg, image/jpeg" @change="getFile" />
-      <button>Lưu</button>
+      <button @click="updateImageHandler">Lưu</button>
     </div>
   </div>
 </template>

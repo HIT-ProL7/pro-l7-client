@@ -7,18 +7,14 @@ import banner from '../assets/banner-profile.png';
 import avatar from '../assets/avatar-profile.png';
 import logoCourse from '../assets/pts-course.png';
 
+import { onMounted } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+
+const userStore = useUserStore();
 const user = {
   userImg: {
     banner: banner,
     avatar: avatar
-  },
-  userInfor: {
-    joinDate: '11/11/2024',
-    email: 'Vugiachien2004@gmail.com',
-    github: 'https://github.com/vugiachien',
-    id: '2022602243',
-    term: '16',
-    desc: 'Tôi là một người đam mê công nghệ, yêu thích việc tìm hiểu và áp dụng các giải pháp sáng tạo. Tôi luôn nỗ lực học hỏi và phát triển bản thân qua từng ngày. Sự kiên nhẫn và khả năng giải quyết vấn đề là điểm mạnh giúp tôi vượt qua những thử thách trong cuộc sống và công việc.'
   },
   userCourses: [
     {
@@ -43,14 +39,29 @@ const user = {
     }
   ]
 };
+
+onMounted(() => {
+  userStore.getInfor();
+});
 </script>
 
 <template>
   <div class="profile-wrap">
-    <ProfileHeader :userImg="user.userImg" />
+    <ProfileHeader
+      :userImg="user.userImg"
+      :full-name="userStore.fullName"
+      :avatar="userStore.avatar"
+    />
     <div class="profile-content">
       <div class="profile-infor-wrap">
-        <ProfileInfor :userInfor="user.userInfor" />
+        <ProfileInfor
+          :created-at="userStore.createdAt"
+          :email="userStore.email"
+          :github-url="userStore.githubUrl"
+          :student-code="userStore.studentCode"
+          :cohort="userStore.cohort"
+          :desc="userStore.desc"
+        />
       </div>
       <div class="profile-courses-wrap">
         <ProfileCourses :userCourses="user.userCourses" />

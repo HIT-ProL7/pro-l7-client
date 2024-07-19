@@ -1,17 +1,25 @@
 <script setup lang="js">
 import { reactive } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
+const userStore = useUserStore();
 const user = reactive({
-  username: '',
+  studentCode: '',
   password: ''
 });
 
 const error = reactive({
-  username: {
+  studentCode: {
     error: false,
     errorMsg: ''
   },
   password: {
+    error: false,
+    errorMsg: ''
+  },
+  login: {
     error: false,
     errorMsg: ''
   }
@@ -19,23 +27,23 @@ const error = reactive({
 
 const rgxUsername = /^\d{10}$/;
 const usernameValidate = () => {
-  if (user.username.trim() == '') {
-    error.username.error = true;
-    error.username.errorMsg = 'Tài khoản không được để trống';
+  if (user.studentCode.trim() == '') {
+    error.studentCode.error = true;
+    error.studentCode.errorMsg = 'Tài khoản không được để trống';
     return false;
   } else {
-    if (!rgxUsername.test(user.username)) {
-      error.username.error = true;
-      error.username.errorMsg = 'Tài khoản phải gồm 10 ký tự số';
+    if (!rgxUsername.test(user.studentCode)) {
+      error.studentCode.error = true;
+      error.studentCode.errorMsg = 'Tài khoản phải gồm 10 ký tự số';
       return false;
     } else {
-      error.username.error = false;
+      error.studentCode.error = false;
     }
   }
   return true;
 };
 
-const rgxPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+const rgxPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*/])[A-Za-z\d!@#$%^&*/]{8,}$/;
 const passwordValidate = () => {
   if (user.password == '') {
     error.password.error = true;
@@ -53,9 +61,22 @@ const passwordValidate = () => {
   return true;
 };
 
-function loginHandler() {
+async function loginHandler() {
   if (!usernameValidate() || !passwordValidate()) {
     return;
+  } else {
+    try {
+      await userStore.login(user);
+      userStore.getInfor();
+      error.login.error = false;
+      router.push({ path: '', name: 'Home' });
+    } catch (e) {
+      console.log(e);
+      if (e.response.status === 401) {
+        error.login.error = true;
+        error.login.errorMsg = 'Mật khẩu hoặc tài khoản không đúng';
+      }
+    }
   }
 }
 </script>
@@ -83,12 +104,12 @@ function loginHandler() {
             id="u-name"
             type="text"
             placeholder="Nhập tài khoản"
-            v-model="user.username"
+            v-model="user.studentCode"
             required
             autofocus
           />
         </div>
-        <p class="errorMsg" v-if="error.username.error">{{ error.username.errorMsg }}</p>
+        <p class="errorMsg" v-if="error.studentCode.error">{{ error.studentCode.errorMsg }}</p>
       </div>
       <div class="password">
         <p>Mật khẩu</p>
@@ -110,6 +131,7 @@ function loginHandler() {
         <p class="errorMsg" v-if="error.password.error">{{ error.password.errorMsg }}</p>
       </div>
       <a href="#">Quên mật khẩu? </a>
+      <p class="errorMsg" v-if="error.login.error">{{ error.login.errorMsg }}</p>
       <button @click.prevent="loginHandler()">Đăng nhập</button>
     </form>
   </div>
@@ -155,7 +177,6 @@ template {
   @include mobile {
     width: 380px;
     height: 480px;
-    
   }
   p.errorMsg {
     color: rgb(238, 59, 59);

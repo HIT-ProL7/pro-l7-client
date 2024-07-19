@@ -5,8 +5,13 @@ import { NModal, NCard } from 'naive-ui';
 import InforUpdate from '@/components/Profile/ProfileUpdate/InforUpdate.vue';
 import ImageUpdate from '@/components/Profile/ProfileUpdate/ImageUpdate.vue';
 
+import { useUserStore } from '@/stores/userStore';
+
+const userStore = useUserStore();
 const props = defineProps({
-  userImg: { type: Object, require: true }
+  userImg: { type: Object, require: true },
+  fullName: { type: String, require: true },
+  avatar: { type: String, require: true }
 });
 
 const showModal = ref(false);
@@ -73,7 +78,7 @@ watch([showModal, inforUpdate, avatar], () => {
     <div class="avatar center">
       <div class="avatar-img">
         <div class="img-wrap">
-          <img :src="userImg.avatar" alt="" />
+          <img :src="props.avatar" alt="" />
         </div>
         <div class="change-avatar icon-setting center" @click="toggleSetting('avatar')">
           <div class="icon-wrap center">
@@ -81,7 +86,7 @@ watch([showModal, inforUpdate, avatar], () => {
           </div>
         </div>
       </div>
-      <p class="profile-name">Vũ Gia Chiến</p>
+      <p class="profile-name">{{ props.fullName }}</p>
     </div>
     <div class="change-banner center" @click="toggleSetting('banner')">
       <div class="change-banner--icon icon-setting center">
@@ -112,7 +117,12 @@ watch([showModal, inforUpdate, avatar], () => {
           <div class="close-modal" @click="showModal = false">x</div>
         </div>
       </template>
-      <InforUpdate v-if="inforUpdate" />
+      <InforUpdate
+        v-if="inforUpdate"
+        :email="userStore.email"
+        :github-url="userStore.githubUrl"
+        :desc="userStore.desc"
+      />
       <ImageUpdate :avatar="avatar" v-if="!inforUpdate" />
     </n-card>
   </n-modal>

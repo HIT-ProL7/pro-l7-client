@@ -22,7 +22,8 @@ export default defineConfig({
       '@stores': path.resolve(__dirname, './src/stores'),
       '@router': path.resolve(__dirname, './src/router'),
       '@assets': path.resolve(__dirname, './src/assets'),
-      '@api': path.resolve(__dirname, './src/api')
+      '@api': path.resolve(__dirname, './src/api'),
+      '@utils': path.resolve(__dirname, './src/utils')
     }
   }
 });

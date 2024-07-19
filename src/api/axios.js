@@ -23,9 +23,9 @@ apiInst.interceptors.response.use(
     return response;
   },
   function (error) {
-    if (error.response.status == 401) {
-      console.log('chuyen ve trang login');
-    }
+    // if (error.response.status == 401) {
+    //   console.log('chuyen ve trang login');
+    // }
     return Promise.reject(error);
   }
 );

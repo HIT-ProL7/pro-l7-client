@@ -1,6 +1,9 @@
 <script setup lang="js">
 import classrooms from '@/components/Classrooms/Classrooms.vue';
+import { useUserStore } from '@/stores/userStore';
+import { onMounted } from 'vue';
 
+const userStore = useUserStore();
 const classes = [
   {
     id: 'cl1',
@@ -8,7 +11,7 @@ const classes = [
     leader: 'Phạm Đình Tiến',
     startDate: '15/06/2024',
     endDate: '15/08/2024',
-    logoType: 'python',
+    logoType: 'python'
   },
   {
     id: 'cl3',
@@ -16,7 +19,7 @@ const classes = [
     leader: 'Phạm Đình Tiến',
     startDate: '15/06/2024',
     endDate: '15/08/2024',
-    logoType: 'java',
+    logoType: 'java'
   },
   {
     id: 'cl2',
@@ -24,7 +27,7 @@ const classes = [
     leader: 'Phạm Đình Tiến',
     startDate: '15/06/2024',
     endDate: '15/08/2024',
-    logoType: 'photoshop',
+    logoType: 'photoshop'
   },
   {
     id: 'cl4',
@@ -32,9 +35,13 @@ const classes = [
     leader: 'Phạm Đình Tiến',
     startDate: '15/06/2024',
     endDate: '15/08/2024',
-    logoType: 'web',
-  },
+    logoType: 'web'
+  }
 ];
+
+onMounted(() => {
+  userStore.getInfor();
+});
 </script>
 
 <template>
