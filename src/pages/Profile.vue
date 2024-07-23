@@ -5,7 +5,6 @@ import ProfileCourses from '@/components/Profile/ProfileCourse/ProfileCourses.vu
 
 import banner from '../assets/banner-profile.png';
 import avatar from '../assets/avatar-profile.png';
-import logoCourse from '../assets/pts-course.png';
 
 import { onMounted } from 'vue';
 import { useUserStore } from '@/stores/userStore';
@@ -15,33 +14,12 @@ const user = {
   userImg: {
     banner: banner,
     avatar: avatar
-  },
-  userCourses: [
-    {
-      name: 'Photoshop',
-      desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos quasi quis ea tempore repellendus quas. Nam, voluptatem? Dolore, iste ullam?',
-      logo: logoCourse
-    },
-    {
-      name: 'Photoshop',
-      desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos quasi quis ea tempore repellendus quas. Nam, voluptatem? Dolore, iste ullam?',
-      logo: logoCourse
-    },
-    {
-      name: 'Photoshop',
-      desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos quasi quis ea tempore repellendus quas. Nam, voluptatem? Dolore, iste ullam?',
-      logo: logoCourse
-    },
-    {
-      name: 'Photoshop',
-      desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos quasi quis ea tempore repellendus quas. Nam, voluptatem? Dolore, iste ullam?',
-      logo: logoCourse
-    }
-  ]
+  }
 };
 
 onMounted(() => {
   userStore.getInfor();
+  userStore.getMyClass();
 });
 </script>
 
@@ -64,7 +42,7 @@ onMounted(() => {
         />
       </div>
       <div class="profile-courses-wrap">
-        <ProfileCourses :userCourses="user.userCourses" />
+        <ProfileCourses :userCourses="userStore.myClass" />
       </div>
     </div>
   </div>

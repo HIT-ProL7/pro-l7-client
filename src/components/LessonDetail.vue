@@ -1,60 +1,46 @@
 <script setup>
 import { defineProps, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useLessonStore } from '@/stores/lessonStore';
 
-const lessons = [
-  {
-    id: 'ls1',
-    name: 'Giới thiệu',
-    lessonDetails: [
-      { id: 'ls1D1', name: 'Giới thiệu lớp học', content: 'Content1' },
-      { id: 'ls1D2', name: 'Video bài học', content: 'Content2' },
-      { id: 'ls1D3', name: 'BTVN', content: 'Content3' }
-    ]
-  },
-  {
-    id: 'ls2',
-    name: 'Giới thiệu 2',
-    lessonDetails: [
-      { id: 'ls2D1', name: 'Giới thiệu lớp học', content: 'Content4' },
-      { id: 'ls2D2', name: 'Video bài học 2', content: 'Content5' },
-      { id: 'ls2D3', name: 'BTVN 2', content: 'Content6' }
-    ]
-  }
-];
-
+const lessonStore = useLessonStore();
 const route = useRoute();
 
-const lesson = ref({});
-function getLesson(lsId) {
-  lesson.value = lessons.find((ls) => ls.id === lsId);
-}
-
-const lessonDetail = ref({});
-function getLessonDetail(lsdId) {
-  lessonDetail.value = lesson.value.lessonDetails.find((lsd) => lsd.id === lsdId);
+const content = ref(false);
+const video = ref(false);
+async function getDetailLesson(lessonId) {
+  try {
+    await lessonStore.getDetailLesson(lessonId);
+    if (route.query.video) {
+      lessonStore.findVideoLesson(route.query.video);
+      document.title = `${lessonStore.video.title} | ProL7`;
+      video.value = true;
+      content.value = false;
+    } else if (!route.query.content) {
+      document.title = `Nội dung bài học | ProL7`;
+      content.value = true;
+      video.value = false;
+    }
+  } catch (error) {
+    return error;
+  }
 }
 
 watch(
-  () => route.params,
+  () => route.query,
   () => {
-    getLesson(route.params.lsId);
-    getLessonDetail(route.params.lsdId);
-    document.title = `${lessonDetail.value.name} | ProL7`;
+    getDetailLesson(route.params.lsdId);
   }
 );
 
 onMounted(() => {
-  getLesson(route.params.lsId);
-  getLessonDetail(route.params.lsdId);
-
-  document.title = `${lessonDetail.value.name} | ProL7`;
+  getDetailLesson(route.params.lsdId);
 });
 </script>
 
 <template>
   <div class="lesson-detail">
-    <div class="video">
+    <div class="video" v-if="video">
       <iframe
         src="https://www.youtube.com/embed/SeWt7IpZ0CA?si=Aub4aRVvb3T3o46a"
         title="YouTube video player"
@@ -63,10 +49,10 @@ onMounted(() => {
         referrerpolicy="strict-origin-when-cross-origin"
         allowfullscreen
       ></iframe>
+      <p>{{ lessonStore.video.description }}</p>
     </div>
-    <div class="content">
-      <p>This is content!</p>
-      <p>{{ lessonDetail.name }}</p>
+    <div class="content" v-if="content">
+      <p>{{ lessonStore.lesson.content }}</p>
     </div>
   </div>
 </template>

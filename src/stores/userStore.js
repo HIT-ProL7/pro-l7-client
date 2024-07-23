@@ -13,7 +13,8 @@ export const useUserStore = defineStore('user', {
     cohort: 0,
     desc: '',
     avatar: '',
-    banner: ''
+    banner: '',
+    myClass: []
   }),
   actions: {
     async login(loginInfor) {
@@ -52,6 +53,16 @@ export const useUserStore = defineStore('user', {
         console.log(response.data.data);
       } catch (e) {
         throw e;
+      }
+    },
+    async getMyClass() {
+      try {
+        const response = await api.get('/api/v1/classrooms/me');
+
+        this.myClass = response.data.data;
+        console.log(this.myClass);
+      } catch (error) {
+        return error;
       }
     },
     async logout() {

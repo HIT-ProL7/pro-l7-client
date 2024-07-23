@@ -45,13 +45,13 @@ function handleMouseMove(event) {
       <tbody>
         <tr v-for="(member, index) in classMembers" :key="index" class="member">
           <td>{{ index + 1 }}</td>
-          <td>{{ member.msv }}</td>
+          <td>{{ member.studentCode }}</td>
           <td
             @mouseover="handleMouseEnter(index)"
             @mouseleave="handleMouseLeave"
             @mousemove="handleMouseMove"
           >
-            {{ member.name }}
+            {{ member.fullName }}
           </td>
           <td><Icon icon="bi:person-plus-fill" /></td>
           <div
@@ -63,10 +63,10 @@ function handleMouseMove(event) {
               <div class="avatar-wrap">
                 <img :src="avatar" alt="" />
               </div>
-              <p class="member-name">{{ member.name }}</p>
+              <p class="member-name">{{ member.avatarUrl }}</p>
             </div>
             <p>
-              <Icon icon="tabler:id" class="icon" />Mã SV: <span>{{ member.msv }}</span>
+              <Icon icon="tabler:id" class="icon" />Mã SV: <span>{{ member.studentCode }}</span>
             </p>
             <p><Icon icon="ph:student-bold" class="icon" />Khóa: <span>16</span></p>
           </div>

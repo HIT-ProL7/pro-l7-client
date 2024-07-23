@@ -2,28 +2,57 @@
 import { Icon } from '@iconify/vue';
 import { defineProps } from 'vue';
 const props = defineProps({
-  classInfor: { type: Object, require: true }
+  name: { type: String, require: true },
+  desc: { type: String, require: true },
+  createAt: { type: String, require: true },
+  leaders: { type: Array, require: true }
 });
+
+import python from '@assets/course-logo/python.png';
+import java from '@assets/course-logo/java.png';
+import web from '@assets/course-logo/web.png';
+import pts from '@assets/course-logo/pts.png';
+
+const getLogo = (logoName) => {
+  const newName = logoName.toLowerCase();
+  switch (newName) {
+    case 'python':
+      return python;
+      break;
+    case 'java':
+      return java;
+      break;
+    case 'web':
+      return web;
+      break;
+    case 'pts':
+      return pts;
+      break;
+  }
+};
 </script>
 
 <template>
   <div class="class-infor-wrap">
     <div class="class-infor">
-      <p class="heading">{{ classInfor.name }}</p>
+      <p class="heading">{{ props.name }}</p>
       <p class="sub-heading">
         <span class="icon-wrap"><Icon icon="f7:person-fill" color="#fff" /></span>
-        Leader: {{ classInfor.leader }}
+        Leader:
+        <span class="leader" v-for="(l, index) in props.leaders" :key="index">{{
+          l.fullName
+        }}</span>
       </p>
       <p class="sub-heading">
         <span class="icon-wrap"><Icon icon="mdi:clipboard-text-date" color="#fff" /></span>
-        {{ classInfor.createdDate }} - {{ classInfor.closeDate }}
+        {{ props.createAt }}
       </p>
       <p class="desc">
-        {{ classInfor.description }}
+        {{ props.desc }}
       </p>
     </div>
     <div class="class-img">
-      <img src="/src/assets/python-course.png" alt="" />
+      <img :src="getLogo(props.name)" alt="" />
     </div>
   </div>
 </template>
@@ -69,6 +98,9 @@ const props = defineProps({
       }
       @include mobile {
         font-size: 20px;
+      }
+      > .leader:not(:last-child)::after {
+        content: ',';
       }
     }
     .desc {

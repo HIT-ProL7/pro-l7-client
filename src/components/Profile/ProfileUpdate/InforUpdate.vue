@@ -49,35 +49,40 @@ const setWidth = () => {
 const updateInfor = ref('');
 const message = useMessage();
 
-function alertResult(status) {
+function alertResult(status, msg) {
   if (status === 'success') {
-    message.success('Cập nhật thông tin thành công');
+    message.success(msg);
   } else {
-    message.error('Cập nhật thông tin thất bại');
+    message.error(msg);
   }
 }
 
+const emailRgx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 async function updateInforHandler() {
   if (inputInfor.value === 'Email') {
     try {
-      await userStore.updateInfor({ email: updateInfor.value });
-      alertResult('success');
+      if (emailRgx.test(updateInfor.value)) {
+        await userStore.updateInfor({ email: updateInfor.value });
+        alertResult('success', 'Cập nhật thông tin thành công');
+      } else {
+        alertResult('fail', 'Email không hợp lệ');
+      }
     } catch (error) {
-      alertResult('fail');
+      alertResult('fail', 'Cập nhật không thành công');
     }
   } else if (inputInfor.value === 'Github') {
     try {
       await userStore.updateInfor({ githubUrl: updateInfor.value });
-      alertResult('success');
+      alertResult('success', 'Cập nhật thông tin thành công');
     } catch (error) {
-      alertResult('fail');
+      alertResult('fail', 'Cập nhật không thành công');
     }
   } else {
     try {
       await userStore.updateInfor({ description: updateInfor.value });
-      alertResult('success');
+      alertResult('success', 'Cập nhật thông tin thành công');
     } catch (error) {
-      alertResult('fail');
+      alertResult('fail', 'Cập nhật không thành công');
     }
   }
 }
