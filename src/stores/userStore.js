@@ -19,7 +19,7 @@ export const useUserStore = defineStore('user', {
   actions: {
     async login(loginInfor) {
       try {
-        const response = await api.post('/api/v1/auth/login', loginInfor);
+        const response = await api.post('/auth/login', loginInfor);
 
         this.userRoles = response.data.data.roles;
         localStorage.setItem('prol7-vuejs:access-token', response.data.data.accessToken);
@@ -30,7 +30,7 @@ export const useUserStore = defineStore('user', {
     },
     async getInfor() {
       try {
-        const response = await api.get('/api/v1/users/me');
+        const response = await api.get('/users/me');
         this.studentCode = response.data.data.studentCode;
         this.fullName = response.data.data.fullName;
         this.email = response.data.data.email;
@@ -44,7 +44,7 @@ export const useUserStore = defineStore('user', {
     },
     async updateInfor(updateInfor) {
       try {
-        const response = await api.put('/api/v1/users/update-info', updateInfor);
+        const response = await api.put('/users/update-info', updateInfor);
         this.email = response.data.data.email;
         this.githubUrl = response.data.data.githubUrl;
         this.desc = response.data.data.description;
@@ -55,7 +55,7 @@ export const useUserStore = defineStore('user', {
     },
     async getMyClass() {
       try {
-        const response = await api.get('/api/v1/classrooms/me');
+        const response = await api.get('/classrooms/me');
 
         this.myClass = response.data.data;
       } catch (error) {

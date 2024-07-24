@@ -17,7 +17,7 @@ export const useClassStore = defineStore('class', {
   actions: {
     async getDetailClass(classId) {
       try {
-        const response = await api.get(`/api/v1/classrooms/${classId}`);
+        const response = await api.get(`/classrooms/${classId}`);
 
         this.id = response.data.data.id;
         this.name = response.data.data.name;
@@ -34,7 +34,7 @@ export const useClassStore = defineStore('class', {
     },
     async getAllLessons(classId) {
       try {
-        const response = await api.get(`/api/v1/lessons/classroom/${classId}`);
+        const response = await api.get(`/lessons/classroom/${classId}`);
 
         this.lessons = response.data.data;
       } catch (error) {

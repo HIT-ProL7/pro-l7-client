@@ -10,7 +10,7 @@ export const useLessonStore = defineStore('lesson', {
   actions: {
     async getDetailLesson(lessonId) {
       try {
-        const response = await api.get(`/api/v1/lessons/${lessonId}`);
+        const response = await api.get(`/lessons/${lessonId}`);
         this.lesson = response.data.data;
         this.videos = response.data.data.videos;
       } catch (error) {
