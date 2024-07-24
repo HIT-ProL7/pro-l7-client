@@ -1,7 +1,7 @@
 <script setup>
 import { Icon } from '@iconify/vue';
 import { defineProps, ref, watch, onMounted, onBeforeUnmount } from 'vue';
-import { NModal, NCard } from 'naive-ui';
+import { NModal, NCard, NImage } from 'naive-ui';
 import InforUpdate from '@/components/Profile/ProfileUpdate/InforUpdate.vue';
 import ImageUpdate from '@/components/Profile/ProfileUpdate/ImageUpdate.vue';
 
@@ -68,13 +68,19 @@ watch([showModal, inforUpdate, avatar], () => {
 <template>
   <div class="profile--header-wrap">
     <div class="banner">
-      <img :src="userImg.banner" alt="" />
+      <n-image
+        width="100%"
+        height="100%"
+        :src="userImg.banner"
+        :previewed-img-props="{ style: { border: '8px solid white' } }"
+      />
     </div>
     <div class="avatar center">
       <div class="avatar-img">
-        <div class="img-wrap">
-          <img :src="userImg.avatar" alt="" />
-        </div>
+        <n-image
+          :src="userImg.avatar"
+          :previewed-img-props="{ style: { border: '8px solid white' } }"
+        />
         <div class="change-avatar icon-setting center" @click="toggleSetting('avatar')">
           <div class="icon-wrap center">
             <Icon icon="bi:camera-fill" font-size="28px" />
@@ -203,25 +209,20 @@ watch([showModal, inforUpdate, avatar], () => {
     height: 100px;
   }
   .banner {
-    width: 100%;
-    height: 100%;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+    .n-image {
       @include mobile {
-        object-fit: fill;
+        height: 100px;
       }
     }
   }
   .avatar {
     position: absolute;
     bottom: 0;
-    left: 85px;
-    top: 60%;
+    left: 36px;
+    top: 90%;
     @include tablet {
-      left: 40px;
-      top: 55%;
+      left: 0px;
+      top: 90%;
     }
     @include small-tablet {
       top: 50%;
@@ -232,8 +233,8 @@ watch([showModal, inforUpdate, avatar], () => {
     }
     .avatar-img {
       position: absolute;
-      .img-wrap {
-        width: 200px;
+      .n-image {
+        border-radius: 50%;
         height: 200px;
         @include tablet {
           width: 120px;
@@ -242,12 +243,6 @@ watch([showModal, inforUpdate, avatar], () => {
         @include small-tablet {
           width: 90px;
           height: 90px;
-        }
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 50%;
         }
       }
       .change-avatar {
@@ -269,9 +264,10 @@ watch([showModal, inforUpdate, avatar], () => {
     .profile-name {
       font-size: 42px;
       position: relative;
-      left: 90%;
-      top: 100%;
+      left: 95%;
+      top: 165%;
       @include tablet {
+        top: 200%;
         font-size: 28px;
       }
       @include small-tablet {

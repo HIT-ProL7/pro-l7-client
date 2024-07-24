@@ -37,6 +37,7 @@ const props = defineProps({
     }
     @include mobile {
       font-size: 22px;
+      text-align: center;
     }
   }
   .content {
