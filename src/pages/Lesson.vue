@@ -266,6 +266,9 @@ setResponsive();
               font-size: 20px;
             }
           }
+          > div.videos {
+            display: block;
+          }
           > div {
             display: flex;
             align-items: center;
