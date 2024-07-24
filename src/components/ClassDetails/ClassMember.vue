@@ -1,33 +1,12 @@
 <script setup>
 import { Icon } from '@iconify/vue';
-import { defineProps, ref } from 'vue';
+import { defineProps } from 'vue';
 import avatar from '@assets/avatar.png';
+import { NPopover } from 'naive-ui';
 
 const props = defineProps({
   classMembers: { type: Array, require: true }
 });
-
-const memberIndex = ref(null);
-const mouseX = ref(0);
-const mouseY = ref(0);
-
-function handleMouseEnter(index) {
-  memberIndex.value = index;
-}
-
-function handleMouseLeave() {
-  memberIndex.value = null;
-}
-
-function handleMouseMove(event) {
-  if (window.innerWidth < 480) {
-    mouseX.value = 3;
-    mouseY.value = 70;
-  } else {
-    mouseX.value = event.clientX;
-    mouseY.value = event.clientY;
-  }
-}
 </script>
 
 <template>
@@ -46,30 +25,44 @@ function handleMouseMove(event) {
         <tr v-for="(member, index) in classMembers" :key="index" class="member">
           <td>{{ index + 1 }}</td>
           <td>{{ member.msv }}</td>
-          <td
-            @mouseover="handleMouseEnter(index)"
-            @mouseleave="handleMouseLeave"
-            @mousemove="handleMouseMove"
+          <n-popover
+            placement="top-end"
+            :overlap="false"
+            trigger="click"
+            :theme-overrides="{ padding: '0px', color: 'rgba(254, 180, 123, 1)' }"
           >
-            {{ member.name }}
-          </td>
-          <td><Icon icon="bi:person-plus-fill" /></td>
-          <div
-            class="member-infor"
-            :style="{ top: mouseY + 'px', left: mouseX + 'px' }"
-            v-if="memberIndex === index"
-          >
-            <div>
-              <div class="avatar-wrap">
-                <img :src="avatar" alt="" />
+            <template #trigger>
+              <td>
+                <p>{{ member.name }}</p>
+              </td>
+            </template>
+            <div
+              class="member-infor"
+              style="
+                padding: 16px 32px;
+                background: linear-gradient(
+                  135deg,
+                  rgba(255, 126, 87, 1) 0%,
+                  rgba(254, 180, 123, 1) 100%
+                );
+                color: #fff;
+              "
+            >
+              <div style="display: flex; align-items: center">
+                <div class="avatar-wrap" style="margin-right: 16px">
+                  <img :src="avatar" alt="" />
+                </div>
+                <p class="member-name">{{ member.name }}</p>
               </div>
-              <p class="member-name">{{ member.name }}</p>
+              <p style="display: flex; align-items: center">
+                <Icon icon="tabler:id" class="icon" />Mã SV: <span>{{ member.msv }}</span>
+              </p>
+              <p style="display: flex; align-items: center">
+                <Icon icon="ph:student-bold" class="icon" />Khóa: <span>16</span>
+              </p>
             </div>
-            <p>
-              <Icon icon="tabler:id" class="icon" />Mã SV: <span>{{ member.msv }}</span>
-            </p>
-            <p><Icon icon="ph:student-bold" class="icon" />Khóa: <span>16</span></p>
-          </div>
+          </n-popover>
+          <td><Icon icon="bi:person-plus-fill" /></td>
         </tr>
       </tbody>
     </table>
@@ -130,7 +123,7 @@ function handleMouseMove(event) {
       text-align: right;
       padding-right: 12px;
     }
-    .member {
+    .n-popover__content {
       .member-infor {
         position: fixed;
         z-index: 999;

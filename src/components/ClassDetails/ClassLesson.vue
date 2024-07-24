@@ -21,13 +21,17 @@ function toggleLesson(index) {
     <div class="lesson-wrap">
       <div class="lesson" v-for="(ls, index) in classLesson" :key="index">
         <div class="lesson-title" @click="toggleLesson(index)">
-          <div class="icon-title-wrap"><Icon icon="ic:round-play-arrow" color="#F06C25" /></div>
+          <div class="icon-title-wrap" :class="{ 'is-active': show[index] }">
+            <Icon icon="ic:round-play-arrow" color="#F06C25" />
+          </div>
           <p>{{ index + 1 }}. {{ ls.name }}</p>
         </div>
         <transition name="slide">
           <div class="lesson-detail" v-if="show[index]">
             <div v-for="(lsd, i) in ls.lessonDetails" :key="i">
-              <div class="icon-wrap"><Icon icon="fluent:document-one-page-24-filled" /></div>
+              <div class="icon-wrap">
+                <Icon icon="fluent:document-one-page-24-filled" />
+              </div>
               <router-link :to="{ name: 'Lesson-detail', params: { lsId: ls.id, lsdId: lsd.id } }">
                 <p>{{ i + 1 }}. {{ lsd.name }}</p>
               </router-link>
@@ -82,7 +86,14 @@ function toggleLesson(index) {
       @include mobile {
         font-size: 24px;
       }
+      .icon-title-wrap {
+        transition: all 0.8s ease;
+      }
+      .is-active {
+        transform: rotate(90deg);
+      }
     }
+
     .lesson-detail {
       transition: all 0.5s;
       padding: 32px 0 32px 32px;
