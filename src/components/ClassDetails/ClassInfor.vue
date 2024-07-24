@@ -49,6 +49,9 @@ const props = defineProps({
   }
   .class-infor {
     color: #fff;
+    @include mobile {
+      order: 2;
+    }
     p:not(:last-child) {
       margin-bottom: 8px;
     }
