@@ -79,7 +79,9 @@ async function loginHandler() {
         },
         4000
       );
-      router.push({ path: '', name: 'Home' });
+      if (userStore.userRoles == 'ROLE_ADMIN' || userStore.userRoles == 'ROLE_USER') {
+        router.push({ path: '', name: 'Home' });
+      }
     } catch (e) {
       if (e.response.status === 401) {
         message.error(

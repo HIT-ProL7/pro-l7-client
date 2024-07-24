@@ -49,8 +49,6 @@ export const useUserStore = defineStore('user', {
         this.githubUrl = response.data.data.githubUrl;
         this.desc = response.data.data.description;
         this.avatar = response.data.data.avatarUrl;
-
-        console.log(response.data.data);
       } catch (e) {
         throw e;
       }
@@ -60,7 +58,6 @@ export const useUserStore = defineStore('user', {
         const response = await api.get('/api/v1/classrooms/me');
 
         this.myClass = response.data.data;
-        console.log(this.myClass);
       } catch (error) {
         return error;
       }
