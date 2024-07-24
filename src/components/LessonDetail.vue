@@ -42,15 +42,15 @@ onMounted(() => {
   <div class="lesson-detail">
     <div class="video" v-if="video">
       <iframe
-        src="https://www.youtube.com/embed/SeWt7IpZ0CA?si=Aub4aRVvb3T3o46a"
+        :src="lessonStore.video.url"
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         referrerpolicy="strict-origin-when-cross-origin"
         allowfullscreen
       ></iframe>
-      <p>{{ lessonStore.video.description }}</p>
     </div>
+    <p v-if="video">{{ lessonStore.video.description }}</p>
     <div class="content" v-if="content">
       <p>{{ lessonStore.lesson.content }}</p>
     </div>

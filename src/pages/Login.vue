@@ -2,7 +2,9 @@
 import { reactive } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 import { useRouter } from 'vue-router';
+import { useMessage } from 'naive-ui';
 
+const message = useMessage();
 const router = useRouter();
 const userStore = useUserStore();
 const user = reactive({
@@ -10,34 +12,27 @@ const user = reactive({
   password: ''
 });
 
-const error = reactive({
-  studentCode: {
-    error: false,
-    errorMsg: ''
-  },
-  password: {
-    error: false,
-    errorMsg: ''
-  },
-  login: {
-    error: false,
-    errorMsg: ''
-  }
-});
-
 const rgxUsername = /^\d{10}$/;
 const usernameValidate = () => {
   if (user.studentCode.trim() == '') {
-    error.studentCode.error = true;
-    error.studentCode.errorMsg = 'Tài khoản không được để trống';
+    message.warning(
+      'Tài khoản không được để trống',
+      {
+        keepAliveOnHover: true
+      },
+      4000
+    );
     return false;
   } else {
     if (!rgxUsername.test(user.studentCode)) {
-      error.studentCode.error = true;
-      error.studentCode.errorMsg = 'Tài khoản phải gồm 10 ký tự số';
+      message.error(
+        'Tài khoản phải gồm 10 ký tự số',
+        {
+          keepAliveOnHover: true
+        },
+        4000
+      );
       return false;
-    } else {
-      error.studentCode.error = false;
     }
   }
   return true;
@@ -47,15 +42,24 @@ const rgxPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*/])[A-Za-z\d!@
 const passwordValidate = () => {
   if (user.password == '') {
     error.password.error = true;
-    error.password.errorMsg = 'Mật khẩu không được để trống';
+    message.warning(
+      'Mật khẩu không được để trống',
+      {
+        keepAliveOnHover: true
+      },
+      4000
+    );
     return false;
   } else {
     if (!rgxPassword.test(user.password)) {
-      error.password.error = true;
-      error.password.errorMsg = 'Mật khẩu phải bao gồm ký tự in hoa, thường, số và ký tự đặc biệt';
+      message.error(
+        'Mật khẩu phải bao gồm ký tự in hoa, thường, số và ký tự đặc biệt',
+        {
+          keepAliveOnHover: true
+        },
+        4000
+      );
       return false;
-    } else {
-      error.password.error = false;
     }
   }
   return true;
@@ -68,13 +72,23 @@ async function loginHandler() {
     try {
       await userStore.login(user);
       userStore.getInfor();
-      error.login.error = false;
+      message.success(
+        'Đăng nhập thành công',
+        {
+          keepAliveOnHover: true
+        },
+        4000
+      );
       router.push({ path: '', name: 'Home' });
     } catch (e) {
-      console.log(e);
       if (e.response.status === 401) {
-        error.login.error = true;
-        error.login.errorMsg = 'Mật khẩu hoặc tài khoản không đúng';
+        message.error(
+          'Mật khẩu hoặc tài khoản không đúng',
+          {
+            keepAliveOnHover: true
+          },
+          4000
+        );
       }
     }
   }
@@ -109,7 +123,6 @@ async function loginHandler() {
             autofocus
           />
         </div>
-        <p class="errorMsg" v-if="error.studentCode.error">{{ error.studentCode.errorMsg }}</p>
       </div>
       <div class="password">
         <p>Mật khẩu</p>
@@ -128,10 +141,8 @@ async function loginHandler() {
           </svg>
           <input id="pw" type="password" placeholder="Nhập mật khẩu" v-model="user.password" />
         </div>
-        <p class="errorMsg" v-if="error.password.error">{{ error.password.errorMsg }}</p>
       </div>
       <a href="#">Quên mật khẩu? </a>
-      <p class="errorMsg" v-if="error.login.error">{{ error.login.errorMsg }}</p>
       <button @click.prevent="loginHandler()">Đăng nhập</button>
     </form>
   </div>
