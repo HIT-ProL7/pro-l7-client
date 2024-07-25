@@ -218,7 +218,7 @@ template {
     max-width: 470px;
   }
   @include mobile {
-    max-width: 380px;
+    max-width: 350px;
   }
 
   .logo {
@@ -246,6 +246,7 @@ template {
       }
       @include mobile {
         height: 30px;
+        width: 280px;
       }
     }
 
@@ -276,7 +277,7 @@ template {
 
   button {
     width: 100%;
-    max-width: 440px;
+    max-width: 400px;
     height: 35px;
     border-radius: 20px;
     background-color: #ff7e57;
