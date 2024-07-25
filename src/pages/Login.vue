@@ -1,5 +1,5 @@
 <script setup lang="js">
-import { reactive,ref } from 'vue';
+import { reactive, ref } from 'vue';
 const forget = ref(false);
 const user = reactive({
   username: '',
@@ -59,13 +59,13 @@ function loginHandler() {
   }
 }
 const formData = reactive({
-  masv: '',
+  masv: ''
 });
 
 const errors = reactive({
   masv: {
     error: false,
-    errorMessage: '',
+    errorMessage: ''
   }
 });
 
@@ -95,50 +95,90 @@ const handleSubmit = () => {
 </script>
 
 <template>
-    <div class="login-cha">
-      <form class="login-con" v-if="!forget" @submit.prevent="loginHandler">
-        <img class="logo" style="width: 88px; height: 88px" src="../assets/logo.png" alt="logo" />
-        <div class="user-name">
-          <p>Tài khoản</p>
-          <div class="login">
-            <svg class="ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 56 56">
-              <path fill="currentColor" d="M28.012 27.367c5.039 0 9.375-4.5 9.375-10.36c0-5.788-4.36-10.077-9.375-10.077c-5.016 0-9.375 4.383-9.375 10.125c0 5.812 4.36 10.312 9.375 10.312M13.293 49.07h29.438c3.68 0 4.992-1.054 4.992-3.117c0-6.047-7.57-14.39-19.711-14.39c-12.164 0-19.735 8.343-19.735 14.39c0 2.063 1.313 3.117 5.016 3.117"/>
-            </svg>
-            <input id="u-name" type="text" placeholder="Nhập tài khoản" v-model="user.username" required autofocus />
-          </div>
-          <p class="errorMsg" v-if="error.username.error">{{ error.username.errorMsg }}</p>
+  <div class="login-cha">
+    <form class="login-con" v-if="!forget" @submit.prevent="loginHandler">
+      <img class="logo" style="width: 88px; height: 88px" src="../assets/logo.png" alt="logo" />
+      <div class="user-name">
+        <p>Tài khoản</p>
+        <div class="login">
+          <svg
+            class="ic"
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 56 56"
+          >
+            <path
+              fill="currentColor"
+              d="M28.012 27.367c5.039 0 9.375-4.5 9.375-10.36c0-5.788-4.36-10.077-9.375-10.077c-5.016 0-9.375 4.383-9.375 10.125c0 5.812 4.36 10.312 9.375 10.312M13.293 49.07h29.438c3.68 0 4.992-1.054 4.992-3.117c0-6.047-7.57-14.39-19.711-14.39c-12.164 0-19.735 8.343-19.735 14.39c0 2.063 1.313 3.117 5.016 3.117"
+            />
+          </svg>
+          <input
+            id="u-name"
+            type="text"
+            placeholder="Nhập tài khoản"
+            v-model="user.username"
+            required
+            autofocus
+          />
         </div>
-        <div class="password">
-          <p>Mật khẩu</p>
-          <div class="login">
-            <svg class="ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2m-6 9c-1.1 0-2-.9-2-2s.9-2 2-2s2 .9 2 2s-.9 2-2 2m3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1c1.71 0 3.1 1.39 3.1 3.1z"/>
-            </svg>
-            <input id="pw" type="password" placeholder="Nhập mật khẩu" v-model="user.password" />
-          </div>
-          <p class="errorMsg" v-if="error.password.error">{{ error.password.errorMsg }}</p>
+        <p class="errorMsg" v-if="error.username.error">{{ error.username.errorMsg }}</p>
+      </div>
+      <div class="password">
+        <p>Mật khẩu</p>
+        <div class="login">
+          <svg
+            class="ic"
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="currentColor"
+              d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2m-6 9c-1.1 0-2-.9-2-2s.9-2 2-2s2 .9 2 2s-.9 2-2 2m3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1c1.71 0 3.1 1.39 3.1 3.1z"
+            />
+          </svg>
+          <input id="pw" type="password" placeholder="Nhập mật khẩu" v-model="user.password" />
         </div>
-        <p class="a" @click="forget = !forget">Quên mật khẩu?</p>
-        <button type="submit">Đăng nhập</button>
-      </form>
-      <form @submit.prevent="handleSubmit" v-else class="forgot-form">
-        <img class="logo" style="width: 88px; height: 88px" src="../assets/logo.png" alt="logo" />
+        <p class="errorMsg" v-if="error.password.error">{{ error.password.errorMsg }}</p>
+      </div>
+      <p class="a" @click="forget = !forget">Quên mật khẩu?</p>
+      <button type="submit">Đăng nhập</button>
+    </form>
+    <form @submit.prevent="handleSubmit" v-else class="forgot-form">
+      <img class="logo" style="width: 88px; height: 88px" src="../assets/logo.png" alt="logo" />
 
-        <div>
-          <label for="masv"><p class="Masv">Mã sinh viên:</p></label>
-          <div class="login">
-            <svg class="ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 56 56">
-              <path fill="currentColor" d="M28.012 27.367c5.039 0 9.375-4.5 9.375-10.36c0-5.788-4.36-10.077-9.375-10.077c-5.016 0-9.375 4.383-9.375 10.125c0 5.812 4.36 10.312 9.375 10.312M13.293 49.07h29.438c3.68 0 4.992-1.054 4.992-3.117c0-6.047-7.57-14.39-19.711-14.39c-12.164 0-19.735 8.343-19.735 14.39c0 2.063 1.313 3.117 5.016 3.117"/>
-            </svg>
-            <input type="text" id="masv" v-model="formData.masv" placeholder="Nhập mã sinh viên" required />
-          </div>
-          <p class="errorMsg" v-if="errors.masv.error">{{ errors.masv.errorMessage }}</p>
+      <div>
+        <label for="masv"><p class="Masv">Mã sinh viên:</p></label>
+        <div class="login">
+          <svg
+            class="ic"
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 56 56"
+          >
+            <path
+              fill="currentColor"
+              d="M28.012 27.367c5.039 0 9.375-4.5 9.375-10.36c0-5.788-4.36-10.077-9.375-10.077c-5.016 0-9.375 4.383-9.375 10.125c0 5.812 4.36 10.312 9.375 10.312M13.293 49.07h29.438c3.68 0 4.992-1.054 4.992-3.117c0-6.047-7.57-14.39-19.711-14.39c-12.164 0-19.735 8.343-19.735 14.39c0 2.063 1.313 3.117 5.016 3.117"
+            />
+          </svg>
+          <input
+            type="text"
+            id="masv"
+            v-model="formData.masv"
+            placeholder="Nhập mã sinh viên"
+            required
+          />
         </div>
-        <button type="submit">Gửi</button>
-        <p class="a" @click="forget = !forget">Quay lại</p>
-      </form>
-    </div>
-  </template>
+        <p class="errorMsg" v-if="errors.masv.error">{{ errors.masv.errorMessage }}</p>
+      </div>
+      <button type="submit">Gửi</button>
+      <p class="a" @click="forget = !forget">Quay lại</p>
+    </form>
+  </div>
+</template>
 <style lang="scss" scoped>
 template {
   height: 100vh;
@@ -159,7 +199,8 @@ template {
   margin: 0;
 }
 
-.login-con, .forgot-form {
+.login-con,
+.forgot-form {
   background-color: rgba(255, 255, 255, 0.4);
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
@@ -193,11 +234,10 @@ template {
     position: relative;
     font-size: 20px;
     color: #d9d9d9;
-    
 
     input {
-        padding-left: 30px;
-        width: 400px;
+      padding-left: 30px;
+      width: 400px;
       height: 35px;
       border-radius: 20px;
       border: none;
@@ -254,8 +294,8 @@ template {
     color: rgb(238, 59, 59);
     margin-top: 4px;
   }
- .Masv{
+  .Masv {
     padding-bottom: 10px;
- } 
+  }
 }
-</style>  
+</style>
