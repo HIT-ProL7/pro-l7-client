@@ -7,7 +7,8 @@ const showModal = ref(false);
 const bodyStyle = ref({
   width: '40%',
   'text-align': 'center',
-  'border-radius': '20px'
+  'border-radius': '20px',
+  background: 'linear-gradient(135deg, rgba(255, 126, 87, 1) 0%, rgba(254, 180, 123, 1) 100%)'
 });
 
 const showTextarea = ref(false);

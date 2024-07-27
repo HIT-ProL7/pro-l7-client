@@ -87,7 +87,7 @@ watch([showModal, inforUpdate, avatar], () => {
           </div>
         </div>
       </div>
-      <p class="profile-name">Vũ Gia Chiến</p>
+      <p class="profile-name">Trần Vũ Trung Trạng Nguyên Trinh</p>
     </div>
     <div class="change-banner center" @click="toggleSetting('banner')">
       <div class="change-banner--icon icon-setting center">
@@ -218,10 +218,9 @@ watch([showModal, inforUpdate, avatar], () => {
   .avatar {
     position: absolute;
     bottom: 0;
-    left: 36px;
+    left: 12%;
     top: 90%;
     @include tablet {
-      left: 0px;
       top: 90%;
     }
     @include small-tablet {
@@ -237,12 +236,12 @@ watch([showModal, inforUpdate, avatar], () => {
         border-radius: 50%;
         height: 200px;
         @include tablet {
-          width: 120px;
-          height: 120px;
+          width: 150px;
+          height: 150px;
         }
-        @include small-tablet {
-          width: 90px;
-          height: 90px;
+        @include mobile {
+          width: 100px;
+          height: 100px;
         }
       }
       .change-avatar {
@@ -263,21 +262,25 @@ watch([showModal, inforUpdate, avatar], () => {
     }
     .profile-name {
       font-size: 42px;
-      position: relative;
-      left: 95%;
+      position: absolute;
+      left: 120px;
       top: 165%;
+      width: max-content;
+      max-width: 1000px;
       @include tablet {
+        left: 100px;
         top: 200%;
-        font-size: 28px;
+        font-size: 24px;
+        max-width: 350px;
       }
       @include small-tablet {
         font-size: 20px;
       }
       @include mobile {
         font-size: 18px;
-        bottom: 0;
-        top: 140%;
-        left: 0;
+        top: 175%;
+        left: 50%;
+        transform: translateX(-50%);
       }
     }
   }
