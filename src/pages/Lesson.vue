@@ -154,7 +154,6 @@ setResponsive();
   overflow: hidden;
   .lesson-content-wrap {
     width: 100%;
-    height: 100vh;
   }
   .toggle-lesson-list {
     position: absolute;
@@ -187,7 +186,7 @@ setResponsive();
     width: 30%;
     height: 100vh;
     background-color: #fff;
-    overflow-y: scroll;
+    overflow: hidden;
     @media (max-width: 1440px) {
       position: absolute;
       top: 0;

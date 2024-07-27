@@ -69,6 +69,7 @@ function goToClassDetail(classId) {
     margin-bottom: 32px;
     @include mobile {
       font-size: 25px;
+      text-align: center;
     }
   }
 
@@ -87,11 +88,6 @@ function goToClassDetail(classId) {
     @include mobile {
       justify-content: center;
     }
-
-    > p:first-child {
-      font-size: 24px;
-    }
-
     .class {
       .class-infor {
         flex: 3;

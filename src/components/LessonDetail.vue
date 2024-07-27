@@ -82,7 +82,7 @@ onMounted(() => {
 .lesson-detail-container {
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
+  overflow: hidden;
   .video {
     position: relative;
     padding-bottom: 56.25%; /* 16:9 aspect ratio */
