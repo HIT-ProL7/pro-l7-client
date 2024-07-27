@@ -7,7 +7,8 @@ const showModal = ref(false);
 const bodyStyle = ref({
   width: '40%',
   'text-align': 'center',
-  'border-radius': '20px'
+  'border-radius': '20px',
+  background: 'linear-gradient(135deg, rgba(255, 126, 87, 1) 0%, rgba(254, 180, 123, 1) 100%)'
 });
 
 const showTextarea = ref(false);
@@ -54,7 +55,7 @@ onBeforeUnmount(() => {
         <div class="icon-wrap">
           <Icon icon="ic:baseline-email" />
         </div>
-        <p>Email: <span>Vugiachien2004@gmail.com</span></p>
+        <p>Email: <span>VugiachieVugiachieVugiachieVugiachie</span></p>
       </div>
       <div class="content-right">
         <div class="icon-wrap icon-wrap--huge">
@@ -67,7 +68,7 @@ onBeforeUnmount(() => {
         <div class="icon-wrap">
           <Icon icon="mdi:github" />
         </div>
-        <p>Github: <span>https://github.com/vugiachien</span></p>
+        <p>Github: <span>https://gitVu</span></p>
       </div>
       <div class="content-right">
         <div class="icon-wrap icon-wrap--huge">
@@ -187,15 +188,9 @@ onBeforeUnmount(() => {
   }
 }
 .icon-wrap {
-  width: 24px;
-  height: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
-  svg {
-    width: 100%;
-    height: 100%;
-  }
 }
 .icon-wrap--huge {
   width: 40px;
@@ -229,15 +224,11 @@ onBeforeUnmount(() => {
       display: flex;
       align-items: center;
       overflow: hidden;
+      flex: 1;
       p {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        width: 424px;
-
-        @include mobile {
-          width: 208px;
-        }
       }
       span {
         font-weight: 500;

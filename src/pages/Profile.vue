@@ -18,7 +18,7 @@ const user = {
     github: 'https://github.com/vugiachien',
     id: '2022602243',
     term: '16',
-    desc: 'Tôi là một người đam mê công nghệ, yêu thích việc tìm hiểu và áp dụng các giải pháp sáng tạo. Tôi luôn nỗ lực học hỏi và phát triển bản thân qua từng ngày. Sự kiên nhẫn và khả năng giải quyết vấn đề là điểm mạnh giúp tôi vượt qua những thử thách trong cuộc sống và công việc.'
+    desc: 'Tôi là một người đam mê công nghệ'
   },
   userCourses: [
     {
