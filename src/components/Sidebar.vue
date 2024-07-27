@@ -285,6 +285,7 @@ setRes();
     background-color: #fff;
     text-align: start;
     z-index: 999;
+    list-style-type: none;
     span {
       margin-left: 10px;
       p {

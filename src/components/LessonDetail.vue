@@ -6,20 +6,19 @@ import { useLessonStore } from '@/stores/lessonStore';
 const lessonStore = useLessonStore();
 const route = useRoute();
 
-const content = ref(false);
-const video = ref(false);
+const option = ref('');
 async function getDetailLesson(lessonId) {
   try {
     await lessonStore.getDetailLesson(lessonId);
     if (route.query.video) {
-      lessonStore.findVideoLesson(route.query.video);
-      document.title = `${lessonStore.video.title} | ProL7`;
-      video.value = true;
-      content.value = false;
-    } else if (!route.query.content) {
+      document.title = `${lessonStore.videos[0].title} | ProL7`;
+      option.value = 'video';
+    } else if (route.query.content) {
       document.title = `Nội dung bài học | ProL7`;
-      content.value = true;
-      video.value = false;
+      option.value = 'content';
+    } else {
+      document.title = `BTVN | ProL7`;
+      option.value = 'exercise';
     }
   } catch (error) {
     return error;
@@ -33,19 +32,16 @@ watch(
   }
 );
 
-const html = `<h2>Hi there,</h2><p>this is a <em>basic</em> example of <strong>Tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:</p><img src="https://inkythuatso.com/uploads/thumbnails/800/2023/03/1-hinh-anh-ngay-moi-hanh-phuc-sieu-cute-inkythuatso-09-13-35-50.jpg"><ul><li><p>That’s a bullet list with one …</p></li><li><p>… or two list items.<br></p><div data-youtube-video=""><iframe width="640" height="480" allowfullscreen="true" autoplay="false" disablekbcontrols="false" enableiframeapi="false" endtime="0" ivloadpolicy="0" loop="false" modestbranding="false" origin="" playlist="" src="https://www.youtube.com/embed/vphOHH5j5LQ" start="0"></iframe></div></li></ul><p>Isn’t that great? And all of that is editable. But wait, there’s more. <a target="_blank" rel="noopener noreferrer nofollow" href="https://www.youtube.com/watch?v=vphOHH5j5LQ" class="my-link">Let’s try a code block:</a></p><pre><code class="language-css">body {display: none;}</code></pre><p>I know, I know, this is impressive. It’s only the tip of the iceberg though. Give it a try and click a little bit around. Don’t forget to check the other examples too.</p><blockquote><p>Wow, that’s amazing. Good work, boy! 👏 <br>— Mom</p></blockquote>"
-`;
 onMounted(() => {
   getDetailLesson(route.params.lsdId);
-  console.log(html.replace(/"/g, "'"));
 });
 </script>
 
 <template>
   <div class="lesson-detail-container">
-    <div class="video" v-if="video">
+    <div class="video" v-if="option == 'video'">
       <iframe
-        :src="lessonStore.video.url"
+        :src="lessonStore.videos[0].url"
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -53,8 +49,17 @@ onMounted(() => {
         allowfullscreen
       ></iframe>
     </div>
-    <p v-if="video">{{ lessonStore.video.description }}</p>
-    <div class="content-lesson" v-if="content" v-html="html || lessonStore.lesson.content"></div>
+    <p v-if="option == 'video'">{{ lessonStore.video.description }}</p>
+    <div
+      class="lesson-detail-content lesson-content"
+      v-if="option == 'content'"
+      v-html="lessonStore.lesson.content"
+    ></div>
+    <div
+      class="lesson-detail-content exercise-content"
+      v-if="option == 'exercise'"
+      v-html="lessonStore.exercise.content"
+    ></div>
   </div>
 </template>
 
@@ -99,8 +104,7 @@ onMounted(() => {
       height: 100%;
     }
   }
-  .content-lesson {
-    height: 1000px;
+  .lesson-detail-content {
     padding: 16px;
     :first-child {
       margin-top: 0;

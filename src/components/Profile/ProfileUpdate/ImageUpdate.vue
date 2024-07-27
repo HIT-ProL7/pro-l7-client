@@ -4,6 +4,7 @@ import { ref, defineProps } from 'vue';
 import { PinturaEditorModal } from '@pqina/vue-pintura';
 import { getEditorDefaults } from '@pqina/pintura';
 import '@pqina/pintura/pintura.css'; // Import Pintura styles
+import { useUserStore } from '@/stores/userStore';
 
 // Define reactive state
 const propsEditor = ref(getEditorDefaults());

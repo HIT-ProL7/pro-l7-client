@@ -13,18 +13,24 @@ function toggleLesson(index) {
   show.value[index] = !show.value[index];
 }
 
-function goToLessonDetail(classId, lsdId, option) {
-  if (option == 'content')
-    router.push({
+function goToLessonDetail(classId, lsdId, option, optionId) {
+  if (option == 'content') {
+    router.replace({
       name: 'Lesson-detail',
       params: { classId: classId, lsdId: lsdId },
-      query: { content: null }
+      query: { content: true }
     });
-  else
-    router.push({
+  } else if (option == 'exercise') {
+    router.replace({
       name: 'Lesson-detail',
       params: { classId: classId, lsdId: lsdId },
-      query: { video: option }
+      query: { exercise: optionId }
+    });
+  } else
+    router.replace({
+      name: 'Lesson-detail',
+      params: { classId: classId, lsdId: lsdId },
+      query: { video: optionId }
     });
   if (!responsive.value) showLessonList.value = false;
 }
@@ -80,22 +86,34 @@ setResponsive();
                 <div>
                   <div
                     class="content"
-                    @click="goToLessonDetail(route.params.classId, ls.id, 'content')"
+                    v-if="ls.content"
+                    @click="goToLessonDetail(route.params.classId, ls.id, 'content', true)"
                   >
                     <div class="icon-wrap"><Icon icon="fluent:document-one-page-24-filled" /></div>
                     <p>Nội dung</p>
                   </div>
-                  <div class="videos">
+                  <div class="videos" v-if="ls.videos[0].url">
                     <div
                       class="video"
                       v-for="(v, index) in ls.videos"
                       :key="index"
-                      @click="goToLessonDetail(route.params.classId, ls.id, v.id)"
+                      @click="goToLessonDetail(route.params.classId, ls.id, 'video', v.id)"
                     >
                       <div class="icon-wrap"><Icon icon="lets-icons:video-fill" /></div>
-                      <router-link>
-                        <p>{{ v.title }}</p>
-                      </router-link>
+                      <p>{{ v.title }}</p>
+                    </div>
+                  </div>
+                  <div class="exercise" v-if="ls.exercises[0].content">
+                    <div
+                      class="exercise"
+                      v-for="(ex, index) in ls.exercises"
+                      :key="index"
+                      @click="goToLessonDetail(route.params.id, ls.id, 'exercise', ex.id)"
+                    >
+                      <div class="icon-wrap">
+                        <Icon icon="mingcute:question-fill" />
+                      </div>
+                      <p>BTVN</p>
                     </div>
                   </div>
                 </div>
@@ -251,11 +269,9 @@ setResponsive();
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 24px;
-            height: 24px;
             svg {
-              width: 100%;
-              height: 100%;
+              width: 24px;
+              height: 24px;
             }
           }
           p {
@@ -272,7 +288,7 @@ setResponsive();
           > div {
             display: flex;
             align-items: center;
-            .video {
+            > div {
               display: flex;
               align-items: center;
             }
