@@ -37,7 +37,7 @@ const props = defineProps({
   border-bottom-right-radius: 20px;
   padding: 60px 50px;
   gap: 100px;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   @include tablet {
     flex-direction: column;
@@ -49,6 +49,9 @@ const props = defineProps({
   }
   .class-infor {
     color: #fff;
+    @include mobile {
+      order: 2;
+    }
     p:not(:last-child) {
       margin-bottom: 8px;
     }
