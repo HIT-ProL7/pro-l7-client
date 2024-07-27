@@ -62,6 +62,16 @@ export const useUserStore = defineStore('user', {
         return error;
       }
     },
+    async changePassword(changePasswordInfor) {
+      try {
+        const response = await api.patch(
+          'http://103.195.236.98:8081/api/v1/users/change-password',
+          changePasswordInfor
+        );
+      } catch (error) {
+        return error;
+      }
+    },
     async logout() {
       this.user = null;
       this.userRole = null;

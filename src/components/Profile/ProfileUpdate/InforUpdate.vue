@@ -1,7 +1,7 @@
 <script setup>
 import { Icon } from '@iconify/vue';
-import { NModal, NCard, useMessage } from 'naive-ui';
-import { ref, onMounted, onBeforeUnmount, defineProps } from 'vue';
+import { NModal, NCard, useMessage, useDialog } from 'naive-ui';
+import { ref, reactive, onMounted, onBeforeUnmount, defineProps } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 
 const userStore = useUserStore();
@@ -19,26 +19,30 @@ const bodyStyle = ref({
   background: 'linear-gradient(135deg, rgba(255, 126, 87, 1) 0%, rgba(254, 180, 123, 1) 100%)'
 });
 
-const showTextarea = ref(false);
+const option = ref('');
 const inputInfor = ref('');
 function showModalHandler(name) {
   if (name === 'email') {
     inputInfor.value = 'Email';
+    option.value = 'infor';
     showModal.value = true;
-    showTextarea.value = false;
   } else if (name === 'github') {
     inputInfor.value = 'Github';
+    option.value = 'infor';
     showModal.value = true;
-    showTextarea.value = false;
+  } else if (name === 'change-password') {
+    inputInfor.value = 'mật khẩu';
+    option.value = 'change-password';
+    showModal.value = true;
   } else {
     inputInfor.value = 'Mô tả';
+    option.value = 'desc';
     showModal.value = true;
-    showTextarea.value = true;
   }
 }
 
 const setWidth = () => {
-  if (window.innerWidth >= 480 && window.innerWidth <= 1440) {
+  if (window.innerWidth >= 480 && window.innerWidth <= 1280) {
     bodyStyle.value.width = '80%';
   } else if (window.innerWidth < 480) {
     bodyStyle.value.width = '100%';
@@ -47,8 +51,66 @@ const setWidth = () => {
   }
 };
 
-const updateInfor = ref('');
+const changePasswordInfor = reactive({
+  oldPassword: '',
+  newPassword: '',
+  confirmNewPassword: ''
+});
 const message = useMessage();
+const dialog = useDialog();
+const rgxPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+function passwordValidate(password) {
+  if (password == '') {
+    message.warning('Mật khẩu không được để trống');
+    return false;
+  } else {
+    if (!rgxPassword.test(password)) {
+      message.warning('Mật khẩu phải bao gồm ký tự in hoa, thường, số và ký tự đặc biệt');
+      return false;
+    }
+  }
+  return true;
+}
+
+function checkPassword(newPass, reNewPass) {
+  if (newPass === reNewPass) return true;
+  else return false;
+}
+
+function changePasswordHandler() {
+  if (
+    passwordValidate(changePasswordInfor.oldPassword) &&
+    passwordValidate(changePasswordInfor.newPassword) &&
+    passwordValidate(changePasswordInfor.confirmNewPassword)
+  ) {
+    const result = checkPassword(
+      changePasswordInfor.newPassword,
+      changePasswordInfor.confirmNewPassword
+    );
+    if (result) {
+      dialog.warning({
+        title: 'Xác nhận',
+        content: 'Bạn xác nhận muốn đổi mật khẩu?',
+        positiveText: 'Xác nhận',
+        negativeText: 'Hủy',
+        onPositiveClick: async () => {
+          try {
+            await userStore.changePassword(changePasswordInfor);
+            message.success('Đổi mật khẩu thành công');
+          } catch (error) {
+            message.error('Đổi mật khẩu thất bại');
+          }
+        },
+        onNegativeClick: () => {
+          message.error('Hủy đổi mật khẩu');
+        }
+      });
+    } else message.error('Mật khẩu không đúng hoặc mật khẩu không trùng khớp nhau');
+  }
+}
+
+const updateInfor = ref('');
 
 function alertResult(status, msg) {
   if (status === 'success') {
@@ -142,6 +204,19 @@ onBeforeUnmount(() => {
         </div>
       </div>
     </div>
+    <div class="option" @click="showModalHandler('change-password')">
+      <div class="content-left">
+        <div class="icon-wrap">
+          <Icon icon="mdi:password" />
+        </div>
+        <p>Thay đổi mật khẩu</p>
+      </div>
+      <div class="content-right">
+        <div class="icon-wrap icon-wrap--huge">
+          <Icon icon="iconamoon:arrow-up-2-bold" />
+        </div>
+      </div>
+    </div>
   </div>
   <n-modal v-model:show="showModal" class="custom-modal">
     <n-card :style="bodyStyle" :bordered="false" size="huge" class="custom">
@@ -153,20 +228,57 @@ onBeforeUnmount(() => {
       </template>
       <div class="content">
         <form>
-          <div v-if="!showTextarea">
+          <div v-if="option == 'infor'">
             <p>
               <label :for="inputInfor">{{ inputInfor }}</label>
             </p>
             <input type="text" placeholder="Nhập tại đây" v-model="updateInfor" />
           </div>
-          <div v-if="showTextarea">
+          <div v-if="option == 'desc'">
             <p>
               <label :for="inputInfor">{{ inputInfor }}</label>
             </p>
             <textarea type="text" placeholder="Nhập tại đây" v-model="updateInfor" />
           </div>
+          <div class="change-password" v-if="option == 'change-password'">
+            <div>
+              <p>
+                <label for="">Mật khẩu cũ</label>
+              </p>
+              <input
+                type="password"
+                placeholder="Nhập mật khẩu cũ"
+                v-model="changePasswordInfor.oldPassword"
+              />
+            </div>
+            <div>
+              <p>
+                <label for="">Mật khẩu mới</label>
+              </p>
+              <input
+                type="password"
+                placeholder="Nhập mật khẩu mới"
+                v-model="changePasswordInfor.newPassword"
+              />
+            </div>
+            <div>
+              <p>
+                <label for="">Nhập lại mật khẩu mới</label>
+              </p>
+              <input
+                type="password"
+                placeholder="Nhập lại mật khẩu mới"
+                v-model="changePasswordInfor.confirmNewPassword"
+              />
+            </div>
+          </div>
         </form>
-        <button @click="updateInforHandler">Lưu</button>
+        <button @click="updateInforHandler" v-if="option == 'infor' || option == 'desc'">
+          Lưu
+        </button>
+        <button @click="changePasswordHandler" v-if="option == 'change-password'">
+          Lưu mật khẩu
+        </button>
       </div>
     </n-card>
   </n-modal>
@@ -205,6 +317,11 @@ onBeforeUnmount(() => {
     padding: 16px 64px 32px;
     @include mobile {
       padding: 32px 16px;
+    }
+  }
+  .change-password {
+    > div:not(:last-child) {
+      margin-bottom: 16px;
     }
   }
   form {
@@ -297,6 +414,7 @@ onBeforeUnmount(() => {
     padding: 16px;
     border-radius: 16px;
     cursor: pointer;
+    margin-bottom: 32px;
     @include mobile {
       width: 90%;
     }
