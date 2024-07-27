@@ -1,7 +1,20 @@
 <script setup>
 import { Icon } from '@iconify/vue';
 import { ref, defineProps } from 'vue';
-import { useUserStore } from '@/stores/userStore';
+import { PinturaEditorModal } from '@pqina/vue-pintura';
+import { getEditorDefaults } from '@pqina/pintura';
+import '@pqina/pintura/pintura.css'; // Import Pintura styles
+
+// Define reactive state
+const propsEditor = ref(getEditorDefaults());
+const visible = ref(false);
+const src = ref('/src/assets/footer-bg.jpg');
+const result = ref(undefined);
+
+// Handle process event
+const handleProcess = (event) => {
+  result.value = URL.createObjectURL(event.detail.dest);
+};
 
 const userStore = useUserStore();
 const props = defineProps({
@@ -11,8 +24,10 @@ const props = defineProps({
 const fileUrl = ref('');
 
 function getFile(event) {
-  const file = event.target.files[0];
-  showFile(file);
+  // const file = event.target.files[0];
+  // showFile(file);
+  src.value = event.target.files[0];
+  visible.value = true;
 }
 
 function showFile(file) {
@@ -37,19 +52,31 @@ function updateImageHandler() {
 
 <template>
   <div class="setting-wrap">
+    <PinturaEditorModal
+      v-bind="propsEditor"
+      v-if="visible"
+      :src="src"
+      @pintura:hide="visible = false"
+      @pintura:process="handleProcess"
+    />
     <div class="content">
-      <label for="file">
-        <div class="icon-wrap">
-          <Icon icon="twemoji:plus" />
+      <div class="content-header">
+        <label for="file">
+          <div class="icon-wrap">
+            <Icon icon="twemoji:plus" />
+          </div>
+          Chọn ảnh từ máy
+        </label>
+        <div class="icon-wrap center" v-if="result" @click="visible = true">
+          <Icon icon="solar:pen-bold" font-size="28px" />
         </div>
-        Chọn ảnh từ máy
-      </label>
+      </div>
       <div class="img-wrap avatar" v-if="avatar">
-        <img :src="fileUrl" alt="" />
+        <img :src="result" alt="" />
       </div>
       <input id="file" type="file" accept="image/png, image/jpg, image/jpeg" @change="getFile" />
       <div class="img-wrap banner" v-if="!avatar">
-        <img :src="fileUrl" alt="" />
+        <img :src="result" alt="" />
       </div>
       <input id="file" type="file" accept="image/png, image/jpg, image/jpeg" @change="getFile" />
       <button @click="updateImageHandler">Lưu</button>
@@ -89,6 +116,14 @@ function updateImageHandler() {
       width: 100%;
       min-width: 0;
     }
+    .content-header {
+      display: flex;
+      align-items: center;
+      align-self: flex-start;
+      .icon-wrap {
+        cursor: pointer;
+      }
+    }
     label {
       align-self: flex-start;
       width: fit-content;
@@ -99,6 +134,7 @@ function updateImageHandler() {
       background: #fff;
       border-radius: 32px;
       cursor: pointer;
+      margin-right: 16px;
       @include mobile {
         align-self: center;
       }
@@ -131,7 +167,7 @@ function updateImageHandler() {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: center top;
+        object-position: center;
         border-radius: 50%;
       }
     }

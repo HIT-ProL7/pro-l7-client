@@ -160,6 +160,7 @@ const props = defineProps({
   .desc {
     display: flex;
     align-items: flex-start;
+    justify-content: space-between;
     gap: 8px;
     span.icon {
       line-height: 24px;
