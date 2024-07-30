@@ -3,19 +3,42 @@ import { defineProps } from 'vue';
 const props = defineProps({
   course: { type: Object, require: true }
 });
+
+import python from '@assets/course-logo/python.png';
+import java from '@assets/course-logo/java.png';
+import web from '@assets/course-logo/web.png';
+import pts from '@assets/course-logo/pts.png';
+
+function getClassLogo(name) {
+  const newName = name.toLowerCase();
+  switch (newName) {
+    case 'python':
+      return python;
+      break;
+    case 'java':
+      return java;
+      break;
+    case 'web':
+      return web;
+      break;
+    case 'pts':
+      return pts;
+      break;
+  }
+}
 </script>
 
 <template>
   <div class="course">
     <div class="course-img-wrap center">
       <div class="course--img center">
-        <img :src="course.logo" alt="" />
+        <img :src="getClassLogo(course.name)" alt="" />
       </div>
     </div>
     <div class="course--infor">
       <p class="heading">{{ course.name }}</p>
       <p class="desc">
-        {{ course.desc }}
+        {{ course.description }}
       </p>
     </div>
   </div>

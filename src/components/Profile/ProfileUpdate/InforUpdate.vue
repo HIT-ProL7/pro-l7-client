@@ -1,7 +1,15 @@
 <script setup>
 import { Icon } from '@iconify/vue';
 import { NModal, NCard, useMessage, useDialog } from 'naive-ui';
-import { ref, onMounted, onBeforeUnmount, reactive } from 'vue';
+import { ref, reactive, onMounted, onBeforeUnmount, defineProps } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+
+const userStore = useUserStore();
+const props = defineProps({
+  email: { type: String, require: true },
+  githubUrl: { type: String, require: true },
+  desc: { type: String, require: true }
+});
 
 const showModal = ref(false);
 const bodyStyle = ref({
@@ -43,10 +51,10 @@ const setWidth = () => {
   }
 };
 
-const changePassword = reactive({
+const changePasswordInfor = reactive({
   oldPassword: '',
   newPassword: '',
-  reNewPassword: ''
+  confirmNewPassword: ''
 });
 const message = useMessage();
 const dialog = useDialog();
@@ -72,25 +80,73 @@ function checkPassword(newPass, reNewPass) {
 
 function changePasswordHandler() {
   if (
-    passwordValidate(changePassword.oldPassword) &&
-    passwordValidate(changePassword.newPassword) &&
-    passwordValidate(changePassword.reNewPassword)
+    passwordValidate(changePasswordInfor.oldPassword) &&
+    passwordValidate(changePasswordInfor.newPassword) &&
+    passwordValidate(changePasswordInfor.confirmNewPassword)
   ) {
-    const result = checkPassword(changePassword.newPassword, changePassword.reNewPassword);
+    const result = checkPassword(
+      changePasswordInfor.newPassword,
+      changePasswordInfor.confirmNewPassword
+    );
     if (result) {
       dialog.warning({
         title: 'Xác nhận',
         content: 'Bạn xác nhận muốn đổi mật khẩu?',
         positiveText: 'Xác nhận',
         negativeText: 'Hủy',
-        onPositiveClick: () => {
-          message.success('Đổi mật khẩu thành công');
+        onPositiveClick: async () => {
+          try {
+            await userStore.changePassword(changePasswordInfor);
+            message.success('Đổi mật khẩu thành công');
+          } catch (error) {
+            message.error('Đổi mật khẩu thất bại');
+          }
         },
         onNegativeClick: () => {
           message.error('Hủy đổi mật khẩu');
         }
       });
     } else message.error('Mật khẩu không đúng hoặc mật khẩu không trùng khớp nhau');
+  }
+}
+
+const updateInfor = ref('');
+
+function alertResult(status, msg) {
+  if (status === 'success') {
+    message.success(msg);
+  } else {
+    message.error(msg);
+  }
+}
+
+const emailRgx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+async function updateInforHandler() {
+  if (inputInfor.value === 'Email') {
+    try {
+      if (emailRgx.test(updateInfor.value)) {
+        await userStore.updateInfor({ email: updateInfor.value });
+        alertResult('success', 'Cập nhật thông tin thành công');
+      } else {
+        alertResult('fail', 'Email không hợp lệ');
+      }
+    } catch (error) {
+      alertResult('fail', 'Cập nhật không thành công');
+    }
+  } else if (inputInfor.value === 'Github') {
+    try {
+      await userStore.updateInfor({ githubUrl: updateInfor.value });
+      alertResult('success', 'Cập nhật thông tin thành công');
+    } catch (error) {
+      alertResult('fail', 'Cập nhật không thành công');
+    }
+  } else {
+    try {
+      await userStore.updateInfor({ description: updateInfor.value });
+      alertResult('success', 'Cập nhật thông tin thành công');
+    } catch (error) {
+      alertResult('fail', 'Cập nhật không thành công');
+    }
   }
 }
 
@@ -110,7 +166,9 @@ onBeforeUnmount(() => {
         <div class="icon-wrap">
           <Icon icon="ic:baseline-email" />
         </div>
-        <p>Email: <span>VugiachieVugiachieVugiachieVugiachie</span></p>
+        <p>
+          Email: <span>{{ props.email }}</span>
+        </p>
       </div>
       <div class="content-right">
         <div class="icon-wrap icon-wrap--huge">
@@ -123,7 +181,9 @@ onBeforeUnmount(() => {
         <div class="icon-wrap">
           <Icon icon="mdi:github" />
         </div>
-        <p>Github: <span>https://gitVu</span></p>
+        <p>
+          Github: <span>{{ props.githubUrl }}</span>
+        </p>
       </div>
       <div class="content-right">
         <div class="icon-wrap icon-wrap--huge">
@@ -135,8 +195,7 @@ onBeforeUnmount(() => {
       <p>Mô tả bản thân</p>
       <div class="content">
         <p>
-          Là sinh viên của trường Đại học Công Nghiệp Hà Nội với chuyên ngành KHMT. Tưởng rằng ra
-          trường là một coder chăm chỉ không ngờ cuộc sống đưa anh đến với ngành bán giày
+          {{ props.desc }}
         </p>
       </div>
       <div class="option-v2-footer">
@@ -173,13 +232,13 @@ onBeforeUnmount(() => {
             <p>
               <label :for="inputInfor">{{ inputInfor }}</label>
             </p>
-            <input type="text" placeholder="Nhập tại đây" />
+            <input type="text" placeholder="Nhập tại đây" v-model="updateInfor" />
           </div>
           <div v-if="option == 'desc'">
             <p>
               <label :for="inputInfor">{{ inputInfor }}</label>
             </p>
-            <textarea type="text" placeholder="Nhập tại đây" />
+            <textarea type="text" placeholder="Nhập tại đây" v-model="updateInfor" />
           </div>
           <div class="change-password" v-if="option == 'change-password'">
             <div>
@@ -189,7 +248,7 @@ onBeforeUnmount(() => {
               <input
                 type="password"
                 placeholder="Nhập mật khẩu cũ"
-                v-model="changePassword.oldPassword"
+                v-model="changePasswordInfor.oldPassword"
               />
             </div>
             <div>
@@ -199,7 +258,7 @@ onBeforeUnmount(() => {
               <input
                 type="password"
                 placeholder="Nhập mật khẩu mới"
-                v-model="changePassword.newPassword"
+                v-model="changePasswordInfor.newPassword"
               />
             </div>
             <div>
@@ -209,12 +268,17 @@ onBeforeUnmount(() => {
               <input
                 type="password"
                 placeholder="Nhập lại mật khẩu mới"
-                v-model="changePassword.reNewPassword"
+                v-model="changePasswordInfor.confirmNewPassword"
               />
             </div>
           </div>
         </form>
-        <button @click="changePasswordHandler">Lưu</button>
+        <button @click="updateInforHandler" v-if="option == 'infor' || option == 'desc'">
+          Lưu
+        </button>
+        <button @click="changePasswordHandler" v-if="option == 'change-password'">
+          Lưu mật khẩu
+        </button>
       </div>
     </n-card>
   </n-modal>

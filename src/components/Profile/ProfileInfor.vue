@@ -2,7 +2,12 @@
 import { Icon } from '@iconify/vue';
 import { defineProps } from 'vue';
 const props = defineProps({
-  userInfor: { type: Object, require: true }
+  studentCode: { type: String, require: true },
+  email: { type: String, require: true },
+  githubUrl: { type: String, require: true },
+  createdAt: { type: String, require: true },
+  cohort: { type: Number, require: true },
+  desc: { type: String, require: true }
 });
 </script>
 
@@ -16,7 +21,7 @@ const props = defineProps({
             <Icon font-size="24px" icon="mdi:clipboard-text-date" />
           </div>
           <p>Ngày tham gia:</p>
-          <span>{{ userInfor.joinDate }}</span>
+          <span>{{ props.createdAt }}</span>
         </div>
         <div class="wrap">
           <div class="left">
@@ -25,7 +30,7 @@ const props = defineProps({
             </div>
             <p>Email:</p>
           </div>
-          <span class="word-wrap">{{ userInfor.email }}</span>
+          <span class="word-wrap">{{ props.email }}</span>
         </div>
         <div class="wrap">
           <div class="left">
@@ -35,7 +40,7 @@ const props = defineProps({
             <p>Github:</p>
           </div>
           <span class="word-wrap"
-            ><a :href="userInfor.github" target="_blank">{{ userInfor.github }}</a></span
+            ><a :href="props.githubUrl" target="_blank">{{ props.githubUrl }}</a></span
           >
         </div>
         <div>
@@ -43,20 +48,20 @@ const props = defineProps({
             <Icon font-size="24px" icon="tabler:id" />
           </div>
           <p>Mã SV:</p>
-          <span>{{ userInfor.id }}</span>
+          <span>{{ props.studentCode }}</span>
         </div>
         <div>
           <div class="icon-wrap center">
             <Icon font-size="24px" icon="ph:student-bold" />
           </div>
           <p>Khóa:</p>
-          <span>{{ userInfor.term }}</span>
+          <span>{{ props.cohort }}</span>
         </div>
       </div>
     </div>
     <div class="desc">
       <span class="icon icon--left">“</span>
-      <div class="content">{{ userInfor.desc }}</div>
+      <div class="content">{{ props.desc }}</div>
       <span class="icon icon--left">”</span>
     </div>
   </div>

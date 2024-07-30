@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const apiInst = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}`,
+  baseURL: `${import.meta.env.VITE_API_URL}/api/v1`,
   headers: {
     'Content-Type': 'application/json'
   }
@@ -24,7 +25,8 @@ apiInst.interceptors.response.use(
   },
   function (error) {
     if (error.response.status == 401) {
-      console.log('chuyen ve trang login');
+      localStorage.removeItem('prol7-vuejs:access-token');
+      useRouter().push('/login');
     }
     return Promise.reject(error);
   }

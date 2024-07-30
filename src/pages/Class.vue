@@ -3,69 +3,30 @@ import ClassInfor from '@components/ClassDetails/ClassInfor.vue';
 import ClassLesson from '@components/ClassDetails/ClassLesson.vue';
 import ClassRoadmap from '@components/ClassDetails/ClassRoadmap.vue';
 import ClassMember from '@/components/ClassDetails/ClassMember.vue';
+
 import { NTabs, NTabPane } from 'naive-ui';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
+import { useClassStore } from '@/stores/classStore';
 
-const allClasses = [
-  {
-    id: 'cl1',
-    name: 'Python',
-    leader: 'Phạm Đình Tiến',
-    createdDate: '15/06/2024',
-    closeDate: '15/08/2024',
-    description:
-      'Khóa học lập trình Python cơ bản với các bài tập và lý thuyết dễ hiểu, học xong bạn có thể tự tin để tới với các chủ đề nâng cao hơn của Python.',
-    lessons: [
-      {
-        id: 'ls1',
-        name: 'Giới thiệu',
-        lessonDetails: [
-          { id: 'ls1D1', name: 'Giới thiệu lớp học' },
-          { id: 'ls1D2', name: 'Video bài học' },
-          { id: 'ls1D3', name: 'BTVN' }
-        ]
-      },
-      {
-        id: 'ls2',
-        name: 'Giới thiệu 2',
-        lessonDetails: [
-          { id: 'ls2D1', name: 'Giới thiệu lớp học 2' },
-          { id: 'ls2D2', name: 'Video bài học 2' },
-          { id: 'ls2D3', name: 'BTVN 2' }
-        ]
-      }
-    ],
-    members: [
-      { msv: '2022602243', name: 'Vũ Gia Chiến' },
-      { msv: '2022601223', name: 'Nguyễn Quỳnh Anh' },
-      { msv: '2022322456', name: 'Đỗ Trạng Nguyên' }
-    ]
-  },
-  {
-    id: 'cl2',
-    name: 'Photoshop',
-    leader: 'Vũ Gia Chiến',
-    createdDate: '20/06/2024',
-    closeDate: '20/08/2024',
-    description:
-      'Khóa học lập trình PTS cơ bản với các bài tập và lý thuyết dễ hiểu, học xong bạn có thể tự tin để tới với các chủ đề nâng cao hơn của PTS.'
-  }
-];
+const classStore = useClassStore();
 
 const route = useRoute();
 const router = useRouter();
-const classId = route.params.id;
 
-const classDetails = ref({});
-function getClassDetails(classId) {
-  classDetails.value = allClasses.find((cls) => cls.id === classId);
+async function getDetailClass(classId) {
+  try {
+    await classStore.getDetailClass(classId);
+    document.title = `${classStore.name} | ProL7`;
+  } catch (error) {
+    return error;
+  }
 }
 
 onMounted(() => {
-  getClassDetails(classId);
-  document.title = `${classDetails.value.name} | ProL7`;
+  getDetailClass(route.params.id);
+  classStore.getAllLessons(route.params.id);
 });
 
 const tabsThemeOverrides = ref({
@@ -107,7 +68,12 @@ justifyCenter();
     <div class="back" @click="router.go(-1)">
       <Icon icon="ep:arrow-left-bold" color="#fff" />
     </div>
-    <ClassInfor :class-infor="classDetails" />
+    <ClassInfor
+      :name="classStore.name"
+      :desc="classStore.description"
+      :create-at="classStore.createAt"
+      :leaders="classStore.leaders"
+    />
     <div class="class-nav">
       <n-tabs
         type="line"
@@ -118,13 +84,13 @@ justifyCenter();
         :theme-overrides="tabsThemeOverrides"
       >
         <n-tab-pane name="Bài học" tab="Bài học">
-          <ClassLesson :class-lesson="classDetails.lessons" />
+          <ClassLesson :class-lesson="classStore.lessons" />
         </n-tab-pane>
         <n-tab-pane name="Lộ trình" tab="Lộ trình">
           <ClassRoadmap />
         </n-tab-pane>
         <n-tab-pane name="Thành viên" tab="Thành viên">
-          <ClassMember :class-members="classDetails.members" />
+          <ClassMember :class-members="classStore.members" />
         </n-tab-pane>
       </n-tabs>
     </div>

@@ -13,7 +13,8 @@
       "@stores/*": ["./src/stores/*"],
       "@router/*": ["./src/router/*"],
       "@assets/*": ["./src/assets/*"],
-      "@api/*": ["./src/api/*"]
+      "@api/*": ["./src/api/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
   "include": ["src/**/*.vue", "src/**/*.js"],

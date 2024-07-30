@@ -1,45 +1,19 @@
 <script setup lang="js">
 import classrooms from '@/components/Classrooms/Classrooms.vue';
+import { useUserStore } from '@/stores/userStore';
+import { onMounted } from 'vue';
 
-const classes = [
-  {
-    id: 'cl1',
-    name: 'Python',
-    leader: 'Phạm Đình Tiến',
-    startDate: '15/06/2024',
-    endDate: '15/08/2024',
-    logoType: 'python',
-  },
-  {
-    id: 'cl3',
-    name: 'Java',
-    leader: 'Phạm Đình Tiến',
-    startDate: '15/06/2024',
-    endDate: '15/08/2024',
-    logoType: 'java',
-  },
-  {
-    id: 'cl2',
-    name: 'Photoshop',
-    leader: 'Phạm Đình Tiến',
-    startDate: '15/06/2024',
-    endDate: '15/08/2024',
-    logoType: 'photoshop',
-  },
-  {
-    id: 'cl4',
-    name: 'Web',
-    leader: 'Phạm Đình Tiến',
-    startDate: '15/06/2024',
-    endDate: '15/08/2024',
-    logoType: 'web',
-  },
-];
+const userStore = useUserStore();
+
+onMounted(() => {
+  userStore.getInfor();
+  userStore.getMyClass();
+});
 </script>
 
 <template>
   <div class="home">
-    <classrooms :classInfor="classes" />
+    <classrooms :classInfor="userStore.myClass" />
   </div>
 </template>
 

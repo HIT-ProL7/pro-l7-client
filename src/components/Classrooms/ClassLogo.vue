@@ -1,59 +1,59 @@
 <script setup>
 import { defineProps } from 'vue';
-import pythonLogo from '../../assets/pythonLogo.png';
-import javaLogo from '../../assets/javaLogo.png';
-import photoshopLogo from '../../assets/photoshopLogo.png';
-import webLogo from '../../assets/webLogo.png';
+
+import python from '@assets/course-logo/python.png';
+import java from '@assets/course-logo/java.png';
+import web from '@assets/course-logo/web.png';
+import pts from '@assets/course-logo/pts.png';
 
 const props = defineProps({
-  logoType: { type: String, require: true },
+  logoName: { type: String, require: true }
 });
-const getLogo = (logoType) => {
-  switch (logoType) {
+const getLogo = (logoName) => {
+  const newName = logoName.toLowerCase();
+  switch (newName) {
     case 'python':
-      return pythonLogo;
-      
+      return python;
+      break;
     case 'java':
-      return javaLogo;
-    case 'photoshop':
-      return photoshopLogo;
+      return java;
+      break;
     case 'web':
-      return webLogo;
-    default:
-      return webLogo;
+      return web;
+      break;
+    case 'pts':
+      return pts;
+      break;
   }
 };
 </script>
 
 <template>
   <div class="logo-container">
-    <img :src="getLogo(logoType)" class="logo-img" />
-  
+    <img :src="getLogo(logoName)" class="logo-img" />
   </div>
 </template>
 
 <style lang="scss" scoped>
-    .logo-container {
-      
-      gap: 16px;
-      .logo-img {
-        width: 280px;
-        height: 100%;
-        border-radius: 20px 20px 0 20px;
-        position: relative;
-        @include tablet{
-          width: 210px;
-          height: 100%;
-        }
-        @include small-tablet{
-          width: 230px;
-          height: 100%;
-        }
-        
-      }
-      .logo-title {
-        font-size: 24px;
-        font-weight: 500;
-      }
+.logo-container {
+  gap: 16px;
+  .logo-img {
+    width: 280px;
+    height: 100%;
+    border-radius: 20px 20px 0 20px;
+    position: relative;
+    @include tablet {
+      width: 210px;
+      height: 100%;
     }
+    @include small-tablet {
+      width: 230px;
+      height: 100%;
+    }
+  }
+  .logo-title {
+    font-size: 24px;
+    font-weight: 500;
+  }
+}
 </style>

@@ -1,9 +1,10 @@
 <script setup>
 import { Icon } from '@iconify/vue';
 import { ref, defineProps } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
+const route = useRoute();
 
 const props = defineProps({
   classLesson: { type: Array, require: true }
@@ -12,6 +13,27 @@ const props = defineProps({
 const show = ref([0]);
 function toggleLesson(index) {
   show.value[index] = !show.value[index];
+}
+
+function goToLessonDetail(classId, lsdId, option, optionId) {
+  if (option == 'content') {
+    router.replace({
+      name: 'Lesson-detail',
+      params: { classId: classId, lsdId: lsdId },
+      query: { content: true }
+    });
+  } else if (option == 'exercise') {
+    router.replace({
+      name: 'Lesson-detail',
+      params: { classId: classId, lsdId: lsdId },
+      query: { exercise: optionId }
+    });
+  } else
+    router.replace({
+      name: 'Lesson-detail',
+      params: { classId: classId, lsdId: lsdId },
+      query: { video: optionId }
+    });
 }
 </script>
 
@@ -28,13 +50,41 @@ function toggleLesson(index) {
         </div>
         <transition name="slide">
           <div class="lesson-detail" v-if="show[index]">
-            <div v-for="(lsd, i) in ls.lessonDetails" :key="i">
-              <div class="icon-wrap">
-                <Icon icon="fluent:document-one-page-24-filled" />
+            <div>
+              <div
+                class="content"
+                v-if="ls.content"
+                @click="goToLessonDetail(route.params.id, ls.id, 'content', true)"
+              >
+                <div class="icon-wrap">
+                  <Icon icon="fluent:document-one-page-24-filled" />
+                </div>
+                <p>Nội dung</p>
               </div>
-              <router-link :to="{ name: 'Lesson-detail', params: { lsId: ls.id, lsdId: lsd.id } }">
-                <p>{{ i + 1 }}. {{ lsd.name }}</p>
-              </router-link>
+              <div class="videos" v-if="ls.videos[0].url">
+                <div
+                  class="video"
+                  v-for="(v, index) in ls.videos"
+                  :key="index"
+                  @click="goToLessonDetail(route.params.id, ls.id, 'video', v.id)"
+                >
+                  <div class="icon-wrap"><Icon icon="lets-icons:video-fill" /></div>
+                  <p>{{ v.title }}</p>
+                </div>
+              </div>
+              <div class="exercise" v-if="ls.exercises[0].content">
+                <div
+                  class="exercise"
+                  v-for="(ex, index) in ls.exercises"
+                  :key="index"
+                  @click="goToLessonDetail(route.params.id, ls.id, 'exercise', ex.id)"
+                >
+                  <div class="icon-wrap">
+                    <Icon icon="mingcute:question-fill" />
+                  </div>
+                  <p>BTVN</p>
+                </div>
+              </div>
             </div>
           </div>
         </transition>
@@ -97,13 +147,14 @@ function toggleLesson(index) {
     .lesson-detail {
       transition: all 0.5s;
       padding: 32px 0 32px 32px;
+      cursor: pointer;
       @include mobile {
         font-size: 18px;
         padding: 16px 0 16px 16px;
       }
       > div {
         display: flex;
-        align-items: center;
+        flex-direction: column;
         &:not(:last-child) {
           margin-bottom: 8px;
         }
@@ -112,11 +163,28 @@ function toggleLesson(index) {
           display: flex;
           justify-content: center;
           align-items: center;
-          width: 24px;
-          height: 24px;
           svg {
-            width: 100%;
-            height: 100%;
+            width: 24px;
+            height: 24px;
+          }
+        }
+        p {
+          &:hover {
+            color: $color-primary;
+          }
+          @include mobile {
+            font-size: 20px;
+          }
+        }
+        > div.videos {
+          display: block;
+        }
+        > div {
+          display: flex;
+          align-items: center;
+          > div {
+            display: flex;
+            align-items: center;
           }
         }
       }

@@ -5,8 +5,13 @@ import { NModal, NCard, NImage } from 'naive-ui';
 import InforUpdate from '@/components/Profile/ProfileUpdate/InforUpdate.vue';
 import ImageUpdate from '@/components/Profile/ProfileUpdate/ImageUpdate.vue';
 
+import { useUserStore } from '@/stores/userStore';
+
+const userStore = useUserStore();
 const props = defineProps({
-  userImg: { type: Object, require: true }
+  userImg: { type: Object, require: true },
+  fullName: { type: String, require: true },
+  avatar: { type: String, require: true }
 });
 
 const showModal = ref(false);
@@ -87,7 +92,7 @@ watch([showModal, inforUpdate, avatar], () => {
           </div>
         </div>
       </div>
-      <p class="profile-name">Trần Vũ Trung Trạng Nguyên Trinh</p>
+      <p class="profile-name">{{ props.fullName }}</p>
     </div>
     <div class="change-banner center" @click="toggleSetting('banner')">
       <div class="change-banner--icon icon-setting center">
@@ -118,7 +123,12 @@ watch([showModal, inforUpdate, avatar], () => {
           <div class="close-modal" @click="showModal = false">x</div>
         </div>
       </template>
-      <InforUpdate v-if="inforUpdate" />
+      <InforUpdate
+        v-if="inforUpdate"
+        :email="userStore.email"
+        :github-url="userStore.githubUrl"
+        :desc="userStore.desc"
+      />
       <ImageUpdate :avatar="avatar" v-if="!inforUpdate" />
     </n-card>
   </n-modal>

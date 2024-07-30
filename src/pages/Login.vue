@@ -1,94 +1,130 @@
 <script setup lang="js">
 import { reactive, ref } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+import { useRouter } from 'vue-router';
+import { useMessage } from 'naive-ui';
+
+const message = useMessage();
+const router = useRouter();
+const userStore = useUserStore();
 const forget = ref(false);
 const user = reactive({
-  username: '',
+  studentCode: '',
   password: ''
-});
-
-const error = reactive({
-  username: {
-    error: false,
-    errorMsg: ''
-  },
-  password: {
-    error: false,
-    errorMsg: ''
-  }
 });
 
 const rgxUsername = /^\d{10}$/;
 const usernameValidate = () => {
-  if (user.username.trim() == '') {
-    error.username.error = true;
-    error.username.errorMsg = 'Tài khoản không được để trống';
+  if (user.studentCode.trim() == '') {
+    message.warning(
+      'Tài khoản không được để trống',
+      {
+        keepAliveOnHover: true
+      },
+      4000
+    );
     return false;
   } else {
-    if (!rgxUsername.test(user.username)) {
-      error.username.error = true;
-      error.username.errorMsg = 'Tài khoản phải gồm 10 ký tự số';
+    if (!rgxUsername.test(user.studentCode)) {
+      message.error(
+        'Tài khoản phải gồm 10 ký tự số',
+        {
+          keepAliveOnHover: true
+        },
+        4000
+      );
       return false;
-    } else {
-      error.username.error = false;
     }
   }
   return true;
 };
 
-const rgxPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+const rgxPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*/])[A-Za-z\d!@#$%^&*/]{8,}$/;
 const passwordValidate = () => {
   if (user.password == '') {
-    error.password.error = true;
-    error.password.errorMsg = 'Mật khẩu không được để trống';
+    message.warning(
+      'Mật khẩu không được để trống',
+      {
+        keepAliveOnHover: true
+      },
+      4000
+    );
     return false;
   } else {
     if (!rgxPassword.test(user.password)) {
-      error.password.error = true;
-      error.password.errorMsg = 'Mật khẩu phải bao gồm ký tự in hoa, thường, số và ký tự đặc biệt';
+      message.error(
+        'Mật khẩu phải bao gồm ký tự in hoa, thường, số và ký tự đặc biệt',
+        {
+          keepAliveOnHover: true
+        },
+        4000
+      );
       return false;
-    } else {
-      error.password.error = false;
     }
   }
   return true;
 };
 
-function loginHandler() {
+async function loginHandler() {
   if (!usernameValidate() || !passwordValidate()) {
     return;
+  } else {
+    try {
+      await userStore.login(user);
+      userStore.getInfor();
+      message.success(
+        'Đăng nhập thành công',
+        {
+          keepAliveOnHover: true
+        },
+        4000
+      );
+      if (userStore.userRoles == 'ROLE_ADMIN' || userStore.userRoles == 'ROLE_USER') {
+        router.push({ path: '', name: 'Home' });
+      }
+    } catch (e) {
+      if (e.response.status === 401) {
+        message.error(
+          'Mật khẩu hoặc tài khoản không đúng',
+          {
+            keepAliveOnHover: true
+          },
+          4000
+        );
+      }
+    }
   }
 }
-const formData = reactive({
-  masv: ''
-});
 
-const errors = reactive({
-  masv: {
-    error: false,
-    errorMessage: ''
-  }
-});
+const formData = ref('');
 
-const rgxMasv = /^\d{10}$/;
-
-const masvValidate = () => {
-  if (formData.masv.trim() === '') {
-    errors.masv.error = true;
-    errors.masv.errorMessage = 'Vui lòng điền vào trường này';
-    return false;
-  } else if (!rgxMasv.test(formData.masv)) {
-    errors.masv.error = true;
-    errors.masv.errorMessage = 'Mã sinh viên phải gồm 10 ký tự số';
+const formDataValidate = () => {
+  if (formData.value.trim() === '') {
+    message.warning(
+      'Tài khoản không được để trống',
+      {
+        keepAliveOnHover: true
+      },
+      4000
+    );
     return false;
   } else {
-    errors.masv.error = false;
-    errors.masv.errorMessage = '';
+    if (!rgxUsername.test(formData.value)) {
+      message.error(
+        'Tài khoản phải gồm 10 ký tự số',
+        {
+          keepAliveOnHover: true
+        },
+        4000
+      );
+      return false;
+    }
   }
   return true;
 };
 
 const handleSubmit = () => {
-  if (masvValidate()) {
+  if (formDataValidate()) {
     alert('Mật khẩu mới đã được gửi vào email của bạn');
   }
 };
@@ -96,6 +132,7 @@ const handleSubmit = () => {
 
 <template>
   <div class="login-cha">
+    <p>{{ formData }}</p>
     <form class="login-con" v-if="!forget" @submit.prevent="loginHandler">
       <img class="logo" style="width: 88px; height: 88px" src="../assets/logo.png" alt="logo" />
       <div class="user-name">
@@ -117,12 +154,11 @@ const handleSubmit = () => {
             id="u-name"
             type="text"
             placeholder="Nhập tài khoản"
-            v-model="user.username"
+            v-model="user.studentCode"
             required
             autofocus
           />
         </div>
-        <p class="errorMsg" v-if="error.username.error">{{ error.username.errorMsg }}</p>
       </div>
       <div class="password">
         <p>Mật khẩu</p>
@@ -141,7 +177,6 @@ const handleSubmit = () => {
           </svg>
           <input id="pw" type="password" placeholder="Nhập mật khẩu" v-model="user.password" />
         </div>
-        <p class="errorMsg" v-if="error.password.error">{{ error.password.errorMsg }}</p>
       </div>
       <p class="a" @click="forget = !forget">Quên mật khẩu?</p>
       <button type="submit">Đăng nhập</button>
@@ -167,12 +202,11 @@ const handleSubmit = () => {
           <input
             type="text"
             id="masv"
-            v-model="formData.masv"
+            v-model="formData"
             placeholder="Nhập mã sinh viên"
             required
           />
         </div>
-        <p class="errorMsg" v-if="errors.masv.error">{{ errors.masv.errorMessage }}</p>
       </div>
       <button type="submit">Gửi</button>
       <p class="a" @click="forget = !forget">Quay lại</p>
@@ -220,7 +254,6 @@ template {
   @include mobile {
     max-width: 350px;
   }
-
   .logo {
     margin-bottom: 50px;
   }

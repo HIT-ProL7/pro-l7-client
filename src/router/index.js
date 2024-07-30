@@ -28,7 +28,7 @@ const routes = [
         component: () => import('@/pages/Class.vue')
       },
       {
-        path: 'lesson/:lsId',
+        path: '/:classId/lesson',
         name: 'Lesson',
         component: () => import('@pages/Lesson.vue'),
         children: [
@@ -62,5 +62,15 @@ router.afterEach((to, from) => {
     document.title = `${to.meta.title} | ${appName}`;
   } else {
     document.title = appName;
+  }
+});
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('prol7-vuejs:access-token');
+
+  if (to.meta.requiresAuth && !token) {
+    next('/login');
+  } else {
+    next();
   }
 });
