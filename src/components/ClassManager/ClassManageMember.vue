@@ -46,15 +46,19 @@ function addMember() {
     positiveText: 'Xác nhận',
     negativeText: 'Hủy',
     onPositiveClick: async () => {
-      try {
-        await classManageStore.addMember({ studentCode: newStudentCode.value }, route.params.id);
-        console.log(route.params.id);
-      } catch (error) {
-        message.error('Thành viên này đã có trong lớp hoặc không tồn tại');
-        return error;
+      const response = await classManageStore.addMember(
+        { studentCode: newStudentCode.value },
+        route.params.id
+      );
+      console.log(response.status);
+      if (response.status == 200) {
+        message.success(`Thêm thành công thành công`);
+      } else if (response.response.status == 400) {
+        message.error('Thành viên này đã có trong lớp');
+      } else if (response.response.status == 404) {
+        message.error('Không tìm thấy thành viên');
       }
       classStore.getDetailClass(route.params.id);
-      message.success(`Thêm thành công thành công`);
     },
     onNegativeClick: () => {
       message.error('Hủy thêm');
@@ -80,7 +84,6 @@ function addMember() {
         </template>
         <div class="input-student-code" style="width: 240px">
           <label for="studentCode" style="font-size: 20px">Nhập mã sinh viên: </label>
-          <p>{{ newStudentCode }}</p>
           <input
             type="text"
             v-model="newStudentCode"

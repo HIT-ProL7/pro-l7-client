@@ -2,53 +2,36 @@
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
-const lessons = [
-  {
-    id: 'ls1',
-    name: 'Giới thiệu',
-    lessonDetails: [
-      { id: 'ls1D1', name: 'Giới thiệu lớp học', content: 'Content1' },
-      { id: 'ls1D2', name: 'Video bài học', content: 'Content2' },
-      { id: 'ls1D3', name: 'BTVN', content: 'Content3' }
-    ]
-  },
-  {
-    id: 'ls2',
-    name: 'Giới thiệu 2',
-    lessonDetails: [
-      {
-        id: 'ls2D1',
-        name: 'Giới thiệu 2',
-        content: 'Content4'
-      },
-      { id: 'ls2D2', name: 'Video bài học 2', content: 'Content5' },
-      { id: 'ls2D3', name: 'BTVN 2', content: 'Content6' }
-    ]
-  }
-];
+import { useClassStore } from '@/stores/classStore';
+
+const route = useRoute();
+const router = useRouter();
+const classStore = useClassStore();
 
 const show = ref([0]);
 function toggleLesson(index) {
   show.value[index] = !show.value[index];
 }
 
-const router = useRouter();
-
-const lesson = ref({});
-function getLesson(lsId) {
-  lesson.value = lessons.find((ls) => ls.id === lsId);
-}
-
-const lessonDetail = ref({});
-function getLessonDetail(lsdId) {
-  lessonDetail.value = lesson.value.lessonDetails.find((lsd) => lsd.id === lsdId);
-}
-
-function goToLessonDetail(lsId, lsdId) {
-  getLesson(lsId);
-  getLessonDetail(lsdId);
-
-  router.push({ name: 'Lesson-detail', params: { lsId: lsId, lsdId: lsdId } });
+function goToLessonDetail(classId, lsdId, option, optionId) {
+  if (option == 'content') {
+    router.replace({
+      name: 'Lesson-detail',
+      params: { classId: classId, lsdId: lsdId },
+      query: { content: true }
+    });
+  } else if (option == 'exercise') {
+    router.replace({
+      name: 'Lesson-detail',
+      params: { classId: classId, lsdId: lsdId },
+      query: { exercise: optionId }
+    });
+  } else
+    router.replace({
+      name: 'Lesson-detail',
+      params: { classId: classId, lsdId: lsdId },
+      query: { video: optionId }
+    });
   if (!responsive.value) showLessonList.value = false;
 }
 
@@ -70,6 +53,8 @@ const setResponsive = () => {
 
 onMounted(() => {
   window.addEventListener('resize', setResponsive);
+
+  classStore.getAllLessons(route.params.classId);
 });
 
 onBeforeUnmount(() => {
@@ -82,7 +67,7 @@ setResponsive();
 <template>
   <div class="lesson-wrap">
     <div class="lesson-content-wrap">
-      <router-view :lesson-details="lesson.lessonDetails"></router-view>
+      <router-view></router-view>
     </div>
     <transition name="slide-right">
       <div class="lesson-list-wrap" v-if="showLessonList">
@@ -91,22 +76,46 @@ setResponsive();
             <div class="close-list" @click="toggleLessonList" v-if="!responsive">x</div>
             <p>Nội dung khóa học</p>
           </div>
-          <div class="lesson" v-for="(ls, index) in lessons" :key="index">
+          <div class="lesson" v-for="(ls, index) in classStore.lessons" :key="index">
             <div class="lesson-title" @click="toggleLesson(index)">
               <div class="icon-title-wrap"><Icon icon="ic:round-play-arrow" color="#F06C25" /></div>
               <p>{{ index + 1 }}. {{ ls.name }}</p>
             </div>
             <transition name="slide">
               <div class="lesson-detail" v-if="show[index]">
-                <div
-                  v-for="(lsd, i) in ls.lessonDetails"
-                  :key="i"
-                  @click="goToLessonDetail(ls.id, lsd.id)"
-                >
-                  <div class="icon-wrap">
-                    <Icon icon="fluent:document-one-page-24-filled" />
+                <div>
+                  <div
+                    class="content"
+                    v-if="ls.content"
+                    @click="goToLessonDetail(route.params.classId, ls.id, 'content', true)"
+                  >
+                    <div class="icon-wrap"><Icon icon="fluent:document-one-page-24-filled" /></div>
+                    <p>Nội dung</p>
                   </div>
-                  <p>{{ i + 1 }}. {{ lsd.name }}</p>
+                  <div class="videos" v-if="ls.videos[0].url">
+                    <div
+                      class="video"
+                      v-for="(v, index) in ls.videos"
+                      :key="index"
+                      @click="goToLessonDetail(route.params.classId, ls.id, 'video', v.id)"
+                    >
+                      <div class="icon-wrap"><Icon icon="lets-icons:video-fill" /></div>
+                      <p>{{ v.title }}</p>
+                    </div>
+                  </div>
+                  <div class="exercise" v-if="ls.exercises[0].content">
+                    <div
+                      class="exercise"
+                      v-for="(ex, index) in ls.exercises"
+                      :key="index"
+                      @click="goToLessonDetail(route.params.id, ls.id, 'exercise', ex.id)"
+                    >
+                      <div class="icon-wrap">
+                        <Icon icon="mingcute:question-fill" />
+                      </div>
+                      <p>BTVN</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </transition>
@@ -145,7 +154,6 @@ setResponsive();
   overflow: hidden;
   .lesson-content-wrap {
     width: 100%;
-    height: 100vh;
   }
   .toggle-lesson-list {
     position: absolute;
@@ -178,7 +186,7 @@ setResponsive();
     width: 30%;
     height: 100vh;
     background-color: #fff;
-    overflow-y: scroll;
+    overflow: hidden;
     @media (max-width: 1440px) {
       position: absolute;
       top: 0;
@@ -250,7 +258,7 @@ setResponsive();
         }
         > div {
           display: flex;
-          align-items: center;
+          flex-direction: column;
           font-size: 24px;
           &:not(:last-child) {
             margin-bottom: 8px;
@@ -260,21 +268,28 @@ setResponsive();
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 24px;
-            height: 24px;
-            flex: 1;
             svg {
-              width: 100%;
-              height: 100%;
+              width: 24px;
+              height: 24px;
             }
           }
           p {
-            flex: 10;
             &:hover {
               color: $color-primary;
             }
             @include mobile {
               font-size: 20px;
+            }
+          }
+          > div.videos {
+            display: block;
+          }
+          > div {
+            display: flex;
+            align-items: center;
+            > div {
+              display: flex;
+              align-items: center;
             }
           }
         }

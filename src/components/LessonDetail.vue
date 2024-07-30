@@ -1,62 +1,47 @@
 <script setup>
 import { defineProps, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useLessonStore } from '@/stores/lessonStore';
 
-const lessons = [
-  {
-    id: 'ls1',
-    name: 'Giới thiệu',
-    lessonDetails: [
-      { id: 'ls1D1', name: 'Giới thiệu lớp học', content: 'Content1' },
-      { id: 'ls1D2', name: 'Video bài học', content: 'Content2' },
-      { id: 'ls1D3', name: 'BTVN', content: 'Content3' }
-    ]
-  },
-  {
-    id: 'ls2',
-    name: 'Giới thiệu 2',
-    lessonDetails: [
-      { id: 'ls2D1', name: 'Giới thiệu lớp học', content: 'Content4' },
-      { id: 'ls2D2', name: 'Video bài học 2', content: 'Content5' },
-      { id: 'ls2D3', name: 'BTVN 2', content: 'Content6' }
-    ]
-  }
-];
-
+const lessonStore = useLessonStore();
 const route = useRoute();
 
-const lesson = ref({});
-function getLesson(lsId) {
-  lesson.value = lessons.find((ls) => ls.id === lsId);
-}
-
-const lessonDetail = ref({});
-function getLessonDetail(lsdId) {
-  lessonDetail.value = lesson.value.lessonDetails.find((lsd) => lsd.id === lsdId);
+const option = ref('');
+async function getDetailLesson(lessonId) {
+  try {
+    await lessonStore.getDetailLesson(lessonId);
+    if (route.query.video) {
+      document.title = `${lessonStore.videos[0].title} | ProL7`;
+      option.value = 'video';
+    } else if (route.query.content) {
+      document.title = `Nội dung bài học | ProL7`;
+      option.value = 'content';
+    } else {
+      document.title = `BTVN | ProL7`;
+      option.value = 'exercise';
+    }
+  } catch (error) {
+    return error;
+  }
 }
 
 watch(
-  () => route.params,
+  () => route.query,
   () => {
-    getLesson(route.params.lsId);
-    getLessonDetail(route.params.lsdId);
-    document.title = `${lessonDetail.value.name} | ProL7`;
+    getDetailLesson(route.params.lsdId);
   }
 );
 
 onMounted(() => {
-  getLesson(route.params.lsId);
-  getLessonDetail(route.params.lsdId);
-
-  document.title = `${lessonDetail.value.name} | ProL7`;
+  getDetailLesson(route.params.lsdId);
 });
 </script>
 
 <template>
-  <div class="lesson-detail">
-    <div class="video">
+  <div class="lesson-detail-container">
+    <div class="video" v-if="option == 'video'">
       <iframe
-        src="https://www.youtube.com/embed/SeWt7IpZ0CA?si=Aub4aRVvb3T3o46a"
+        :src="lessonStore.videos[0].url"
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -64,14 +49,21 @@ onMounted(() => {
         allowfullscreen
       ></iframe>
     </div>
-    <div class="content">
-      <p>This is content!</p>
-      <p>{{ lessonDetail.name }}</p>
-    </div>
+    <p v-if="option == 'video'">{{ lessonStore.video.description }}</p>
+    <div
+      class="lesson-detail-content lesson-content"
+      v-if="option == 'content'"
+      v-html="lessonStore.lesson.content"
+    ></div>
+    <div
+      class="lesson-detail-content exercise-content"
+      v-if="option == 'exercise'"
+      v-html="lessonStore.exercise.content"
+    ></div>
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 ::-webkit-scrollbar {
   width: 10px;
   @include mobile {
@@ -87,10 +79,10 @@ onMounted(() => {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-.lesson-detail {
+.lesson-detail-container {
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
+  overflow: hidden;
   .video {
     position: relative;
     padding-bottom: 56.25%; /* 16:9 aspect ratio */
@@ -112,12 +104,114 @@ onMounted(() => {
       height: 100%;
     }
   }
-  .content {
-    height: 1000px;
+  .lesson-detail-content {
     padding: 16px;
-    p {
-      font-size: 36px;
-      font-weight: 500;
+    :first-child {
+      margin-top: 0;
+    }
+
+    a {
+      color: blue;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+    img {
+      display: block;
+      height: auto;
+      margin: 1.5rem 0;
+      max-width: 100%;
+
+      &.ProseMirror-selectednode {
+        outline: 3px solid var(--purple);
+      }
+    }
+    /* List styles */
+    ul,
+    ol {
+      padding: 0 1rem;
+      margin: 1.25rem 1rem 1.25rem 0.4rem;
+
+      li p {
+        margin-top: 0.25em;
+        margin-bottom: 0.25em;
+      }
+    }
+
+    /* Heading styles */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      line-height: 1.1;
+      margin-top: 2.5rem;
+      text-wrap: pretty;
+    }
+
+    h1,
+    h2 {
+      margin-top: 3.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+    }
+
+    h4,
+    h5,
+    h6 {
+      font-size: 1rem;
+    }
+
+    /* Code and preformatted text styles */
+    code {
+      background-color: red;
+      border-radius: 0.4rem;
+      color: #000;
+      font-size: 0.85rem;
+      padding: 0.25em 0.3em;
+    }
+
+    pre {
+      background: #000;
+      border-radius: 0.5rem;
+      color: #fff;
+      font-family: 'JetBrainsMono', monospace;
+      margin: 1.5rem 0;
+      padding: 0.75rem 1rem;
+
+      code {
+        background: none;
+        color: inherit;
+        font-size: 0.8rem;
+        padding: 0;
+      }
+    }
+
+    blockquote {
+      border-left: 3px solid #ccc;
+      margin: 1.5rem 0;
+      padding-left: 1rem;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #ccc;
+      margin: 2rem 0;
     }
   }
 }

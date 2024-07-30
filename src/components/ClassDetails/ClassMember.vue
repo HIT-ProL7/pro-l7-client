@@ -24,7 +24,7 @@ const props = defineProps({
       <tbody>
         <tr v-for="(member, index) in classMembers" :key="index" class="member">
           <td>{{ index + 1 }}</td>
-          <td>{{ member.msv }}</td>
+          <td>{{ member.studentCode }}</td>
           <n-popover
             placement="top-end"
             :overlap="false"
@@ -33,7 +33,7 @@ const props = defineProps({
           >
             <template #trigger>
               <td>
-                <p>{{ member.name }}</p>
+                <p>{{ member.fullName }}</p>
               </td>
             </template>
             <div
@@ -52,10 +52,10 @@ const props = defineProps({
                 <div class="avatar-wrap" style="margin-right: 16px">
                   <img :src="avatar" alt="" />
                 </div>
-                <p class="member-name">{{ member.name }}</p>
+                <p class="member-name">{{ member.fullName }}</p>
               </div>
               <p style="display: flex; align-items: center">
-                <Icon icon="tabler:id" class="icon" />Mã SV: <span>{{ member.msv }}</span>
+                <Icon icon="tabler:id" class="icon" />Mã SV: <span>{{ member.studentCode }}</span>
               </p>
               <p style="display: flex; align-items: center">
                 <Icon icon="ph:student-bold" class="icon" />Khóa: <span>16</span>

@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router';
 import ClassLogo from '@components/Classrooms/ClassLogo.vue';
 import { defineProps, onMounted } from 'vue';
+import { formatDate } from '@/utils/formatDate';
 
 const router = useRouter();
 const props = defineProps({
@@ -20,9 +21,10 @@ function goToClassDetail(classId) {
     </div>
 
     <div class="class-list">
+      <p v-if="classInfor.length == 0">Không có lớp học nào</p>
       <div class="class" v-for="c in classInfor" :key="c.id">
         <div class="class-img">
-          <ClassLogo :logoType="c.logoType" />
+          <ClassLogo :logo-name="c.name" />
         </div>
         <div class="class-infor">
           <p class="heading">{{ c.name }}</p>
@@ -35,7 +37,10 @@ function goToClassDetail(classId) {
                 />
               </svg>
             </span>
-            Leader: {{ c.leader }}
+            Leader:
+            <span class="leader" v-for="(l, index) in c.leaders" :key="index"
+              >{{ l.fullName }}
+            </span>
           </p>
           <p class="sub-heading">
             <span class="icon-wrap">
@@ -46,7 +51,7 @@ function goToClassDetail(classId) {
                 />
               </svg>
             </span>
-            {{ c.startDate }} - {{ c.endDate }}
+            {{ formatDate(c.createAt) }}
           </p>
           <div class="class-action">
             <button class="class-join-btn" @click="goToClassDetail(c.id)">Tham gia</button>
@@ -83,7 +88,6 @@ function goToClassDetail(classId) {
     @include mobile {
       justify-content: center;
     }
-
     .class {
       .class-infor {
         flex: 3;
@@ -116,6 +120,7 @@ function goToClassDetail(classId) {
           display: flex;
           align-items: center;
           gap: 8px;
+          width: 100%;
           .icon-wrap {
             display: flex;
             align-items: center;
@@ -123,6 +128,10 @@ function goToClassDetail(classId) {
             width: 30px;
             height: 30px;
             border-radius: 50%;
+          }
+
+          > .leader:not(:last-child)::after {
+            content: ',';
           }
         }
       }

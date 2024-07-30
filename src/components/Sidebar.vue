@@ -4,7 +4,11 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 const router = useRouter();
 const toggleMenu = ref(false);
 const toggleSidebar = ref(false);
+import { useUserStore } from '@/stores/userStore';
+import { useClassManageStore } from '@stores/classManageStore';
 
+const userStore = useUserStore();
+const classManageStore = useClassManageStore();
 const res = ref(false);
 const setRes = () => {
   if (window.innerWidth < 480) {
@@ -27,12 +31,26 @@ function autoCloseSidebar(action) {
   if (res.value) {
     action;
     toggleSidebar.value = !toggleSidebar.value;
-    console.log('object');
   } else action;
+}
+
+function logoutHandler() {
+  userStore.logout();
+  router.replace('/login');
+}
+
+async function getInfor() {
+  try {
+    await userStore.getInfor();
+    await classManageStore.getClassManage(userStore.studentCode);
+  } catch (error) {
+    return error;
+  }
 }
 
 onMounted(() => {
   window.addEventListener('resize', setRes);
+  getInfor();
 });
 
 onBeforeUnmount(() => {
@@ -67,18 +85,18 @@ setRes();
           <li class="fist">
             <img src="../assets/avatar.png" alt="avartar" />
             <span
-              >Vũ Gia Chiến
-              <p>User name</p></span
+              >{{ userStore.fullName }}
+              <p>{{ userStore.studentCode }}</p></span
             >
           </li>
           <li @click="router.replace({ name: 'Profile' })">Trang cá nhân</li>
           <li>Chế độ sáng/ tối</li>
-          <li>Đăng xuất</li>
+          <li @click="logoutHandler">Đăng xuất</li>
         </ul>
       </div>
 
-      <div class="icon-cha" @click="autoCloseSidebar(router.push('/'))">
-        <div class="icon">
+      <div class="icon-cha">
+        <div class="icon" @click="autoCloseSidebar(router.push('/'))">
           <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
             <path
               fill="currentColor"
@@ -87,7 +105,11 @@ setRes();
           </svg>
           <p>Trang chủ</p>
         </div>
-        <div class="icon" @click="autoCloseSidebar(router.replace({ name: 'ClassesManagement' }))">
+        <div
+          class="icon"
+          @click="autoCloseSidebar(router.replace({ name: 'ClassesManagement' }))"
+          v-if="classManageStore.classManage.length != 0"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 14 14">
             <path
               fill="currentColor"
@@ -124,7 +146,7 @@ setRes();
         <div class="icon" v-if="res">
           <p>Chế độ sáng tối</p>
         </div>
-        <div class="icon" v-if="res">
+        <div class="icon" v-if="res" @click="logoutHandler">
           <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 14 14">
             <path
               fill="black"
@@ -277,7 +299,7 @@ setRes();
     position: fixed;
   }
   .menu {
-    width: 250px;
+    width: max-content;
     height: 230px;
     border: 1px solid #f06c25;
     position: absolute;
@@ -289,6 +311,7 @@ setRes();
     background-color: #fff;
     text-align: start;
     z-index: 999;
+    list-style-type: none;
     span {
       margin-left: 10px;
       p {
