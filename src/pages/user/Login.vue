@@ -69,29 +69,14 @@ async function loginHandler() {
   if (!usernameValidate() || !passwordValidate()) {
     return;
   } else {
-    try {
-      await userStore.login(user);
-      userStore.getInfor();
-      message.success(
-        'Đăng nhập thành công',
-        {
-          keepAliveOnHover: true
-        },
-        4000
-      );
-      if (userStore.userRoles == 'ROLE_ADMIN' || userStore.userRoles == 'ROLE_USER') {
-        router.push({ path: '', name: 'Home' });
-      }
-    } catch (e) {
-      if (e.response.status === 401) {
-        message.error(
-          'Mật khẩu hoặc tài khoản không đúng',
-          {
-            keepAliveOnHover: true
-          },
-          4000
-        );
-      }
+    const response = await userStore.login(user);
+    console.log(response);
+    userStore.getInfor();
+    if (userStore.userRoles == 'ROLE_ADMIN' || userStore.userRoles == 'ROLE_USER') {
+      router.push({ path: '', name: 'Home' });
+      message.success('Đăng nhập thành công');
+    } else {
+      message.error('Mật khẩu hoặc tài khoản không đúng');
     }
   }
 }
