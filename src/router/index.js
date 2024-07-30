@@ -12,7 +12,7 @@ const routes = [
           title: 'Trang chủ',
           requiresAuth: true
         },
-        component: () => import('@pages/index.vue')
+        component: () => import('@/pages/user/index.vue')
       },
       {
         path: 'profile',
@@ -20,17 +20,17 @@ const routes = [
         meta: {
           title: 'Trang cá nhân'
         },
-        component: () => import('@/pages/Profile.vue')
+        component: () => import('@/pages/user/Profile.vue')
       },
       {
         path: 'class/:id',
         name: 'Class',
-        component: () => import('@/pages/Class.vue')
+        component: () => import('@/pages/user/Class.vue')
       },
       {
         path: 'lesson/:lsId',
         name: 'Lesson',
-        component: () => import('@pages/Lesson.vue'),
+        component: () => import('@/pages/user/Lesson.vue'),
         children: [
           {
             path: ':lsdId',
@@ -38,6 +38,24 @@ const routes = [
             component: () => import('@components/LessonDetail.vue')
           }
         ]
+      },
+      {
+        path: 'classesManagement',
+        name: 'ClassesManagement',
+        meta: {
+          title: 'Quản lý lớp'
+        },
+        component: () => import('@pages/leader/ClassesManager.vue')
+      },
+      {
+        path: 'ClassManagement/:id',
+        name: 'ClassManagement',
+        component: () => import('@/pages/leader/ClassManager.vue')
+      },
+      {
+        path: 'lessonManagement',
+        name: 'LessonManagement',
+        component: () => import('@/pages/leader/LessonManager.vue')
       }
     ]
   },
@@ -47,7 +65,7 @@ const routes = [
     meta: {
       title: 'Trang đăng nhập'
     },
-    component: () => import('@pages/Login.vue')
+    component: () => import('@/pages/user/Login.vue')
   }
 ];
 const router = createRouter({
