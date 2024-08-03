@@ -48,6 +48,11 @@ async function getInfor() {
   }
 }
 
+function closeMenuHandler(act) {
+  act;
+  toggleMenu.value = false;
+}
+
 onMounted(() => {
   window.addEventListener('resize', setRes);
   getInfor();
@@ -81,18 +86,20 @@ setRes();
           <img src="../assets/avatar.png" alt="avartar" />
         </div>
 
-        <ul class="menu" v-if="toggleMenu">
-          <li class="fist">
-            <img src="../assets/avatar.png" alt="avartar" />
-            <span
-              >{{ userStore.fullName }}
-              <p>{{ userStore.studentCode }}</p></span
-            >
-          </li>
-          <li @click="router.replace({ name: 'Profile' })">Trang cá nhân</li>
-          <li>Chế độ sáng/ tối</li>
-          <li @click="logoutHandler">Đăng xuất</li>
-        </ul>
+        <div class="menu-wrap" v-if="toggleMenu" @click.self="toggleMenu = false">
+          <ul class="menu">
+            <li class="fist">
+              <img src="../assets/avatar.png" alt="avartar" />
+              <span
+                >{{ userStore.fullName }}
+                <p>{{ userStore.studentCode }}</p></span
+              >
+            </li>
+            <li @click="closeMenuHandler(router.replace({ name: 'Profile' }))">Trang cá nhân</li>
+            <li @click="closeMenuHandler(null)">Chế độ sáng/ tối</li>
+            <li @click="logoutHandler">Đăng xuất</li>
+          </ul>
+        </div>
       </div>
 
       <div class="icon-cha">
@@ -297,6 +304,15 @@ setRes();
     padding: 10px;
     bottom: 25px;
     position: fixed;
+  }
+  .menu-wrap {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1010;
+    background-color: rgba(255, 255, 255, 0.7);
   }
   .menu {
     width: max-content;
