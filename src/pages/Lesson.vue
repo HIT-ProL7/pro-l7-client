@@ -156,7 +156,7 @@ setResponsive();
     width: 100%;
   }
   .toggle-lesson-list {
-    position: absolute;
+    position: fixed;
     right: 20px;
     bottom: 20px;
     width: 70px;
@@ -188,9 +188,11 @@ setResponsive();
     background-color: #fff;
     overflow: hidden;
     @media (max-width: 1440px) {
-      position: absolute;
+      position: fixed;
       top: 0;
       right: 0;
+      bottom: 0;
+      left: 0;
       z-index: 9999;
       width: 100%;
     }
