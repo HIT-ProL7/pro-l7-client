@@ -10,6 +10,7 @@ export const useUserStore = defineStore('user', {
     email: '',
     createdAt: '',
     githubUrl: '',
+    facebookUrl: '',
     cohort: 0,
     desc: '',
     avatar: '',
@@ -36,21 +37,35 @@ export const useUserStore = defineStore('user', {
         this.email = response.data.data.email;
         this.createdAt = formatDate(response.data.data.createdAt);
         this.githubUrl = response.data.data.githubUrl;
+        this.facebookUrl = response.data.data.facebookUrl;
         this.cohort = response.data.data.cohort;
         this.desc = response.data.data.description;
+        this.avatar = response.data.data.avatarUrl;
+        this.banner = response.data.data.bannerUrl;
+        console.log(response.data.data);
       } catch (error) {
         throw error;
       }
     },
     async updateInfor(updateInfor) {
       try {
-        const response = await api.put('/users/update-info', updateInfor);
+        const response = await api.put('/users/update-info', updateInfor, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
         this.email = response.data.data.email;
         this.githubUrl = response.data.data.githubUrl;
+        this.facebookUrl = response.data.data.facebookUrl;
         this.desc = response.data.data.description;
+        this.cohort = response.data.data.cohort;
         this.avatar = response.data.data.avatarUrl;
+        this.banner = response.data.data.bannerUrl;
+
+        return response;
+        console.log(response);
       } catch (e) {
-        throw e;
+        return e;
       }
     },
     async getMyClass() {

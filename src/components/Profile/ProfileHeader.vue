@@ -2,16 +2,18 @@
 import { Icon } from '@iconify/vue';
 import { defineProps, ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import { NModal, NCard, NImage } from 'naive-ui';
+import { useUserStore } from '@/stores/userStore';
 import InforUpdate from '@/components/Profile/ProfileUpdate/InforUpdate.vue';
 import ImageUpdate from '@/components/Profile/ProfileUpdate/ImageUpdate.vue';
 
-import { useUserStore } from '@/stores/userStore';
+import bannerDefault from '@/assets/banner-profile.png';
+import avatarDefault from '@/assets/avatar-profile.png';
 
 const userStore = useUserStore();
 const props = defineProps({
-  userImg: { type: Object, require: true },
   fullName: { type: String, require: true },
-  avatar: { type: String, require: true }
+  avatar: { type: String, require: true },
+  banner: { type: String, require: true }
 });
 
 const showModal = ref(false);
@@ -76,14 +78,15 @@ watch([showModal, inforUpdate, avatar], () => {
       <n-image
         width="100%"
         height="100%"
-        :src="userImg.banner"
+        object-fit="cover"
+        :src="props.banner || bannerDefault"
         :previewed-img-props="{ style: { border: '8px solid white' } }"
       />
     </div>
     <div class="avatar center">
       <div class="avatar-img">
         <n-image
-          :src="userImg.avatar"
+          :src="props.avatar || avatarDefault"
           :previewed-img-props="{ style: { border: '8px solid white' } }"
         />
         <div class="change-avatar icon-setting center" @click="toggleSetting('avatar')">
@@ -127,6 +130,8 @@ watch([showModal, inforUpdate, avatar], () => {
         v-if="inforUpdate"
         :email="userStore.email"
         :github-url="userStore.githubUrl"
+        :facebook-url="userStore.facebookUrl"
+        :cohort="userStore.cohort"
         :desc="userStore.desc"
       />
       <ImageUpdate :avatar="avatar" v-if="!inforUpdate" />
@@ -134,7 +139,7 @@ watch([showModal, inforUpdate, avatar], () => {
   </n-modal>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .center {
   display: flex;
   justify-content: center;
@@ -220,8 +225,21 @@ watch([showModal, inforUpdate, avatar], () => {
   }
   .banner {
     .n-image {
+      height: 250px;
+      width: 100%;
+      justify-content: center;
+      @include tablet {
+        height: 180px;
+      }
+      @include small-tablet {
+        height: 150px;
+      }
       @include mobile {
         height: 100px;
+      }
+      > img {
+        width: 100%;
+        height: 100%;
       }
     }
   }
@@ -231,6 +249,7 @@ watch([showModal, inforUpdate, avatar], () => {
     left: 12%;
     top: 90%;
     @include tablet {
+      left: 14%;
       top: 90%;
     }
     @include small-tablet {
@@ -244,7 +263,9 @@ watch([showModal, inforUpdate, avatar], () => {
       position: absolute;
       .n-image {
         border-radius: 50%;
+        width: 200px;
         height: 200px;
+        justify-content: center;
         @include tablet {
           width: 150px;
           height: 150px;
@@ -252,6 +273,10 @@ watch([showModal, inforUpdate, avatar], () => {
         @include mobile {
           width: 100px;
           height: 100px;
+        }
+        > img {
+          width: 100% !important;
+          height: 100% !important;
         }
       }
       .change-avatar {
@@ -261,12 +286,9 @@ watch([showModal, inforUpdate, avatar], () => {
         background-color: #b0b0b0;
         border-radius: 50%;
         cursor: pointer;
-        @include tablet {
-          right: 0;
-        }
         @include mobile {
           bottom: -5px;
-          right: -5px;
+          right: 12px;
         }
       }
     }
