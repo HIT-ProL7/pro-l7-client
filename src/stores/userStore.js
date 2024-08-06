@@ -24,8 +24,10 @@ export const useUserStore = defineStore('user', {
 
         this.userRoles = response.data.data.roles;
         localStorage.setItem('prol7-vuejs:access-token', response.data.data.accessToken);
+
+        return response;
       } catch (error) {
-        throw error;
+        return error;
       }
     },
     async getInfor() {
