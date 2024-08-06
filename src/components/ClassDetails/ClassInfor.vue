@@ -5,6 +5,7 @@ const props = defineProps({
   name: { type: String, require: true },
   desc: { type: String, require: true },
   createAt: { type: String, require: true },
+  startedAt: { type: String, require: true },
   logo: { type: String, require: true },
   leaders: { type: Array, require: true }
 });
@@ -23,6 +24,7 @@ const props = defineProps({
       </p>
       <p class="sub-heading">
         <span class="icon-wrap"><Icon icon="mdi:clipboard-text-date" color="#fff" /></span>
+        <span>Ngày bắt đầu: </span>
         <span>{{ props.createAt }}</span>
       </p>
       <p class="desc">

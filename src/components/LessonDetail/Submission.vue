@@ -3,8 +3,11 @@ import { NThing, NImage, NButton, useMessage, useDialog } from 'naive-ui';
 import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useSubmissionStore } from '@/stores/submissionStore';
+import { formatDate } from '@/utils/formatDate';
+
 import delIcon from '@assets/icons/delIcon.svg';
 import editIcon from '@assets/icons/editIcon.svg';
+import avatarDefault from '@/assets/avatar-profile.png';
 
 const submissionStore = useSubmissionStore();
 const route = useRoute();
@@ -89,7 +92,12 @@ onMounted(async () => {
       <div class="submission" v-for="(s, i) in limitedSubList" :key="i">
         <n-thing>
           <template #avatar>
-            <n-image width="50px" height="50px" src="/src/assets/avatar.png" />
+            <n-image
+              width="50px"
+              height="50px"
+              style="border-radius: 50%"
+              :src="s.createdBy.avatarUrl || avatarDefault"
+            />
           </template>
           <template #header
             ><p style="font-size: 20px">
@@ -124,7 +132,7 @@ onMounted(async () => {
             {{ s.content }}
           </div>
           <template #footer>
-            <p style="color: #888">{{ s.updatedAt }}</p>
+            <p style="color: #888">{{ formatDate(s.updatedAt) }}</p>
           </template>
         </n-thing>
       </div>
