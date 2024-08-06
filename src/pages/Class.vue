@@ -72,6 +72,7 @@ justifyCenter();
       :name="classStore.name"
       :desc="classStore.description"
       :create-at="classStore.createAt"
+      :started-at="classStore.startedAt"
       :leaders="classStore.leaders"
       :logo="classStore.logo"
     />

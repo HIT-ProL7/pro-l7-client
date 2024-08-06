@@ -78,7 +78,9 @@ setResponsive();
           </div>
           <div class="lesson" v-for="(ls, index) in classStore.lessons" :key="index">
             <div class="lesson-title" @click="toggleLesson(index)">
-              <div class="icon-title-wrap"><Icon icon="ic:round-play-arrow" color="#F06C25" /></div>
+              <div class="icon-title-wrap" :class="{ 'is-active': show[index] }">
+                <Icon icon="ic:round-play-arrow" color="#F06C25" />
+              </div>
               <p>{{ index + 1 }}. {{ ls.name }}</p>
             </div>
             <transition name="slide">
@@ -92,7 +94,7 @@ setResponsive();
                     <div class="icon-wrap"><Icon icon="fluent:document-one-page-24-filled" /></div>
                     <p>Nội dung</p>
                   </div>
-                  <div class="videos" v-if="ls.videos[0].url">
+                  <div class="videos" v-if="ls.videos || ls.videos[0].url">
                     <div
                       class="video"
                       v-for="(v, index) in ls.videos"
@@ -103,7 +105,7 @@ setResponsive();
                       <p>{{ v.title }}</p>
                     </div>
                   </div>
-                  <div class="exercise" v-if="ls.exercises[0].content">
+                  <div class="exercise" v-if="ls.exercises || ls.exercises[0].content">
                     <div
                       class="exercise"
                       v-for="(ex, index) in ls.exercises"
@@ -234,7 +236,7 @@ setResponsive();
         margin-bottom: 8px;
       }
       .lesson-title {
-        font-size: 32px;
+        font-size: 24px;
         display: flex;
         align-items: center;
         padding: 8px;
@@ -248,6 +250,10 @@ setResponsive();
           display: flex;
           align-items: center;
           justify-content: center;
+          transition: all 0.8s ease;
+        }
+        .is-active {
+          transform: rotate(90deg);
         }
       }
       .lesson-detail {
@@ -261,7 +267,7 @@ setResponsive();
         > div {
           display: flex;
           flex-direction: column;
-          font-size: 24px;
+          font-size: 20px;
           &:not(:last-child) {
             margin-bottom: 8px;
           }
