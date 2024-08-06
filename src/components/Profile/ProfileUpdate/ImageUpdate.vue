@@ -1,20 +1,25 @@
 <script setup>
 import { Icon } from '@iconify/vue';
+import { useMessage, useDialog } from 'naive-ui';
 import { ref, defineProps } from 'vue';
 import { PinturaEditorModal } from '@pqina/vue-pintura';
 import { getEditorDefaults } from '@pqina/pintura';
 import '@pqina/pintura/pintura.css'; // Import Pintura styles
 import { useUserStore } from '@/stores/userStore';
 
+const message = useMessage();
+const dialog = useDialog();
 // Define reactive state
 const propsEditor = ref(getEditorDefaults());
 const visible = ref(false);
-const src = ref('/src/assets/footer-bg.jpg');
+const src = ref('');
 const result = ref(undefined);
+const resultImg = ref(null);
 
 // Handle process event
 const handleProcess = (event) => {
   result.value = URL.createObjectURL(event.detail.dest);
+  resultImg.value = event.detail.dest;
 };
 
 const userStore = useUserStore();
@@ -31,23 +36,53 @@ function getFile(event) {
   visible.value = true;
 }
 
-function showFile(file) {
-  const fileType = file.type;
-  const validExtensions = ['image/jpeg', 'image/jpg', 'image/png'];
-  if (validExtensions.includes(fileType)) {
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      fileUrl.value = fileReader.result;
-    };
-    fileReader.readAsDataURL(file);
-  } else {
-    alert('Đây không phải là file ảnh');
-  }
+function continueEdit() {
+  visible.value = true;
+  src.value = result.value;
 }
 
-function updateImageHandler() {
-  console.log(typeof fileUrl.value);
-  userStore.updateInfor({ description: fileUrl.value });
+async function updateImageHandler() {
+  if (props.avatar) {
+    if (!src.value) message.info('Hãy chọn ảnh đại diện');
+    else {
+      dialog.warning({
+        title: 'Xác nhận đổi ảnh đại diện',
+        content: 'Bạn chắc chắn muốn đổi ảnh đại diện?',
+        positiveText: 'Đổi',
+        negativeText: 'Hủy',
+        onPositiveClick: async () => {
+          const res = await userStore.updateInfor({ avatar: resultImg.value });
+
+          if (res.status == 200) {
+            message.success('Đổi ảnh đại diện thành công');
+          } else if (res.response.status) message.error('Lỗi đổi ảnh đại diện');
+        },
+        onNegativeClick: () => {
+          message.error('Hủy đổi ảnh đại diện');
+        }
+      });
+    }
+  } else {
+    if (!src.value) message.info('Hãy chọn ảnh bìa');
+    else {
+      dialog.warning({
+        title: 'Xác nhận đổi ảnh bìa',
+        content: 'Bạn chắc chắn muốn đổi ảnh bìa?',
+        positiveText: 'Đổi',
+        negativeText: 'Hủy',
+        onPositiveClick: async () => {
+          const res = await userStore.updateInfor({ banner: resultImg.value });
+
+          if (res.status == 200) {
+            message.success('Đổi ảnh bìa thành công');
+          } else if (res.response.status) message.error('Lỗi đổi ảnh bìa');
+        },
+        onNegativeClick: () => {
+          message.error('Hủy đổi ảnh bìa');
+        }
+      });
+    }
+  }
 }
 </script>
 
@@ -68,7 +103,7 @@ function updateImageHandler() {
           </div>
           Chọn ảnh từ máy
         </label>
-        <div class="icon-wrap center" v-if="result" @click="visible = true">
+        <div class="icon-wrap center" v-if="result" @click="continueEdit">
           <Icon icon="solar:pen-bold" font-size="28px" />
         </div>
       </div>
@@ -80,7 +115,7 @@ function updateImageHandler() {
         <img :src="result" alt="" />
       </div>
       <input id="file" type="file" accept="image/png, image/jpg, image/jpeg" @change="getFile" />
-      <button @click="updateImageHandler">Lưu</button>
+      <button @click="updateImageHandler()">Lưu</button>
     </div>
   </div>
 </template>

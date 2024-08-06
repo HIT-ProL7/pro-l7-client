@@ -5,6 +5,7 @@ const props = defineProps({
   studentCode: { type: String, require: true },
   email: { type: String, require: true },
   githubUrl: { type: String, require: true },
+  facebookUrl: { type: String, require: true },
   createdAt: { type: String, require: true },
   cohort: { type: Number, require: true },
   desc: { type: String, require: true }
@@ -41,6 +42,17 @@ const props = defineProps({
           </div>
           <span class="word-wrap"
             ><a :href="props.githubUrl" target="_blank">{{ props.githubUrl }}</a></span
+          >
+        </div>
+        <div class="wrap">
+          <div class="left">
+            <div class="icon-wrap center">
+              <Icon font-size="24px" icon="ic:baseline-facebook" />
+            </div>
+            <p>Facebook:</p>
+          </div>
+          <span class="word-wrap"
+            ><a :href="props.facebookUrl" target="_blank">{{ props.facebookUrl }}</a></span
           >
         </div>
         <div>

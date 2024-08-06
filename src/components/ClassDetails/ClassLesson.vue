@@ -61,7 +61,7 @@ function goToLessonDetail(classId, lsdId, option, optionId) {
                 </div>
                 <p>Nội dung</p>
               </div>
-              <div class="videos" v-if="ls.videos[0].url">
+              <div class="videos" v-if="ls.videos || ls.videos[0].url">
                 <div
                   class="video"
                   v-for="(v, index) in ls.videos"
@@ -72,7 +72,7 @@ function goToLessonDetail(classId, lsdId, option, optionId) {
                   <p>{{ v.title }}</p>
                 </div>
               </div>
-              <div class="exercise" v-if="ls.exercises[0].content">
+              <div class="exercise" v-if="ls.exercises || ls.exercises[0].content">
                 <div
                   class="exercise"
                   v-for="(ex, index) in ls.exercises"

@@ -2,6 +2,7 @@
 import { defineProps, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useLessonStore } from '@/stores/lessonStore';
+import Submission from '@components/LessonDetail/Submission.vue';
 
 const lessonStore = useLessonStore();
 const route = useRoute();
@@ -10,6 +11,8 @@ const option = ref('');
 async function getDetailLesson(lessonId) {
   try {
     await lessonStore.getDetailLesson(lessonId);
+
+    console.log();
     if (route.query.video) {
       document.title = `${lessonStore.videos[0].title} | ProL7`;
       option.value = 'video';
@@ -36,11 +39,11 @@ onMounted(() => {
   getDetailLesson(route.params.lsdId);
 });
 </script>
-
 <template>
   <div class="lesson-detail-container">
     <div class="video" v-if="option == 'video'">
       <iframe
+        v-if="lessonStore.videos[0].url.includes('https://www.youtube.com/embed')"
         :src="lessonStore.videos[0].url"
         title="YouTube video player"
         frameborder="0"
@@ -49,17 +52,21 @@ onMounted(() => {
         allowfullscreen
       ></iframe>
     </div>
-    <p v-if="option == 'video'">{{ lessonStore.video.description }}</p>
     <div
       class="lesson-detail-content lesson-content"
       v-if="option == 'content'"
       v-html="lessonStore.lesson.content"
     ></div>
-    <div
-      class="lesson-detail-content exercise-content"
-      v-if="option == 'exercise'"
-      v-html="lessonStore.exercise.content"
-    ></div>
+    <div class="exercise-content-wrap">
+      <div
+        class="lesson-detail-content exercise-content"
+        v-if="option == 'exercise'"
+        v-html="lessonStore.exercise.content"
+      ></div>
+      <div class="submission-wrap" v-if="option == 'exercise'">
+        <Submission />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -214,5 +221,9 @@ onMounted(() => {
       margin: 2rem 0;
     }
   }
+}
+.submission-wrap {
+  padding: 16px;
+  margin-top: 32px;
 }
 </style>

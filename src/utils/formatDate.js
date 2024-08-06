@@ -1,7 +1,14 @@
 export function formatDate(stringDate) {
-  const date = stringDate.split('T')[0];
-  const dateParts = date.split('-');
-  const dateReverse = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]} `;
+  const date = new Date(stringDate);
 
-  return dateReverse;
+  const localHours = date.getHours();
+  const localMinutes = date.getMinutes();
+
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth() + 1;
+  const day = date.getUTCDate();
+
+  const result = `${localHours}:${localMinutes} - ${day}/${month}/${year}`;
+
+  return result;
 }

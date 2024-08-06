@@ -8,6 +8,8 @@ const userStore = useUserStore();
 const props = defineProps({
   email: { type: String, require: true },
   githubUrl: { type: String, require: true },
+  facebookUrl: { type: String, require: true },
+  cohort: { type: Number, require: true },
   desc: { type: String, require: true }
 });
 
@@ -28,6 +30,14 @@ function showModalHandler(name) {
     showModal.value = true;
   } else if (name === 'github') {
     inputInfor.value = 'Github';
+    option.value = 'infor';
+    showModal.value = true;
+  } else if (name === 'facebook') {
+    inputInfor.value = 'Facebook';
+    option.value = 'infor';
+    showModal.value = true;
+  } else if (name === 'cohort') {
+    inputInfor.value = 'Cohort';
     option.value = 'infor';
     showModal.value = true;
   } else if (name === 'change-password') {
@@ -127,6 +137,8 @@ async function updateInforHandler() {
       if (emailRgx.test(updateInfor.value)) {
         await userStore.updateInfor({ email: updateInfor.value });
         alertResult('success', 'Cập nhật thông tin thành công');
+        showModal.value = false;
+        updateInfor.value = '';
       } else {
         alertResult('fail', 'Email không hợp lệ');
       }
@@ -137,6 +149,26 @@ async function updateInforHandler() {
     try {
       await userStore.updateInfor({ githubUrl: updateInfor.value });
       alertResult('success', 'Cập nhật thông tin thành công');
+      showModal.value = false;
+      updateInfor.value = '';
+    } catch (error) {
+      alertResult('fail', 'Cập nhật không thành công');
+    }
+  } else if (inputInfor.value === 'Facebook') {
+    try {
+      await userStore.updateInfor({ facebookUrl: updateInfor.value });
+      alertResult('success', 'Cập nhật thông tin thành công');
+      showModal.value = false;
+      updateInfor.value = '';
+    } catch (error) {
+      alertResult('fail', 'Cập nhật không thành công');
+    }
+  } else if (inputInfor.value === 'Cohort') {
+    try {
+      await userStore.updateInfor({ cohort: updateInfor.value });
+      alertResult('success', 'Cập nhật thông tin thành công');
+      showModal.value = false;
+      updateInfor.value = '';
     } catch (error) {
       alertResult('fail', 'Cập nhật không thành công');
     }
@@ -144,6 +176,8 @@ async function updateInforHandler() {
     try {
       await userStore.updateInfor({ description: updateInfor.value });
       alertResult('success', 'Cập nhật thông tin thành công');
+      showModal.value = false;
+      updateInfor.value = '';
     } catch (error) {
       alertResult('fail', 'Cập nhật không thành công');
     }
@@ -191,6 +225,36 @@ onBeforeUnmount(() => {
         </div>
       </div>
     </div>
+    <div class="option" @click="showModalHandler('facebook')">
+      <div class="content-left">
+        <div class="icon-wrap">
+          <Icon icon="ic:baseline-facebook" />
+        </div>
+        <p>
+          Facebook: <span>{{ props.facebookUrl }}</span>
+        </p>
+      </div>
+      <div class="content-right">
+        <div class="icon-wrap icon-wrap--huge">
+          <Icon icon="iconamoon:arrow-up-2-bold" />
+        </div>
+      </div>
+    </div>
+    <div class="option" @click="showModalHandler('cohort')">
+      <div class="content-left">
+        <div class="icon-wrap">
+          <Icon icon="ph:student-bold" />
+        </div>
+        <p>
+          Khóa: <span>{{ props.cohort }}</span>
+        </p>
+      </div>
+      <div class="content-right">
+        <div class="icon-wrap icon-wrap--huge">
+          <Icon icon="iconamoon:arrow-up-2-bold" />
+        </div>
+      </div>
+    </div>
     <div class="option-v2" @click="showModalHandler('desc')">
       <p>Mô tả bản thân</p>
       <div class="content">
@@ -227,7 +291,7 @@ onBeforeUnmount(() => {
         </div>
       </template>
       <div class="content">
-        <form>
+        <form @submit.prevent="">
           <div v-if="option == 'infor'">
             <p>
               <label :for="inputInfor">{{ inputInfor }}</label>

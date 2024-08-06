@@ -4,8 +4,7 @@ import { api } from '@/api/axios';
 export const useLessonStore = defineStore('lesson', {
   state: () => ({
     lesson: {},
-    videos: [],
-    video: {},
+    videos: {},
     exercise: {}
   }),
   actions: {

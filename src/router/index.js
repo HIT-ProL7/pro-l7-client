@@ -35,7 +35,7 @@ const routes = [
           {
             path: ':lsdId',
             name: 'Lesson-detail',
-            component: () => import('@components/LessonDetail.vue')
+            component: () => import('@/components/LessonDetail/LessonDetail.vue')
           }
         ]
       },
