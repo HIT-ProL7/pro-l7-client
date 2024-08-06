@@ -26,8 +26,6 @@ export const useClassStore = defineStore('class', {
         this.createAt = formatDate(response.data.data.createAt);
         this.leaders = response.data.data.leaders;
         this.members = response.data.data.members;
-
-        console.log(response.data.data);
       } catch (error) {
         return error;
       }
