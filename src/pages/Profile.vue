@@ -10,12 +10,6 @@ import { onMounted } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 
 const userStore = useUserStore();
-const user = {
-  userImg: {
-    banner: banner,
-    avatar: avatar
-  }
-};
 
 onMounted(() => {
   userStore.getInfor();
@@ -26,9 +20,9 @@ onMounted(() => {
 <template>
   <div class="profile-wrap">
     <ProfileHeader
-      :userImg="user.userImg"
       :full-name="userStore.fullName"
       :avatar="userStore.avatar"
+      :banner="userStore.banner"
     />
     <div class="profile-content">
       <div class="profile-infor-wrap">
@@ -36,6 +30,7 @@ onMounted(() => {
           :created-at="userStore.createdAt"
           :email="userStore.email"
           :github-url="userStore.githubUrl"
+          :facebook-url="userStore.facebookUrl"
           :student-code="userStore.studentCode"
           :cohort="userStore.cohort"
           :desc="userStore.desc"

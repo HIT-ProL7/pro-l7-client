@@ -6,6 +6,8 @@ const toggleMenu = ref(false);
 const toggleSidebar = ref(false);
 import { useUserStore } from '@/stores/userStore';
 
+import avatarDefault from '@/assets/avatar-profile.png';
+
 const userStore = useUserStore();
 const res = ref(false);
 const setRes = () => {
@@ -72,13 +74,13 @@ setRes();
       <br />
       <div class="drop-down">
         <div class="avatar" @click="toggleMenuHandler">
-          <img src="../assets/avatar.png" alt="avartar" />
+          <img :src="userStore.avatar || avatarDefault" alt="avartar" />
         </div>
 
         <div class="menu-wrap" v-if="toggleMenu" @click.self="toggleMenu = false">
           <ul class="menu">
             <li class="fist">
-              <img src="../assets/avatar.png" alt="avartar" />
+              <img :src="userStore.avatar || avatarDefault" alt="avartar" />
               <span
                 >{{ userStore.fullName }}
                 <p>{{ userStore.studentCode }}</p></span
@@ -229,6 +231,7 @@ setRes();
     cursor: pointer;
 
     img {
+      border-radius: 50%;
       height: 100%;
       width: 100%;
       object-fit: cover;
@@ -322,6 +325,7 @@ setRes();
     img {
       width: 40px;
       height: 40px;
+      border-radius: 50%;
     }
   }
 }
