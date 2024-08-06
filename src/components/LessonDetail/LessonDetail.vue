@@ -2,6 +2,7 @@
 import { defineProps, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useLessonStore } from '@/stores/lessonStore';
+import Submission from '@components/LessonDetail/Submission.vue';
 
 const lessonStore = useLessonStore();
 const route = useRoute();
@@ -55,11 +56,16 @@ onMounted(() => {
       v-if="option == 'content'"
       v-html="lessonStore.lesson.content"
     ></div>
-    <div
-      class="lesson-detail-content exercise-content"
-      v-if="option == 'exercise'"
-      v-html="lessonStore.exercise.content"
-    ></div>
+    <div class="exercise-content-wrap">
+      <div
+        class="lesson-detail-content exercise-content"
+        v-if="option == 'exercise'"
+        v-html="lessonStore.exercise.content"
+      ></div>
+      <div class="submission-wrap">
+        <Submission />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -214,5 +220,9 @@ onMounted(() => {
       margin: 2rem 0;
     }
   }
+}
+.submission-wrap {
+  padding: 16px;
+  margin-top: 32px;
 }
 </style>

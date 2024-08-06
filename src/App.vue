@@ -1,6 +1,11 @@
 <script setup>
 import { NModalProvider, NConfigProvider, NMessageProvider, NDialogProvider } from 'naive-ui';
 const themeOverrides = {
+  common: {
+    primaryColor: '#F06C25',
+    primaryColorHover: '#F06C25',
+    primaryColorPressed: '#F06C25'
+  },
   Card: {
     paddingHuge: '0'
   }
