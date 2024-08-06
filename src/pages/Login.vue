@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 import { useRouter } from 'vue-router';
 import { useMessage } from 'naive-ui';
+import { Icon } from '@iconify/vue';
 
 const message = useMessage();
 const router = useRouter();
@@ -69,9 +70,9 @@ async function loginHandler() {
   if (!usernameValidate() || !passwordValidate()) {
     return;
   } else {
-    try {
-      await userStore.login(user);
-      userStore.getInfor();
+    const res = await userStore.login(user);
+    console.log(res);
+    if (res.status === 200) {
       message.success(
         'Đăng nhập thành công',
         {
@@ -79,21 +80,28 @@ async function loginHandler() {
         },
         4000
       );
+
       if (userStore.userRoles == 'ROLE_ADMIN' || userStore.userRoles == 'ROLE_USER') {
         router.push({ path: '', name: 'Home' });
-      }
-    } catch (e) {
-      if (e.response.status === 401) {
-        message.error(
-          'Mật khẩu hoặc tài khoản không đúng',
-          {
-            keepAliveOnHover: true
-          },
-          4000
-        );
+        await userStore.getInfor();
       }
     }
+    // if (res.response.status === 401) {
+    //   message.error(
+    //     'Mật khẩu hoặc tài khoản không đúng',
+    //     {
+    //       keepAliveOnHover: true
+    //     },
+    //     4000
+    //   );
+    // }
   }
+}
+
+const typeInput = ref('password');
+function showPassword(typeEye) {
+  if (typeEye == 'open') typeInput.value = 'text';
+  else typeInput.value = 'password';
 }
 
 const formData = ref('');
@@ -132,7 +140,6 @@ const handleSubmit = () => {
 
 <template>
   <div class="login-cha">
-    <p>{{ formData }}</p>
     <form class="login-con" v-if="!forget" @submit.prevent="loginHandler">
       <img class="logo" style="width: 88px; height: 88px" src="../assets/logo.png" alt="logo" />
       <div class="user-name">
@@ -175,7 +182,21 @@ const handleSubmit = () => {
               d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2m-6 9c-1.1 0-2-.9-2-2s.9-2 2-2s2 .9 2 2s-.9 2-2 2m3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1c1.71 0 3.1 1.39 3.1 3.1z"
             />
           </svg>
-          <input id="pw" type="password" placeholder="Nhập mật khẩu" v-model="user.password" />
+          <input id="pw" :type="typeInput" placeholder="Nhập mật khẩu" v-model="user.password" />
+          <div
+            class="eye-password eye-open"
+            v-if="typeInput == 'text'"
+            @click="showPassword('close')"
+          >
+            <Icon icon="ph:eye-fill" font-size="20px" />
+          </div>
+          <div
+            class="eye-password eye-close"
+            v-if="typeInput == 'password'"
+            @click="showPassword('open')"
+          >
+            <Icon icon="ph:eye-slash-fill" font-size="20px" />
+          </div>
         </div>
       </div>
       <p class="a" @click="forget = !forget">Quên mật khẩu?</p>
@@ -265,9 +286,10 @@ template {
   }
   .login {
     position: relative;
-    font-size: 20px;
     color: #d9d9d9;
-
+    > svg {
+      font-size: 20px;
+    }
     input {
       padding-left: 30px;
       width: 400px;
@@ -297,8 +319,17 @@ template {
     }
   }
   .password {
+    position: relative;
     p {
       padding-bottom: 10px;
+    }
+    .eye-password {
+      position: absolute;
+      right: 2%;
+      top: 16%;
+      color: #000;
+      z-index: 10;
+      cursor: pointer;
     }
   }
 
