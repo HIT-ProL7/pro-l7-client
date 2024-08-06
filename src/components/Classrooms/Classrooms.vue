@@ -19,13 +19,10 @@ function goToClassDetail(classId) {
     <div class="class-title">
       <p class="my-class">Lớp học của tôi</p>
     </div>
-
     <div class="class-list">
       <p v-if="classInfor.length == 0">Không có lớp học nào</p>
       <div class="class" v-for="c in classInfor" :key="c.id">
-        <div class="class-img">
-          <ClassLogo :logo-name="c.name" />
-        </div>
+        <ClassLogo :logo-name="c.logo" />
         <div class="class-infor">
           <p class="heading">{{ c.name }}</p>
           <p class="sub-heading">
@@ -89,47 +86,53 @@ function goToClassDetail(classId) {
       justify-content: center;
     }
     .class {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 254px;
       .class-infor {
-        flex: 3;
+        width: 100%;
+        padding: 16px;
+        max-width: 280px;
         color: $text-color;
         background-color: #fff;
         position: relative;
-        bottom: 25px;
+        bottom: 20px;
         border-radius: 0 25px 20px 20px;
         height: 210px;
         overflow: hidden;
         box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
         font-size: 16px;
+
         .icon-wrap {
           font-size: 20px;
-        }
-        @include tablet {
-          font-size: 12.5px;
         }
 
         p:not(:last-child) {
           margin-bottom: 8px;
         }
         .heading {
-          margin-top: 12px;
-          margin-left: 12px;
           font-size: 24px;
           font-weight: 500;
+          width: 94%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         .sub-heading {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          width: 100%;
+          width: 94%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
           .icon-wrap {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+            margin-right: 4px;
+            svg {
+              transform: translateY(12%);
+            }
           }
-
+          @include mobile {
+            font-size: 20px;
+          }
           > .leader:not(:last-child)::after {
             content: ',';
           }

@@ -5,9 +5,9 @@ import { onMounted } from 'vue';
 
 const userStore = useUserStore();
 
-onMounted(() => {
-  userStore.getInfor();
-  userStore.getMyClass();
+onMounted(async () => {
+  await userStore.getInfor();
+  await userStore.getMyClass();
 });
 </script>
 

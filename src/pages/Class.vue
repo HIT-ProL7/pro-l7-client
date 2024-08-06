@@ -73,6 +73,7 @@ justifyCenter();
       :desc="classStore.description"
       :create-at="classStore.createAt"
       :leaders="classStore.leaders"
+      :logo="classStore.logo"
     />
     <div class="class-nav">
       <n-tabs
