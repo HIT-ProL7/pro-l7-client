@@ -38,14 +38,14 @@ const getLogo = (logoName) => {
       <p class="heading">{{ props.name }}</p>
       <p class="sub-heading">
         <span class="icon-wrap"><Icon icon="f7:person-fill" color="#fff" /></span>
-        Leader:
+        <span>Leader:</span>
         <span class="leader" v-for="(l, index) in props.leaders" :key="index">{{
           l.fullName
         }}</span>
       </p>
       <p class="sub-heading">
         <span class="icon-wrap"><Icon icon="mdi:clipboard-text-date" color="#fff" /></span>
-        {{ props.createAt }}
+        <span>{{ props.createAt }}</span>
       </p>
       <p class="desc">
         {{ props.desc }}
@@ -93,11 +93,11 @@ const getLogo = (logoName) => {
     }
     .sub-heading {
       font-size: 32px;
-      display: flex;
-      align-items: center;
       .icon-wrap {
-        display: inline-flex;
         margin-right: 4px;
+        svg {
+          transform: translateY(12%);
+        }
       }
       @include mobile {
         font-size: 20px;
@@ -107,6 +107,7 @@ const getLogo = (logoName) => {
       }
     }
     .desc {
+      max-width: 940px;
       font-size: 24px;
       padding: 8px 24px;
       border: 1px solid #fff;

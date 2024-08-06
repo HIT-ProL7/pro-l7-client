@@ -25,7 +25,6 @@ export const useUserStore = defineStore('user', {
         this.userRoles = response.data.data.roles;
         localStorage.setItem('prol7-vuejs:access-token', response.data.data.accessToken);
       } catch (error) {
-        console.log(error);
         throw error;
       }
     },
@@ -42,7 +41,6 @@ export const useUserStore = defineStore('user', {
         this.desc = response.data.data.description;
         this.avatar = response.data.data.avatarUrl;
         this.banner = response.data.data.bannerUrl;
-        console.log(response.data.data);
       } catch (error) {
         throw error;
       }
@@ -63,7 +61,6 @@ export const useUserStore = defineStore('user', {
         this.banner = response.data.data.bannerUrl;
 
         return response;
-        console.log(response);
       } catch (e) {
         return e;
       }
