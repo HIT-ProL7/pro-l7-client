@@ -8,7 +8,7 @@ const props = defineProps({
 
 <template>
   <div class="profile-courses">
-    <p class="heading">Các khóa học đã tham gia</p>
+    <p class="heading">Các lớp học đã tham gia</p>
     <div class="content">
       <Course v-for="course in userCourses" :key="course" :course="course" />
     </div>
