@@ -3,10 +3,6 @@ import { api } from '@/api/axios';
 
 export const useSubmissionStore = defineStore('submission', {
   state: () => ({
-    id: 0,
-    content: '',
-    updateAt: '',
-    createdBy: {},
     editable: null,
     subList: [],
     subLength: 0
@@ -23,14 +19,9 @@ export const useSubmissionStore = defineStore('submission', {
     async getSubmission(exerciseId) {
       try {
         const response = await api.get(`/submission/${exerciseId}`);
-
-        this.id = response.data.data.id;
-        this.content = response.data.data.content;
-        this.updateAt = response.data.data.updateAt;
-        this.createdBy = response.data.data.createdBy;
         this.editable = response.data.data.editable;
-        this.subLength = response.data.data.length;
         this.subList = response.data.data;
+        this.subLength = response.data.data.length;
 
         return response;
       } catch (error) {

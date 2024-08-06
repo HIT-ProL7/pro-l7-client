@@ -75,7 +75,6 @@ onMounted(async () => {
   await submissionStore.getSubmission(route.query.exercise);
   pageMax.value = submissionStore.subLength;
   subList.value = submissionStore.subList.reverse();
-  console.log(pageMax.value);
 });
 </script>
 
