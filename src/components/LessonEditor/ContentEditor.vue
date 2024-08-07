@@ -11,32 +11,31 @@ import Youtube from '@tiptap/extension-youtube';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import TextAlign from '@tiptap/extension-text-align';
-import BulletList from '@tiptap/extension-bullet-list';
 import StarterKit from '@tiptap/starter-kit';
 import { Editor, EditorContent, useEditor } from '@tiptap/vue-3';
 
 import BordIcon from 'vue-material-design-icons/FormatBold.vue';
 import ItalicIcon from 'vue-material-design-icons/FormatItalic.vue';
-import StrikeIcon from 'vue-material-design-icons/formatStrikethrough.vue';
-import Header1Icon from 'vue-material-design-icons/formatHeader1.vue';
-import Header2Icon from 'vue-material-design-icons/formatHeader2.vue';
-import Header3Icon from 'vue-material-design-icons/formatHeader3.vue';
-import ListBulletedIcon from 'vue-material-design-icons/listBox.vue';
-import ListNumberedIcon from 'vue-material-design-icons/formatListNumbered.vue';
-import codeBracesIcon from 'vue-material-design-icons/codeBraces.vue';
-import codeBlcokBracesIcon from 'vue-material-design-icons/codeBlockBraces.vue';
-import quoteIcon from 'vue-material-design-icons/formatQuoteClose.vue';
-import horizontalIcon from 'vue-material-design-icons/minus.vue';
-import youtubeIcon from 'vue-material-design-icons/youtube.vue';
-import imageIcon from 'vue-material-design-icons/imageEdit.vue';
-import linkIcon from 'vue-material-design-icons/linkVariant.vue';
-import undoIcon from 'vue-material-design-icons/undo.vue';
-import redoIcon from 'vue-material-design-icons/redo.vue';
-import alignLeftIcon from 'vue-material-design-icons/formatAlignLeft.vue';
-import alignRightIcon from 'vue-material-design-icons/formatAlignRight.vue';
-import alignCenterIcon from 'vue-material-design-icons/formatAlignCenter.vue';
-import alignJustifyIcon from 'vue-material-design-icons/formatAlignJustify.vue';
-import saveIcon from 'vue-material-design-icons/contentSave.vue';
+import StrikeIcon from 'vue-material-design-icons/FormatStrikethrough.vue';
+import Header1Icon from 'vue-material-design-icons/FormatHeader1.vue';
+import Header2Icon from 'vue-material-design-icons/FormatHeader2.vue';
+import Header3Icon from 'vue-material-design-icons/FormatHeader3.vue';
+import ListBulletedIcon from 'vue-material-design-icons/ListBox.vue';
+import ListNumberedIcon from 'vue-material-design-icons/FormatListNumbered.vue';
+import codeBracesIcon from 'vue-material-design-icons/CodeBraces.vue';
+import codeBlcokBracesIcon from 'vue-material-design-icons/CodeBlockBraces.vue';
+import quoteIcon from 'vue-material-design-icons/FormatQuoteClose.vue';
+import horizontalIcon from 'vue-material-design-icons/Minus.vue';
+import youtubeIcon from 'vue-material-design-icons/Youtube.vue';
+import imageIcon from 'vue-material-design-icons/ImageEdit.vue';
+import linkIcon from 'vue-material-design-icons/LinkVariant.vue';
+import undoIcon from 'vue-material-design-icons/Undo.vue';
+import redoIcon from 'vue-material-design-icons/Redo.vue';
+import alignLeftIcon from 'vue-material-design-icons/FormatAlignLeft.vue';
+import alignRightIcon from 'vue-material-design-icons/FormatAlignRight.vue';
+import alignCenterIcon from 'vue-material-design-icons/FormatAlignCenter.vue';
+import alignJustifyIcon from 'vue-material-design-icons/FormatAlignJustify.vue';
+import saveIcon from 'vue-material-design-icons/ContentSave.vue';
 
 const content = ref('');
 const contentLesson = inject('contentLesson');
@@ -54,8 +53,6 @@ const editor = useEditor({
     Youtube,
     Image,
     Link,
-    BulletList,
-    TextStyle,
     TextAlign.configure({
       types: ['heading', 'paragraph']
     })
