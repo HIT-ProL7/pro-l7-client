@@ -3,8 +3,8 @@ import ProfileHeader from '@/components/Profile/ProfileHeader.vue';
 import ProfileInfor from '@/components/Profile/ProfileInfor.vue';
 import ProfileCourses from '@/components/Profile/ProfileCourse/ProfileCourses.vue';
 
-import banner from '../assets/banner-profile.png';
-import avatar from '../assets/avatar-profile.png';
+import banner from '@assets/banner-profile.png';
+import avatar from '@assets/avatar-profile.png';
 
 import { onMounted } from 'vue';
 import { useUserStore } from '@/stores/userStore';

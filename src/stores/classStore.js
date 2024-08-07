@@ -10,11 +10,12 @@ export const useClassStore = defineStore('class', {
     description: '',
     roadmap: '',
     createAt: '',
-    startedAt: '',
+    startedDate: '',
     logo: '',
     leaders: [],
     members: [],
-    lessons: []
+    lessons: [],
+    allClasses: []
   }),
   actions: {
     async getDetailClass(classId) {
@@ -26,10 +27,25 @@ export const useClassStore = defineStore('class', {
         this.description = response.data.data.description;
         this.roadmap = response.data.data.roadmap;
         this.createAt = formatDate(response.data.data.createAt);
-        this.startedAt = formatDate(response.data.data.startedAt);
+        this.startedDate = formatDate(response.data.data.startedDate);
         this.leaders = response.data.data.leaders;
         this.members = response.data.data.members;
         this.logo = response.data.data.logo;
+
+        return response;
+      } catch (error) {
+        return error;
+      }
+    },
+    async updateRoadmap(roadmap, classId) {
+      try {
+        const response = await api.put(`classrooms/${classId}`, roadmap, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        console.log(response);
+        return response;
       } catch (error) {
         return error;
       }
@@ -37,7 +53,6 @@ export const useClassStore = defineStore('class', {
     async getAllLessons(classId) {
       try {
         const response = await api.get(`/lessons/classroom/${classId}`);
-
         this.lessons = response.data.data;
       } catch (error) {
         return error;

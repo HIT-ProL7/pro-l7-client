@@ -1,6 +1,6 @@
 <script setup lang="js">
 import { useRouter } from 'vue-router';
-import ClassLogo from '@components/Classrooms/ClassLogo.vue';
+import ClassLogo from '@/components/ClassManager/ClassManageLogo.vue';
 import { defineProps, onMounted } from 'vue';
 import { formatDate } from '@/utils/formatDate';
 
@@ -10,14 +10,14 @@ const props = defineProps({
 });
 
 function goToClassDetail(classId) {
-  router.push({ name: 'Class', params: { id: classId } });
+  router.push({ name: 'ClassManagement', params: { id: classId } });
 }
 </script>
 
 <template>
   <div class="class-list-wrap">
     <div class="class-title">
-      <p class="my-class">Lớp học của tôi</p>
+      <p class="my-class">Quản lý lớp học</p>
     </div>
     <div class="class-list">
       <p v-if="classInfor.length == 0">Không có lớp học nào</p>
@@ -51,7 +51,7 @@ function goToClassDetail(classId) {
             {{ formatDate(c.startedDate) }}
           </p>
           <div class="class-action">
-            <button class="class-join-btn" @click="goToClassDetail(c.id)">Tham gia</button>
+            <button class="class-join-btn" @click="goToClassDetail(c.id)">Kiểm tra</button>
           </div>
         </div>
       </div>
@@ -85,6 +85,11 @@ function goToClassDetail(classId) {
     @include mobile {
       justify-content: center;
     }
+
+    > p:first-child {
+      font-size: 24px;
+    }
+
     .class {
       display: flex;
       flex-direction: column;
@@ -103,11 +108,9 @@ function goToClassDetail(classId) {
         overflow: hidden;
         box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
         font-size: 16px;
-
         .icon-wrap {
           font-size: 20px;
         }
-
         p:not(:last-child) {
           margin-bottom: 8px;
         }

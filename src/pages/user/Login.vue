@@ -40,11 +40,30 @@ const usernameValidate = () => {
   return true;
 };
 
-const rgxPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*/])[A-Za-z\d!@#$%^&*/]{8,}$/;
+const rgxPassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+=<>?/{}~|-]).{8,16}$/;
+
 const passwordValidate = () => {
   if (user.password == '') {
     message.warning(
       'Mật khẩu không được để trống',
+      {
+        keepAliveOnHover: true
+      },
+      4000
+    );
+    return false;
+  } else if (user.password.length > 16) {
+    message.warning(
+      'Mật khẩu quá dài',
+      {
+        keepAliveOnHover: true
+      },
+      4000
+    );
+    return false;
+  } else if (user.password.length < 8) {
+    message.warning(
+      'Mật khẩu quá ngắn',
       {
         keepAliveOnHover: true
       },
@@ -141,7 +160,7 @@ const handleSubmit = () => {
 <template>
   <div class="login-cha">
     <form class="login-con" v-if="!forget" @submit.prevent="loginHandler">
-      <img class="logo" style="width: 88px; height: 88px" src="../assets/logo.png" alt="logo" />
+      <img class="logo" style="width: 88px; height: 88px" src="@assets/logo.png" alt="logo" />
       <div class="user-name">
         <p>Tài khoản</p>
         <div class="login">
@@ -241,7 +260,7 @@ template {
 }
 
 .login-cha {
-  background-image: url(../assets/anhsinhnhat.png);
+  background-image: url('@assets/anhsinhnhat.png');
   width: 100%;
   height: 100vh;
   background-size: cover;

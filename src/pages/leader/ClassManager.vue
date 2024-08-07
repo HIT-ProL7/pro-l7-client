@@ -1,8 +1,8 @@
 <script setup>
-import ClassInfor from '@components/ClassDetails/ClassInfor.vue';
-import ClassLesson from '@components/ClassDetails/ClassLesson.vue';
-import ClassRoadmap from '@components/ClassDetails/ClassRoadmap.vue';
-import ClassMember from '@/components/ClassDetails/ClassMember.vue';
+import ClassManageInfor from '@/components/ClassManager/ClassManageInfor.vue';
+import ClassManageLesson from '@/components/ClassManager/ClassManageLesson.vue';
+import ClassManageRoadmap from '@/components/ClassManager/ClassManageRoadmap.vue';
+import ClassManageMember from '@/components/ClassManager/ClassManageMember.vue';
 
 import { NTabs, NTabPane } from 'naive-ui';
 import { onMounted, ref } from 'vue';
@@ -68,11 +68,11 @@ justifyCenter();
     <div class="back" @click="router.go(-1)">
       <Icon icon="ep:arrow-left-bold" color="#fff" />
     </div>
-    <ClassInfor
+    <ClassManageInfor
       :name="classStore.name"
       :desc="classStore.description"
       :create-at="classStore.createAt"
-      :started-at="classStore.startedAt"
+      :started-date="classStore.startedDate"
       :leaders="classStore.leaders"
       :logo="classStore.logo"
     />
@@ -86,13 +86,13 @@ justifyCenter();
         :theme-overrides="tabsThemeOverrides"
       >
         <n-tab-pane name="Bài học" tab="Bài học">
-          <ClassLesson :class-lesson="classStore.lessons" />
+          <ClassManageLesson :class-lesson="classStore.lessons" />
         </n-tab-pane>
         <n-tab-pane name="Lộ trình" tab="Lộ trình">
-          <ClassRoadmap />
+          <ClassManageRoadmap />
         </n-tab-pane>
         <n-tab-pane name="Thành viên" tab="Thành viên">
-          <ClassMember :class-members="classStore.members" />
+          <ClassManageMember :class-members="classStore.members" />
         </n-tab-pane>
       </n-tabs>
     </div>

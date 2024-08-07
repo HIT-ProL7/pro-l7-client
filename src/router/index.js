@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
 
 const routes = [
   {
@@ -12,25 +13,32 @@ const routes = [
           title: 'Trang chủ',
           requiresAuth: true
         },
-        component: () => import('@pages/index.vue')
+        component: () => import('@/pages/user/index.vue')
       },
       {
         path: 'profile',
         name: 'Profile',
         meta: {
-          title: 'Trang cá nhân'
+          title: 'Trang cá nhân',
+          requiresAuth: true
         },
-        component: () => import('@/pages/Profile.vue')
+        component: () => import('@/pages/user/Profile.vue')
       },
       {
         path: 'class/:id',
         name: 'Class',
-        component: () => import('@/pages/Class.vue')
+        meta: {
+          requiresAuth: true
+        },
+        component: () => import('@/pages/user/Class.vue')
       },
       {
         path: '/:classId/lesson',
         name: 'Lesson',
-        component: () => import('@pages/Lesson.vue'),
+        meta: {
+          requiresAuth: true
+        },
+        component: () => import('@/pages/user/Lesson.vue'),
         children: [
           {
             path: ':lsdId',
@@ -38,6 +46,31 @@ const routes = [
             component: () => import('@/components/LessonDetail/LessonDetail.vue')
           }
         ]
+      },
+      {
+        path: 'classesManagement',
+        name: 'ClassesManagement',
+        meta: {
+          title: 'Quản lý lớp',
+          requiresAuth: true
+        },
+        component: () => import('@/pages/leader/ClassesManager.vue')
+      },
+      {
+        path: 'ClassManagement/:id',
+        name: 'ClassManagement',
+        meta: {
+          requiresAuth: true
+        },
+        component: () => import('@/pages/leader/ClassManager.vue')
+      },
+      {
+        path: 'lessonManagement',
+        name: 'LessonManagement',
+        meta: {
+          requiresAuth: true
+        },
+        component: () => import('@/pages/leader/LessonManager.vue')
       }
     ]
   },
@@ -47,7 +80,7 @@ const routes = [
     meta: {
       title: 'Trang đăng nhập'
     },
-    component: () => import('@pages/Login.vue')
+    component: () => import('@/pages/user/Login.vue')
   }
 ];
 const router = createRouter({
@@ -68,8 +101,13 @@ router.afterEach((to, from) => {
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('prol7-vuejs:access-token');
 
-  if (to.meta.requiresAuth && !token) {
-    next('/login');
+  if (to.path == '/login' && token) {
+    next({ name: 'Home' });
+  } else if (to.path === '/Login' && !token) {
+    localStorage.removeItem('prol7-vuejs:access-token');
+    next({ name: 'Login' });
+  } else if (to.meta.requiresAuth && !token) {
+    next({ name: 'Login' });
   } else {
     next();
   }

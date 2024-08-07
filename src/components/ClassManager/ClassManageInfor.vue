@@ -4,8 +4,8 @@ import { defineProps } from 'vue';
 const props = defineProps({
   name: { type: String, require: true },
   desc: { type: String, require: true },
-  createAt: { type: String, require: true },
   startedDate: { type: String, require: true },
+  startedAt: { type: String, require: true },
   logo: { type: String, require: true },
   leaders: { type: Array, require: true }
 });

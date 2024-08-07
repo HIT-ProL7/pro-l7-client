@@ -5,10 +5,12 @@ const router = useRouter();
 const toggleMenu = ref(false);
 const toggleSidebar = ref(false);
 import { useUserStore } from '@/stores/userStore';
+import { useClassManageStore } from '@stores/classManageStore';
 
 import avatarDefault from '@/assets/avatar-profile.png';
 
 const userStore = useUserStore();
+const classManageStore = useClassManageStore();
 const res = ref(false);
 const setRes = () => {
   if (window.innerWidth < 480) {
@@ -39,6 +41,15 @@ function logoutHandler() {
   router.replace('/login');
 }
 
+async function getInfor() {
+  try {
+    await userStore.getInfor();
+    await classManageStore.getClassManage(userStore.studentCode);
+  } catch (error) {
+    return error;
+  }
+}
+
 function closeMenuHandler(act) {
   act;
   toggleMenu.value = false;
@@ -46,7 +57,7 @@ function closeMenuHandler(act) {
 
 onMounted(() => {
   window.addEventListener('resize', setRes);
-  userStore.getInfor();
+  getInfor();
 });
 
 onBeforeUnmount(() => {
@@ -93,8 +104,8 @@ setRes();
         </div>
       </div>
 
-      <div class="icon-cha" @click="autoCloseSidebar(router.push('/'))">
-        <div class="icon">
+      <div class="icon-cha">
+        <div class="icon" @click="autoCloseSidebar(router.push('/'))">
           <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
             <path
               fill="currentColor"
@@ -102,6 +113,21 @@ setRes();
             />
           </svg>
           <p>Trang chủ</p>
+        </div>
+        <div
+          class="icon"
+          @click="autoCloseSidebar(router.replace({ name: 'ClassesManagement' }))"
+          v-if="classManageStore.classManage.length != 0"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 14 14">
+            <path
+              fill="currentColor"
+              fill-rule="evenodd"
+              d="M12.402 8.976H7.259a2.278 2.278 0 0 0-.193-4.547h-1.68A3.095 3.095 0 0 0 4.609 0h7.793a1.35 1.35 0 0 1 1.348 1.35v6.279c0 .744-.604 1.348-1.348 1.348ZM2.898 4.431a1.848 1.848 0 1 0 0-3.695a1.848 1.848 0 0 0 0 3.695m5.195 2.276c0-.568-.46-1.028-1.027-1.028H2.899a2.649 2.649 0 0 0-2.65 2.65v1.205c0 .532.432.963.964.963h.172l.282 2.61A1 1 0 0 0 2.66 14h.502a1 1 0 0 0 .99-.862l.753-5.404h2.16c.567 0 1.027-.46 1.027-1.027Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <p>Quản lý lớp</p>
         </div>
         <div class="icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
@@ -183,15 +209,18 @@ setRes();
   z-index: 1001;
 }
 .side-bar {
-  width: 90px;
-  height: 100vh;
+  width: 116px;
+  padding: 0 8px;
   background-color: white;
   font-size: 13px;
   text-align: center;
-  // position: fixed;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  top: 0;
+  left: 0;
+  bottom: 0;
   @include mobile {
     width: 100%;
     position: fixed;
@@ -210,6 +239,7 @@ setRes();
     width: 90px;
     height: 90px;
     padding: 15px;
+    cursor: pointer;
     @include mobile {
       width: 100%;
       height: fit-content;
@@ -239,7 +269,6 @@ setRes();
   }
   .icon-cha {
     width: 100%;
-    height: 296px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -254,7 +283,7 @@ setRes();
     transition: 0.5s;
   }
   .icon {
-    width: 80%;
+    width: 100px;
     padding: 16px 0;
     display: flex;
     align-items: center;
