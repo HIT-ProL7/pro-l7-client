@@ -325,7 +325,7 @@ setRes();
     height: 230px;
     border: 1px solid #f06c25;
     position: absolute;
-    left: 100px;
+    left: 132px;
     top: 90px;
     font-size: 15px;
     padding: 0 30px;

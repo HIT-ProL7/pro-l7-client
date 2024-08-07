@@ -12,6 +12,11 @@ export default defineConfig({
     }
   },
   plugins: [vue()],
+  build: {
+    rollupOptions: {
+      external: (id) => /vue-material-design-icons/.test(id)
+    }
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
