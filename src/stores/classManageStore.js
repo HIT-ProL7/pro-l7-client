@@ -12,7 +12,6 @@ export const useClassManageStore = defineStore('classManage', {
         this.classManage = response.data.data.filter((item) =>
           item.leaders.some((leader) => leader.studentCode === studentCode)
         );
-        console.log(this.classManage);
       } catch (error) {
         return error;
       }

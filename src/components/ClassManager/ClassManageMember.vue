@@ -1,11 +1,11 @@
 <script setup>
 import { Icon } from '@iconify/vue';
-import { defineProps, ref } from 'vue';
+import { defineProps, ref, computed, onMounted } from 'vue';
 import avatar from '@assets/avatar.png';
 import { NPopover, NPopconfirm } from 'naive-ui';
 import { useClassManageStore } from '@/stores/classManageStore';
 import { useClassStore } from '@/stores/classStore';
-import { useDialog, useMessage } from 'naive-ui';
+import { useDialog, useMessage, NButton } from 'naive-ui';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -27,6 +27,9 @@ function removeMember(memberId, memberName, classId) {
       onPositiveClick: async () => {
         await classManageStore.removeMember(memberId, classId);
         await classStore.getDetailClass(route.params.id);
+
+        memberList.value = classStore.members;
+        memberListLength.value = memberList.value.length;
         message.success(`Xóa thành công ${memberName}`);
       },
       onNegativeClick: () => {
@@ -53,18 +56,36 @@ function addMember() {
       console.log(response.status);
       if (response.status == 200) {
         message.success(`Thêm thành công thành công`);
+
+        await classStore.getDetailClass(route.params.id);
+        memberList.value = classStore.members;
+        memberListLength.value = memberList.value.length;
       } else if (response.response.status == 400) {
         message.error('Thành viên này đã có trong lớp');
       } else if (response.response.status == 404) {
         message.error('Không tìm thấy thành viên');
       }
-      classStore.getDetailClass(route.params.id);
     },
     onNegativeClick: () => {
       message.error('Hủy thêm');
     }
   });
 }
+
+const memberList = ref([]);
+// memberList.value = props.classMembers;
+
+const memberSize = ref(10);
+const memberCnt = ref(10);
+const memberListLength = ref(0);
+const limitedMemberList = computed(() => memberList.value.slice(0, memberSize.value));
+
+onMounted(async () => {
+  await classStore.getDetailClass(route.params.id);
+
+  memberList.value = classStore.members;
+  memberListLength.value = memberList.value.length;
+});
 </script>
 
 <template>
@@ -103,7 +124,7 @@ function addMember() {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(member, index) in classMembers" :key="index" class="member">
+        <tr v-for="(member, index) in limitedMemberList" :key="index" class="member">
           <td>{{ index + 1 }}</td>
           <td>{{ member.studentCode }}</td>
           <n-popover
@@ -129,16 +150,26 @@ function addMember() {
                 color: #fff;
               "
             >
-              <div style="display: flex; align-items: center">
-                <div class="avatar-wrap" style="margin-right: 16px">
-                  <img :src="avatar" alt="" />
+              <div style="display: flex; align-items: center; margin-bottom: 8px">
+                <div class="avatar-wrap" style="margin-right: 16px; width: 72px; height: 72px">
+                  <img
+                    :src="member.avatarUrl || avatar"
+                    alt=""
+                    style="
+                      width: 100%;
+                      height: 100%;
+                      object-fit: cover;
+                      object-position: center;
+                      border-radius: 50%;
+                    "
+                  />
                 </div>
-                <p class="member-name">{{ member.fullName }}</p>
+                <p class="member-name" style="font-size: 18px">{{ member.fullName }}</p>
               </div>
-              <p style="display: flex; align-items: center">
+              <p style="display: flex; align-items: center; font-size: 18px">
                 <Icon icon="tabler:id" class="icon" />Mã SV: <span>{{ member.studentCode }}</span>
               </p>
-              <p style="display: flex; align-items: center">
+              <p style="display: flex; align-items: center; font-size: 18px">
                 <Icon icon="ph:student-bold" class="icon" />Khóa: <span>16</span>
               </p>
             </div>
@@ -152,6 +183,9 @@ function addMember() {
         </tr>
       </tbody>
     </table>
+    <div class="class-member-footer" v-if="memberSize < memberListLength">
+      <n-button @click="memberSize += memberCnt">Xem thêm</n-button>
+    </div>
   </div>
 </template>
 
@@ -289,5 +323,11 @@ function addMember() {
       }
     }
   }
+}
+.class-member-footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
 }
 </style>

@@ -25,6 +25,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .class-manager-wrap {
   width: 100%;
+  height: 100vh;
   background-color: $body-color;
   padding: 100px 50px 100px 50px;
   @include tablet {

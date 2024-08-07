@@ -94,7 +94,7 @@ function goToClassDetail(classId) {
         width: 100%;
         padding: 16px;
         max-width: 280px;
-        color: $text-color;
+        color: #2a2a2a;
         background-color: #fff;
         position: relative;
         bottom: 20px;

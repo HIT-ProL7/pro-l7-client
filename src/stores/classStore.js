@@ -31,6 +31,21 @@ export const useClassStore = defineStore('class', {
         this.leaders = response.data.data.leaders;
         this.members = response.data.data.members;
         this.logo = response.data.data.logo;
+
+        return response;
+      } catch (error) {
+        return error;
+      }
+    },
+    async updateRoadmap(roadmap, classId) {
+      try {
+        const response = await api.put(`classrooms/${classId}`, roadmap, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        console.log(response);
+        return response;
       } catch (error) {
         return error;
       }

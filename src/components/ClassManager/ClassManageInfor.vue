@@ -5,31 +5,10 @@ const props = defineProps({
   name: { type: String, require: true },
   desc: { type: String, require: true },
   createAt: { type: String, require: true },
+  startedAt: { type: String, require: true },
+  logo: { type: String, require: true },
   leaders: { type: Array, require: true }
 });
-
-import python from '@assets/course-logo/python.png';
-import java from '@assets/course-logo/java.png';
-import web from '@assets/course-logo/web.png';
-import pts from '@assets/course-logo/pts.png';
-
-const getLogo = (logoName) => {
-  const newName = logoName.toLowerCase();
-  switch (newName) {
-    case 'python':
-      return python;
-      break;
-    case 'java':
-      return java;
-      break;
-    case 'web':
-      return web;
-      break;
-    case 'pts':
-      return pts;
-      break;
-  }
-};
 </script>
 
 <template>
@@ -38,21 +17,22 @@ const getLogo = (logoName) => {
       <p class="heading">{{ props.name }}</p>
       <p class="sub-heading">
         <span class="icon-wrap"><Icon icon="f7:person-fill" color="#fff" /></span>
-        Leader:
+        <span>Leader:</span>
         <span class="leader" v-for="(l, index) in props.leaders" :key="index">{{
           l.fullName
         }}</span>
       </p>
       <p class="sub-heading">
         <span class="icon-wrap"><Icon icon="mdi:clipboard-text-date" color="#fff" /></span>
-        Ngày bắt đầu: {{ props.createAt }}
+        <span>Ngày bắt đầu: </span>
+        <span>{{ props.createAt }}</span>
       </p>
       <p class="desc">
         {{ props.desc }}
       </p>
     </div>
     <div class="class-img">
-      <img :src="getLogo(props.name)" alt="" />
+      <img :src="props.logo" alt="" />
     </div>
   </div>
 </template>
@@ -93,11 +73,11 @@ const getLogo = (logoName) => {
     }
     .sub-heading {
       font-size: 32px;
-      display: flex;
-      align-items: center;
       .icon-wrap {
-        display: inline-flex;
         margin-right: 4px;
+        svg {
+          transform: translateY(12%);
+        }
       }
       @include mobile {
         font-size: 20px;
@@ -107,6 +87,7 @@ const getLogo = (logoName) => {
       }
     }
     .desc {
+      max-width: 940px;
       font-size: 24px;
       padding: 8px 24px;
       border: 1px solid #fff;

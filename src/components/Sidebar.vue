@@ -209,15 +209,18 @@ setRes();
   z-index: 1001;
 }
 .side-bar {
-  width: 90px;
-  height: 100vh;
+  width: 116px;
+  padding: 0 8px;
   background-color: white;
   font-size: 13px;
   text-align: center;
-  // position: fixed;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  top: 0;
+  left: 0;
+  bottom: 0;
   @include mobile {
     width: 100%;
     position: fixed;
@@ -236,6 +239,7 @@ setRes();
     width: 90px;
     height: 90px;
     padding: 15px;
+    cursor: pointer;
     @include mobile {
       width: 100%;
       height: fit-content;
@@ -265,7 +269,6 @@ setRes();
   }
   .icon-cha {
     width: 100%;
-    height: 296px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -280,7 +283,7 @@ setRes();
     transition: 0.5s;
   }
   .icon {
-    width: 80%;
+    width: 100px;
     padding: 16px 0;
     display: flex;
     align-items: center;
