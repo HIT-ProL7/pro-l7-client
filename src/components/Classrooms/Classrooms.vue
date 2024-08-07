@@ -48,7 +48,7 @@ function goToClassDetail(classId) {
                 />
               </svg>
             </span>
-            {{ formatDate(c.createAt) }}
+            {{ formatDate(c.startedDate) }}
           </p>
           <div class="class-action">
             <button class="class-join-btn" @click="goToClassDetail(c.id)">Tham gia</button>

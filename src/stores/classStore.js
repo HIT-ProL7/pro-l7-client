@@ -10,7 +10,7 @@ export const useClassStore = defineStore('class', {
     description: '',
     roadmap: '',
     createAt: '',
-    startedAt: '',
+    startedDate: '',
     logo: '',
     leaders: [],
     members: [],
@@ -27,7 +27,7 @@ export const useClassStore = defineStore('class', {
         this.description = response.data.data.description;
         this.roadmap = response.data.data.roadmap;
         this.createAt = formatDate(response.data.data.createAt);
-        this.startedAt = formatDate(response.data.data.startedAt);
+        this.startedDate = formatDate(response.data.data.startedDate);
         this.leaders = response.data.data.leaders;
         this.members = response.data.data.members;
         this.logo = response.data.data.logo;
