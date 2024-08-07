@@ -4,6 +4,7 @@ import { useUserStore } from '@/stores/userStore';
 import { useRouter } from 'vue-router';
 import { useMessage } from 'naive-ui';
 import { Icon } from '@iconify/vue';
+import logoHIT from '@assets/logo.png';
 
 const message = useMessage();
 const router = useRouter();
@@ -222,7 +223,7 @@ const handleSubmit = () => {
       <button type="submit">Đăng nhập</button>
     </form>
     <form @submit.prevent="handleSubmit" v-else class="forgot-form">
-      <img class="logo" style="width: 88px; height: 88px" src="../assets/logo.png" alt="logo" />
+      <img class="logo" style="width: 88px; height: 88px" :src="logoHIT" />
 
       <div>
         <label for="masv"><p class="Masv">Mã sinh viên:</p></label>
