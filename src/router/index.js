@@ -75,6 +75,34 @@ const routes = [
     ]
   },
   {
+    path: '/Admin',
+    component: () => import('@layout/admin.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Classes',
+        meta: {
+          title: 'Các lớp học',
+          requiresAuth: true
+        },
+        component: () => import('@pages/admin/Classes.vue')
+      },
+      {
+        path: '/Class/:id',
+        name: 'ClassAdmin',
+        component: () => import('@pages/admin/Class.vue')
+      },
+      {
+        path: '/registerMember',
+        name: 'registerMember',
+        meta: {
+          title: 'Đăng ký thành viên'
+        },
+        component: () => import('@pages/admin/registerMember.vue')
+      }
+    ]
+  },
+  {
     path: '/login',
     name: 'Login',
     meta: {

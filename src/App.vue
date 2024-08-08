@@ -14,7 +14,7 @@ const themeOverrides = {
 
 <template>
   <n-config-provider :theme-overrides="themeOverrides">
-    <n-message-provider>
+    <n-message-provider max="5">
       <n-dialog-provider>
         <n-modal-provider>
           <router-view></router-view>
