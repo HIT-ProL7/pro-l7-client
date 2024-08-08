@@ -29,11 +29,11 @@ const props = defineProps({
   box-shadow: 2px 4px 3px 0px rgba(0, 0, 0, 0.35);
   background-color: $body-color;
   .heading {
-    font-size: 36px;
+    font-size: 32px;
     font-weight: 500;
     margin-bottom: 22px;
     @include tablet {
-      font-size: 32px;
+      font-size: 28px;
     }
     @include mobile {
       font-size: 22px;

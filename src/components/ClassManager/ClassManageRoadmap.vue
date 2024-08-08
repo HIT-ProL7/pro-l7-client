@@ -60,13 +60,7 @@ onMounted(async () => {
     </div>
     <div class="roadmap">
       <h1 v-if="!classStore.roadmap" style="text-align: center">Chưa có lộ trình</h1>
-      <iframe
-        :src="classStore.roadmap"
-        width="100%"
-        height="800px"
-        frameborder="0"
-        v-if="classStore.roadmap"
-      ></iframe>
+      <iframe :src="classStore.roadmap" frameborder="0" v-if="classStore.roadmap"></iframe>
     </div>
   </div>
 </template>
@@ -82,6 +76,17 @@ onMounted(async () => {
       font-size: 28px;
       margin: 24px 0;
       margin-left: 24px;
+    }
+  }
+  .roadmap {
+    display: flex;
+    justify-content: center;
+    iframe {
+      width: 100%;
+      height: 900px;
+      @include mobile {
+        height: 550px;
+      }
     }
   }
   .roadmap-input {

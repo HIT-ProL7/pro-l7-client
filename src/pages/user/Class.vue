@@ -37,16 +37,16 @@ const tabsThemeOverrides = ref({
   tabTextColorActiveBar: '#F06C25FF',
   tabTextColorActiveCard: '#F06C25FF',
   tabFontSizeSmall: '24px',
-  tabFontSizeMedium: '36px'
+  tabFontSizeMedium: '32px'
 });
 
 const setResponsiveTheme = () => {
   if (window.innerWidth > 768 && window.innerWidth <= 1025)
-    tabsThemeOverrides.value.tabFontSizeMedium = '36px';
+    tabsThemeOverrides.value.tabFontSizeMedium = '32px';
   else if (window.innerWidth >= 480 && window.innerWidth <= 768)
     tabsThemeOverrides.value.tabFontSizeMedium = '24px';
   else if (window.innerWidth < 480) tabsThemeOverrides.value.tabFontSizeMedium = '18px';
-  else tabsThemeOverrides.value.tabFontSizeMedium = '36px';
+  else tabsThemeOverrides.value.tabFontSizeMedium = '32px';
 };
 
 const justify = ref('');

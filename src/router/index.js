@@ -108,7 +108,7 @@ const routes = [
     meta: {
       title: 'Trang đăng nhập'
     },
-    component: () => import('@/pages/user/Login.vue')
+    component: () => import('@/pages/Login.vue')
   }
 ];
 const router = createRouter({
