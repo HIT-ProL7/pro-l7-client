@@ -126,7 +126,7 @@ function goToLessonDetail(classId, lsdId, option, optionId) {
       margin-bottom: 8px;
     }
     .lesson-title {
-      font-size: 32px;
+      font-size: 28px;
       display: flex;
       align-items: center;
       padding: 8px;

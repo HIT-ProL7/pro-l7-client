@@ -346,7 +346,7 @@ template {
     .eye-password {
       position: absolute;
       right: 2%;
-      top: 16%;
+      top: 20%;
       color: #000;
       z-index: 10;
       cursor: pointer;

@@ -271,7 +271,9 @@ onMounted(() => {
 .lesson-manager-content {
   padding: 0 48px;
   overflow: hidden;
-
+  @include mobile {
+    padding: 0 8px;
+  }
   .lesson-name {
     width: 100%;
     margin-bottom: 32px;
