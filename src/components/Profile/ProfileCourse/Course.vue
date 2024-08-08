@@ -78,25 +78,26 @@ const props = defineProps({
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     .heading {
-      font-size: 36px;
+      font-size: 28px;
       font-weight: 500;
       @include tablet {
-        font-size: 32px;
+        font-size: 24px;
       }
       @include mobile {
+        display: none;
         flex: 1;
-        font-size: 24px;
+        font-size: 18px;
       }
     }
     .desc {
-      font-size: 24px;
+      font-size: 20px;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
       @include tablet {
-        font-size: 20px;
+        font-size: 18px;
       }
       @include mobile {
         font-size: 18px;

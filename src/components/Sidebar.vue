@@ -292,6 +292,7 @@ setRes();
     border-radius: 8px;
     @include mobile {
       flex-direction: row;
+      width: max-content;
     }
     svg {
       @include mobile {

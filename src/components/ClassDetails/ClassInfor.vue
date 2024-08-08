@@ -69,10 +69,11 @@ const props = defineProps({
       font-weight: 500;
       @include mobile {
         font-size: 32px;
+        display: none;
       }
     }
     .sub-heading {
-      font-size: 32px;
+      font-size: 28px;
       .icon-wrap {
         margin-right: 4px;
         svg {
