@@ -83,6 +83,15 @@ export const useUserStore = defineStore('user', {
     async changePassword(changePasswordInfor) {
       try {
         const response = await api.patch('users/change-password', changePasswordInfor);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
+    async forgotPassword(studentCode) {
+      try {
+        const response = await api.put(`auth/forgot-password/${studentCode}`);
+        return response;
       } catch (error) {
         return error;
       }
