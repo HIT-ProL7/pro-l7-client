@@ -15,6 +15,7 @@ import {
   NCard
 } from 'naive-ui';
 import { formatDate } from '@/utils/formatDate';
+import { downloadSheet } from '@/utils/downloadSheet';
 
 import editIcon from '@assets/icons/edit.svg';
 import delIcon from '@assets/icons/del.svg';
@@ -22,6 +23,7 @@ import addIcon from '@assets/icons/add.svg';
 import listIcon from '@assets/icons/list.svg';
 import exportIcon from '@assets/icons/export.svg';
 import signoutIcon from '@assets/icons/signout.svg';
+import backIcon from '@assets/icons/back.svg';
 
 import { read, utils, writeFileXLSX } from 'xlsx';
 import { useClassStore } from '@/stores/classStore';
@@ -204,32 +206,12 @@ function handleCloseModal() {
 }
 
 const classesRef = ref(null);
+const sheetHeader = ['Mã lớp', 'Tên lớp', 'Leader', 'Ngày bắt đầu', 'Số lượng thành viên'];
+const sheetName = 'Danh sách các lớp học';
 
-function downloadSheet() {
-  /* generate worksheet and workbook */
-  const worksheet = utils.json_to_sheet(classesInfor.value);
-  const workbook = utils.book_new();
-  utils.book_append_sheet(workbook, worksheet, 'Các lớp học');
-
-  /* fix headers */
-  utils.sheet_add_aoa(
-    worksheet,
-    [['Mã lớp', 'Tên lớp', 'Leader', 'Ngày bắt đầu', 'Số lượng thành viên', 'Tình trạng']],
-    {
-      origin: 'A1'
-    }
-  );
-
-  /* calculate column width */
-  const header = Object.keys(classesInfor.value[0]);
-  var wscols = [];
-  for (var i = 0; i < header.length; i++) {
-    // columns length added
-    wscols.push({ wch: 20 });
-  }
-  worksheet['!cols'] = wscols;
-
-  writeFileXLSX(workbook, 'Classes.xlsx', { compression: true });
+function downloadSheetHandler() {
+  console.log(classesRef);
+  downloadSheet(classesInfor.value, sheetHeader, sheetName);
 }
 
 async function getAllClasses() {
@@ -242,16 +224,13 @@ async function getAllClasses() {
     classStore.allClasses[i].leaders.forEach((l) => {
       leaders.push(l.fullName);
     });
-    let status = '';
-    if (i % 2 == 0) status = 'Đóng';
-    else status = 'Mở';
+
     classesInfor.value.push({
       id: classStore.allClasses[i].id,
       name: classStore.allClasses[i].name,
       leader: leaders.join(),
       startedDate: formatDate(classStore.allClasses[i].startedDate),
-      totalMember: classStore.allClasses[i].members.length,
-      status: status
+      totalMember: classStore.allClasses[i].members.length
     });
   }
 }
@@ -272,7 +251,10 @@ onMounted(() => {
 
 <template>
   <div class="classes">
-    <h1>Danh sách lớp học</h1>
+    <div class="heading">
+      <div @click="router.replace({ name: 'Home' })"><img :src="backIcon" alt="" /></div>
+      <h1>Danh sách lớp học</h1>
+    </div>
     <div class="classes-header">
       <n-input-group style="gap: 8px">
         <n-input
@@ -284,7 +266,7 @@ onMounted(() => {
         <n-select v-model:value="searchOption" :options="searchOptions" :style="{ width: '15%' }" />
       </n-input-group>
       <n-input-group style="gap: 8px; justify-content: flex-end">
-        <n-button @click="downloadSheet">
+        <n-button @click="downloadSheetHandler">
           <img :src="exportIcon" alt="Add" style="margin-right: 8px" /> Xuất Sheet
         </n-button>
         <n-button @click="router.replace({ path: 'registerMember' })">
@@ -345,6 +327,21 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+}
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+  > div {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    img {
+      width: 24px;
+      height: 24px;
+    }
   }
 }
 .icon-signout {

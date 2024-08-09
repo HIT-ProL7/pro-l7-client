@@ -127,8 +127,8 @@ function saveContent() {
               return error;
             }
             message.success('Thêm bài học thành công');
+            router.replace({ name: 'ClassManagement', params: { id: route.query.classId } });
           } catch (error) {
-            console.log(error);
             message.error('Thêm bài học thất bại');
           }
         },

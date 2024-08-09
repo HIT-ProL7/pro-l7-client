@@ -22,6 +22,7 @@ import exportIcon from '@assets/icons/export.svg';
 
 import { read, utils, writeFileXLSX } from 'xlsx';
 import { useClassStore } from '@/stores/classStore';
+import { downloadSheet } from '@/utils/downloadSheet';
 
 // Dữ liệu bảng
 const router = useRouter();
@@ -209,31 +210,11 @@ const handlePageChange = (page) => {
 };
 
 const membersRef = ref(null);
-function downloadSheet() {
-  console.log(membersRef.value.data);
-  /* generate worksheet and workbook */
-  const worksheet = utils.json_to_sheet(foundedClassMembers.value);
-  const workbook = utils.book_new();
-  utils.book_append_sheet(workbook, worksheet, 'Các lớp học');
+const sheetHeader = ['Mã sinh viên', 'Họ và tên', 'Khóa', 'Ngày bắt đầu', 'Số lượng thành viên'];
+const sheetName = ref('');
 
-  /* fix headers */
-  // utils.sheet_add_aoa(worksheet, [['Tên lớp', 'Id', 'Leader', 'Ngày bắt đầu', 'Tình trạng']], {
-  //   origin: 'A1'
-  // });
-
-  /* calculate column width */
-  const header = Object.keys(foundedClassMembers.value[0]);
-  var wscols = [];
-  for (var i = 0; i < header.length; i++) {
-    // columns length added
-    wscols.push({ wch: 20 });
-  }
-  worksheet['!cols'] = wscols;
-
-  /* create an XLSX file and try to save to Presidents.xlsx */
-  writeFileXLSX(workbook, `Danh sách thành viên lớp-${foundedClass.value.name}.xlsx`, {
-    compression: true
-  });
+function downloadSheetHandler() {
+  downloadSheet(foundedClassMembers.value, sheetHeader, sheetName.value);
 }
 
 const options = ref('');
@@ -254,16 +235,33 @@ async function getDetailClass() {
     foundedClassMembers.value = [];
   }
   await classStore.getAllClasses();
-  foundedClass.value = classStore.allClasses.find((item) => item.id == route.params.id);
-  foundedClass.value.leaders.forEach((l) => {
-    foundedClassMembers.value.push(l);
-    l.seatRole = 'Leader';
-  });
 
-  foundedClass.value.members.forEach((m) => {
-    foundedClassMembers.value.push(m);
-    m.seatRole = 'Thành viên';
-  });
+  foundedClass.value = classStore.allClasses.find((item) => item.id == route.params.id);
+  sheetName.value = `Danh sách thành viên lớp-${foundedClass.value.name}`;
+
+  for (let i = 0; i < foundedClass.value.leaders.length; i++) {
+    foundedClassMembers.value.push({
+      studentCode: foundedClass.value.leaders[i].studentCode,
+      fullName: foundedClass.value.leaders[i].fullName,
+      seatRole: 'Leader',
+      cohort: foundedClass.value.leaders[i].cohort,
+      email: foundedClass.value.leaders[i].email,
+      githubUrl: foundedClass.value.leaders[i].githubUrl,
+      facebookUrl: foundedClass.value.leaders[i].facebookUrl
+    });
+  }
+
+  for (let i = 0; i < foundedClass.value.members.length; i++) {
+    foundedClassMembers.value.push({
+      studentCode: foundedClass.value.members[i].studentCode,
+      fullName: foundedClass.value.members[i].fullName,
+      seatRole: 'Thành viên',
+      cohort: foundedClass.value.members[i].cohort,
+      email: foundedClass.value.members[i].email,
+      githubUrl: foundedClass.value.members[i].githubUrl,
+      facebookUrl: foundedClass.value.members[i].facebookUrl
+    });
+  }
 }
 
 function refreshMemberListHandler() {
@@ -294,7 +292,7 @@ onMounted(() => {
           <img :src="exportIcon" alt="Add" style="margin-right: 8px; transform: rotate(180deg)" />
           Nhập Sheet
         </n-button>
-        <n-button @click="downloadSheet">
+        <n-button @click="downloadSheetHandler">
           <img :src="exportIcon" alt="Add" style="margin-right: 8px" /> Xuất Sheet
         </n-button>
         <n-button @click="showModalHandler('single')">

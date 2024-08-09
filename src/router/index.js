@@ -75,7 +75,12 @@ const routes = [
     ]
   },
   {
-    path: '/Admin',
+    path: '/admin',
+    name: 'Admin',
+    meta: {
+      requiresAuth: true,
+      requiredRole: 'ROLE_ADMIN'
+    },
     component: () => import('@layout/admin.vue'),
     children: [
       {
@@ -88,15 +93,21 @@ const routes = [
         component: () => import('@pages/admin/Classes.vue')
       },
       {
-        path: '/Class/:id',
+        path: '/ClassAdmin/:id',
         name: 'ClassAdmin',
+        meta: {
+          requiresAuth: true,
+          requiredRole: 'ROLE_ADMIN'
+        },
         component: () => import('@pages/admin/Class.vue')
       },
       {
         path: '/registerMember',
         name: 'registerMember',
         meta: {
-          title: 'Đăng ký thành viên'
+          title: 'Đăng ký thành viên',
+          requiresAuth: true,
+          requiredRole: 'ROLE_ADMIN'
         },
         component: () => import('@pages/admin/registerMember.vue')
       }
@@ -109,6 +120,14 @@ const routes = [
       title: 'Trang đăng nhập'
     },
     component: () => import('@/pages/Login.vue')
+  },
+  {
+    path: '/forbidden',
+    name: 'Forbidden',
+    meta: {
+      title: 'Trang bị cấm'
+    },
+    component: () => import('@pages/Forbidden.vue')
   }
 ];
 const router = createRouter({
@@ -126,17 +145,26 @@ router.afterEach((to, from) => {
   }
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const token = localStorage.getItem('prol7-vuejs:access-token');
+  const { requiredRole, requiresAuth } = to.meta;
 
-  if (to.path == '/login' && token) {
-    next({ name: 'Home' });
-  } else if (to.path === '/Login' && !token) {
-    localStorage.removeItem('prol7-vuejs:access-token');
-    next({ name: 'Login' });
-  } else if (to.meta.requiresAuth && !token) {
-    next({ name: 'Login' });
-  } else {
-    next();
+  if (requiresAuth) {
+    if (!token) return next({ name: 'Login' });
+    if (requiredRole) {
+      const userStore = useUserStore();
+      await userStore.getInfor();
+      if (!(requiredRole == userStore.userRole)) {
+        return next({ path: '/forbidden' });
+      }
+    }
   }
+
+  // if (requiresAuth && !token) return next({ name: 'Login' });
+
+  if (to.path == '/Login' && token) {
+    return next({ name: 'Home' });
+  }
+
+  next();
 });

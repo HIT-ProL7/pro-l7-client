@@ -22,6 +22,7 @@ import backIcon from '@assets/icons/back.svg';
 import { read, utils, writeFileXLSX } from 'xlsx';
 import formRegisterMember from '@/components/Admin/formAddRegisterMember.vue';
 import { useClassStore } from '@/stores/classStore';
+import { downloadSheet } from '@/utils/downloadSheet';
 
 const classStore = useClassStore();
 const message = useMessage();
@@ -278,43 +279,20 @@ async function showFile(file) {
   if (registerMemberList.value.length == 0) registerMemberList.value = objects.slice(1);
   else {
     registerMemberList.value.some((item) => {
-      objects.forEach((o) => {
-        if (o.studentCode === item.studentCode) return 0;
-        else registerMemberList.value.push(o);
-      });
+      for (let i = 1; i <= objects.length; i++) {
+        if (objects[i].studentCode === item.studentCode) return 0;
+        else registerMemberList.value.push(objects[i]);
+      }
     });
   }
   console.log(objects.slice(1));
 }
 
 const registerMemberListRef = ref(null);
-
-function downloadSheet() {
-  /* generate worksheet and workbook */
-  const worksheet = utils.json_to_sheet(registerMemberList.value);
-  const workbook = utils.book_new();
-  utils.book_append_sheet(workbook, worksheet, 'Các lớp học');
-
-  /* fix headers */
-  utils.sheet_add_aoa(
-    worksheet,
-    [['Mã sinh viên', 'Mật khẩu', 'Họ và tên', 'Email', 'Trạng thái']],
-    {
-      origin: 'A1'
-    }
-  );
-
-  /* calculate column width */
-  const header = Object.keys(registerMemberList.value[0]);
-  var wscols = [];
-  for (var i = 0; i < header.length; i++) {
-    // columns length added
-    wscols.push({ wch: 20 });
-  }
-  worksheet['!cols'] = wscols;
-
-  /* create an XLSX file and try to save to Presidents.xlsx */
-  writeFileXLSX(workbook, 'Danh sách tài khoản đăng ký.xlsx', { compression: true });
+const sheetHeader = ['Mã sinh viên', 'Mật khẩu', 'Họ và tên', 'Email', 'Trạng thái'];
+const sheetName = 'Danh sách tài khoản đã đăng ký';
+function downloadSheetHandler() {
+  downloadSheet(registerMemberList.value, sheetHeader, sheetName);
 }
 
 const showModal = ref(false);
@@ -404,7 +382,7 @@ function registerMemberHandler() {
           @change="getFile"
           style="display: none"
         />
-        <n-button @click="downloadSheet">
+        <n-button @click="downloadSheetHandler">
           <img :src="exportIcon" alt="Add" style="margin-right: 8px" /> Xuất Sheet
         </n-button>
         <n-button @click="showModal = true">

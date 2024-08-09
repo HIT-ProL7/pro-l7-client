@@ -4,7 +4,8 @@ import { formatDate } from '@/utils/formatDate';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    userRoles: '',
+    userRole: '',
+    isLoggined: '',
     studentCode: '',
     fullName: '',
     email: '',
@@ -17,12 +18,14 @@ export const useUserStore = defineStore('user', {
     banner: '',
     myClass: []
   }),
+  getters: {
+    getUserRole: (state) => state.userRole
+  },
   actions: {
     async login(loginInfor) {
       try {
         const response = await api.post('/auth/login', loginInfor);
-
-        this.userRoles = response.data.data.roles;
+        this.isLoggined = true;
         localStorage.setItem('prol7-vuejs:access-token', response.data.data.accessToken);
 
         return response;
@@ -43,6 +46,7 @@ export const useUserStore = defineStore('user', {
         this.desc = response.data.data.description;
         this.avatar = response.data.data.avatarUrl;
         this.banner = response.data.data.bannerUrl;
+        this.userRole = response.data.data.role;
       } catch (error) {
         throw error;
       }
