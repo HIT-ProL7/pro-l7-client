@@ -17,12 +17,14 @@ const props = defineProps({
     <div class="infor">
       <p class="heading">Giới thiệu</p>
       <div class="content">
-        <div>
-          <div class="icon-wrap center">
-            <Icon font-size="24px" icon="mdi:clipboard-text-date" />
+        <div class="wrap">
+          <div class="left">
+            <div class="icon-wrap center">
+              <Icon font-size="24px" icon="mdi:clipboard-text-date" />
+            </div>
+            <p>Ngày tham gia:</p>
           </div>
-          <p>Ngày tham gia:</p>
-          <span>{{ props.createdAt }}</span>
+          <span class="word-wrap"> {{ props.createdAt }}</span>
         </div>
         <div class="wrap">
           <div class="left">
@@ -136,28 +138,21 @@ const props = defineProps({
         font-size: 22px;
       }
     }
-    .content {
-      @include mobile {
-        > div.wrap {
-          align-items: flex-start;
-        }
-      }
-    }
     .content > div {
       display: flex;
       align-items: center;
       .left {
         display: flex;
         align-items: center;
+        p {
+          width: max-content;
+        }
       }
       @include tablet {
         font-size: 22px;
       }
       @include mobile {
         font-size: 18px;
-        span.word-wrap {
-          margin-top: 4px;
-        }
       }
       span {
         overflow-wrap: break-word;
@@ -165,6 +160,9 @@ const props = defineProps({
         margin-left: 8px;
       }
       span.word-wrap {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         word-break: break-word;
       }
     }
