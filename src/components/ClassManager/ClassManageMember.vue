@@ -5,7 +5,7 @@ import avatar from '@assets/avatar.png';
 import { NPopover, NPopconfirm } from 'naive-ui';
 import { useClassManageStore } from '@/stores/classManageStore';
 import { useClassStore } from '@/stores/classStore';
-import { useDialog, useMessage, NButton } from 'naive-ui';
+import { useDialog, useMessage, NButton, NSelect, NInput } from 'naive-ui';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -74,11 +74,45 @@ function addMember() {
 
 const memberList = ref([]);
 // memberList.value = props.classMembers;
+// Lựa chọn tìm kiếm
+const searchOptions = [
+  {
+    label: 'Tìm kiếm',
+    value: ''
+  },
+  {
+    label: 'Mã sinh viên',
+    value: 'studentCode'
+  },
+  {
+    label: 'Họ tên',
+    value: 'fullName'
+  }
+];
+
+const searchOption = ref('');
+const searchInput = ref('');
+
+const filterMemberList = computed(() => {
+  if (searchInput.value == '') return memberList.value;
+  else {
+    if (searchOption.value == '') return memberList.value;
+    else if (searchOption.value == 'studentCode') {
+      return memberList.value.filter((m) =>
+        m.studentCode.toLowerCase().includes(searchInput.value.toLowerCase())
+      );
+    } else if (searchOption.value == 'fullName') {
+      return memberList.value.filter((m) =>
+        m.fullName.toLowerCase().includes(searchInput.value.toLowerCase())
+      );
+    }
+  }
+});
 
 const memberSize = ref(10);
 const memberCnt = ref(10);
 const memberListLength = ref(0);
-const limitedMemberList = computed(() => memberList.value.slice(0, memberSize.value));
+const limitedMemberList = computed(() => filterMemberList.value.slice(0, memberSize.value));
 
 onMounted(async () => {
   await classStore.getDetailClass(route.params.id);
@@ -91,28 +125,36 @@ onMounted(async () => {
 <template>
   <div class="class-member-wrap">
     <div class="heading-wrap">
-      <p class="heading">Thành viên lớp</p>
-      <n-popconfirm
-        :show-icon="false"
-        negative-text="Hủy"
-        positive-text="Thêm"
-        @positive-click="addMember()"
-      >
-        <template #trigger>
-          <div class="add-member">
-            <Icon icon="ic:round-plus" font-size="28px" />
+      <div>
+        <p class="heading">Thành viên lớp</p>
+        <n-popconfirm
+          :show-icon="false"
+          negative-text="Hủy"
+          positive-text="Thêm"
+          @positive-click="addMember()"
+        >
+          <template #trigger>
+            <div class="add-member">
+              <Icon icon="ic:round-plus" font-size="28px" />
+            </div>
+          </template>
+          <div class="input-student-code" style="width: 240px">
+            <label for="studentCode" style="font-size: 20px">Nhập mã sinh viên: </label>
+            <input
+              type="text"
+              v-model="newStudentCode"
+              id="studentCode"
+              style="width: 100%; padding: 8px 16px; font-size: 18px"
+            />
           </div>
-        </template>
-        <div class="input-student-code" style="width: 240px">
-          <label for="studentCode" style="font-size: 20px">Nhập mã sinh viên: </label>
-          <input
-            type="text"
-            v-model="newStudentCode"
-            id="studentCode"
-            style="width: 100%; padding: 8px 16px; font-size: 18px"
-          />
-        </div>
-      </n-popconfirm>
+        </n-popconfirm>
+      </div>
+      <p>Số lượng: {{ memberListLength }}</p>
+    </div>
+    <div class="search">
+      <n-input placeholder="Nhập tìm kiếm" class="n-input-custom" v-model:value="searchInput" />
+      <n-button type="primary" @click="console.log(search)">Tìm kiếm</n-button>
+      <n-select v-model:value="searchOption" :options="searchOptions" class="n-input-select" />
     </div>
     <table class="member-list">
       <thead>
@@ -183,7 +225,7 @@ onMounted(async () => {
         </tr>
       </tbody>
     </table>
-    <div class="class-member-footer" v-if="memberSize < memberListLength">
+    <div class="class-member-footer" v-if="memberSize < filterMemberList.length">
       <n-button @click="memberSize += memberCnt">Xem thêm</n-button>
     </div>
   </div>
@@ -196,6 +238,20 @@ onMounted(async () => {
     display: flex;
     align-items: center;
     gap: 16px;
+    font-size: 36px;
+    font-weight: 500;
+    margin: 32px;
+    justify-content: space-between;
+    @include mobile {
+      font-size: 24px;
+      margin: 24px 8px;
+      flex-direction: column;
+    }
+    > div {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
     .add-member {
       background-color: #ccc;
       border-radius: 50%;
@@ -208,16 +264,42 @@ onMounted(async () => {
       width: 250px;
     }
   }
-  .heading {
-    font-size: 36px;
-    margin: 32px 0;
-    font-weight: 500;
-    margin-left: 32px;
+  .search {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
     @include mobile {
-      font-size: 28px;
-      margin: 24px 0;
-      margin-left: 24px;
+      flex-direction: column;
     }
+    .n-input-custom {
+      width: 400px;
+      @include tablet {
+        width: 300px;
+      }
+      @include small-tablet {
+        width: 250px;
+      }
+      @include mobile {
+        width: 100%;
+      }
+    }
+    .n-input-select {
+      width: 10%;
+      @include tablet {
+        width: 20%;
+      }
+      @include small-tablet {
+        width: 30%;
+      }
+      @include mobile {
+        width: 100%;
+      }
+    }
+  }
+  .heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   .member-list {
     width: 100%;

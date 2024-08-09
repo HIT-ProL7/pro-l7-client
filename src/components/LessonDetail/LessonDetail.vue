@@ -41,6 +41,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="lesson-detail-container">
+    <h1 v-if="option == 'video'" style="margin: 8px 0">{{ lessonStore.videos[0].title }}</h1>
     <div class="video" v-if="option == 'video'">
       <iframe
         v-if="lessonStore.videos[0].url.includes('https://www.youtube.com/embed')"

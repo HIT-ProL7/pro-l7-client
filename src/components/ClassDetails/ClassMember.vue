@@ -2,7 +2,7 @@
 import { Icon } from '@iconify/vue';
 import { defineProps, ref, computed, onMounted } from 'vue';
 import avatar from '@assets/avatar.png';
-import { NPopover, NButton } from 'naive-ui';
+import { NPopover, NInput, NButton, NSelect } from 'naive-ui';
 
 const props = defineProps({
   classMembers: { type: Array, require: true }
@@ -11,10 +11,45 @@ const props = defineProps({
 const memberList = ref([]);
 memberList.value = props.classMembers;
 
+// Lựa chọn tìm kiếm
+const searchOptions = [
+  {
+    label: 'Tìm kiếm',
+    value: ''
+  },
+  {
+    label: 'Mã sinh viên',
+    value: 'studentCode'
+  },
+  {
+    label: 'Họ tên',
+    value: 'fullName'
+  }
+];
+
+const searchOption = ref('');
+const searchInput = ref('');
+
+const filterMemberList = computed(() => {
+  if (searchInput.value == '') return memberList.value;
+  else {
+    if (searchOption.value == '') return memberList.value;
+    else if (searchOption.value == 'studentCode') {
+      return memberList.value.filter((m) =>
+        m.studentCode.toLowerCase().includes(searchInput.value.toLowerCase())
+      );
+    } else if (searchOption.value == 'fullName') {
+      return memberList.value.filter((m) =>
+        m.fullName.toLowerCase().includes(searchInput.value.toLowerCase())
+      );
+    }
+  }
+});
+
 const memberSize = ref(10);
 const memberCnt = ref(10);
 const memberListLength = ref(0);
-const limitedMemberList = computed(() => memberList.value.slice(0, memberSize.value));
+const limitedMemberList = computed(() => filterMemberList.value.slice(0, memberSize.value));
 
 onMounted(() => {
   memberListLength.value = memberList.value.length;
@@ -23,7 +58,15 @@ onMounted(() => {
 
 <template>
   <div class="class-member-wrap">
-    <p class="heading">Thành viên lớp</p>
+    <div class="heading">
+      <p>Thành viên lớp</p>
+      <p>Số lượng: {{ memberListLength }}</p>
+    </div>
+    <div class="search">
+      <n-input placeholder="Nhập tìm kiếm" class="n-input-custom" v-model:value="searchInput" />
+      <n-button type="primary" @click="console.log(search)">Tìm kiếm</n-button>
+      <n-select v-model:value="searchOption" :options="searchOptions" class="n-input-select" />
+    </div>
     <table class="member-list">
       <thead>
         <tr>
@@ -88,7 +131,7 @@ onMounted(() => {
         </tr>
       </tbody>
     </table>
-    <div class="class-member-footer" v-if="memberSize < memberListLength">
+    <div class="class-member-footer" v-if="memberSize < filterMemberList.length">
       <n-button @click="memberSize += memberCnt">Xem thêm</n-button>
     </div>
   </div>
@@ -99,13 +142,47 @@ onMounted(() => {
   position: relative;
   .heading {
     font-size: 36px;
-    margin: 32px 0;
+    margin: 32px;
     font-weight: 500;
-    margin-left: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     @include mobile {
-      font-size: 28px;
-      margin: 24px 0;
-      margin-left: 24px;
+      font-size: 24px;
+      margin: 24px 8px;
+      // flex-direction: column;
+    }
+  }
+  .search {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    @include mobile {
+      flex-direction: column;
+    }
+    .n-input-custom {
+      width: 400px;
+      @include tablet {
+        width: 300px;
+      }
+      @include small-tablet {
+        width: 250px;
+      }
+      @include mobile {
+        width: 100%;
+      }
+    }
+    .n-input-select {
+      width: 10%;
+      @include tablet {
+        width: 20%;
+      }
+      @include small-tablet {
+        width: 30%;
+      }
+      @include mobile {
+        width: 100%;
+      }
     }
   }
   .member-list {

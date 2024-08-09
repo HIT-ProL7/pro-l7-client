@@ -174,6 +174,7 @@ setResponsive();
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #fff;
     z-index: 999;
     cursor: pointer;
     @include mobile {
@@ -249,6 +250,7 @@ setResponsive();
         border: 1px solid $color-primary;
         border-radius: 8px;
         cursor: pointer;
+
         @include mobile {
           font-size: 24px;
         }
@@ -260,6 +262,11 @@ setResponsive();
         }
         .is-active {
           transform: rotate(90deg);
+        }
+        p {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
       .lesson-detail {
@@ -288,6 +295,9 @@ setResponsive();
             }
           }
           p {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             &:hover {
               color: $color-primary;
             }

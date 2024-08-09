@@ -57,25 +57,21 @@ function saveContent() {
             route.query.vId,
             {
               name: lessonName.value,
-              content:
-                contentLesson.value.replace(/"/g, "'").replace(/({|})/g, '\\$1') || null || ''
+              content: contentLesson.value.replace(/"/g, "'").replace('\\$1') || null || ''
             },
             {
-              content: exerciseLesson.value.replace(/"/g, "'").replace(/({|})/g, '\\$1') || ''
+              content: exerciseLesson.value.replace(/"/g, "'").replace('\\$1') || ''
             },
             {
               title: videoName.value,
-              url: videoIframe.value.replace(/"/g, "'").replace(/({|})/g, '\\$1') || null || '',
+              url: videoIframe.value.replace(/"/g, "'").replace('\\$1') || null || '',
               lessonId: route.query.lessonId
             }
           );
-          console.log(lessonStore.lesson.content);
-          console.log(contentLesson.value.replace(/"/g, "'").replace(/({|})/g, '\\$1'));
+
           message.success('Cập nhật bài học thành công');
         } catch (error) {
           console.log(error);
-          console.log(exerciseLesson.value.replace(/"/g, "'").replace(/({|})/g, '\\$1'));
-          console.log(contentLesson.value.replace(/"/g, "'").replace(/({|})/g, '\\$1'));
           message.error('Cập nhật bài học thất bại');
         }
       },
@@ -105,7 +101,7 @@ function saveContent() {
             try {
               await lessonStore.createLesson({
                 name: lessonName.value,
-                content: contentLesson.value.replace(/"/g, "'").replace(/({|})/g, '\\$1'),
+                content: contentLesson.value.replace(/"/g, "'").replace('\\$1'),
                 classroomId: route.query.classId
               });
             } catch (error) {
@@ -114,7 +110,7 @@ function saveContent() {
             try {
               await lessonStore.createVideo({
                 title: videoName.value,
-                url: videoIframe.value.replace(/"/g, "'").replace(/({|})/g, '\\$1'),
+                url: videoIframe.value.replace(/"/g, "'").replace('\\$1'),
                 lessonId: lessonStore.lesson.id
               });
             } catch (error) {
@@ -123,7 +119,7 @@ function saveContent() {
             try {
               await lessonStore.createExercise(lessonStore.lesson.id, {
                 title: videoName.value,
-                url: videoIframe.value.replace(/"/g, "'").replace(/({|})/g, '\\$1'),
+                url: videoIframe.value.replace(/"/g, "'").replace('\\$1'),
                 lessonId: lessonStore.lesson.id
               });
             } catch (error) {
@@ -245,7 +241,7 @@ onMounted(() => {
         class="btn btn-exist"
         @click="router.replace({ name: 'ClassManagement', params: { id: route.query.classId } })"
       >
-        Hủy
+        Quay lại
       </button>
       <button class="btn btn-del" v-if="route.query.option == 'edit'" @click="deleteLesson">
         Xóa

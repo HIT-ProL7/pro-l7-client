@@ -164,7 +164,7 @@ function goToLessonDetail(classId, lsdId, option, optionId) {
     font-weight: 500;
     margin-left: 32px;
     @include mobile {
-      font-size: 28px;
+      font-size: 24px;
       margin: 24px 0;
       margin-left: 24px;
     }
