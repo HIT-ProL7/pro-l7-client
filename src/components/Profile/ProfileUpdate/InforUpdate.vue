@@ -68,7 +68,7 @@ const changePasswordInfor = reactive({
 });
 const message = useMessage();
 const dialog = useDialog();
-const rgxPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+const rgxPassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+=<>?/{}~|-]).{8,16}$/;
 
 function passwordValidate(password) {
   if (password == '') {

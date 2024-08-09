@@ -147,15 +147,27 @@ const formDataValidate = () => {
   return true;
 };
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (formDataValidate()) {
-    message.success(
-      'Mật khẩu mới đã được gửi đến Gmail của bạn. Hãy mở Gmail và kiểm tra!',
-      {
-        keepAliveOnHover: true
-      },
-      4000
-    );
+    const res = await userStore.forgotPassword(formData.value);
+    console.log(formData.value);
+    if (res.status == 200) {
+      message.success(
+        'Mật khẩu mới đã được gửi đến Gmail của bạn. Hãy mở Gmail và kiểm tra!',
+        {
+          keepAliveOnHover: true
+        },
+        4000
+      );
+    } else if (res.response.status) {
+      message.error(
+        'Không tìm thấy tài khoản, hãy nhập lại',
+        {
+          keepAliveOnHover: true
+        },
+        4000
+      );
+    }
   }
 };
 </script>
@@ -291,6 +303,7 @@ template {
   flex-direction: column;
   border-radius: 25px;
   overflow: hidden;
+  padding: 0 36px;
   @include tablet {
     max-width: 470px;
   }
