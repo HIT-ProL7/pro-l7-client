@@ -14,28 +14,28 @@ import TextAlign from '@tiptap/extension-text-align';
 import StarterKit from '@tiptap/starter-kit';
 import { Editor, EditorContent, useEditor } from '@tiptap/vue-3';
 
-import BordIcon from 'vue-material-design-icons/FormatBold.vue';
-import ItalicIcon from 'vue-material-design-icons/FormatItalic.vue';
-import StrikeIcon from 'vue-material-design-icons/FormatStrikethrough.vue';
-import Header1Icon from 'vue-material-design-icons/FormatHeader1.vue';
-import Header2Icon from 'vue-material-design-icons/FormatHeader2.vue';
-import Header3Icon from 'vue-material-design-icons/FormatHeader3.vue';
-import ListBulletedIcon from 'vue-material-design-icons/ListBox.vue';
-import ListNumberedIcon from 'vue-material-design-icons/FormatListNumbered.vue';
-import codeBracesIcon from 'vue-material-design-icons/CodeBraces.vue';
-import codeBlcokBracesIcon from 'vue-material-design-icons/CodeBlockBraces.vue';
-import quoteIcon from 'vue-material-design-icons/FormatQuoteClose.vue';
-import horizontalIcon from 'vue-material-design-icons/Minus.vue';
-import youtubeIcon from 'vue-material-design-icons/Youtube.vue';
-import imageIcon from 'vue-material-design-icons/ImageEdit.vue';
-import linkIcon from 'vue-material-design-icons/LinkVariant.vue';
-import undoIcon from 'vue-material-design-icons/Undo.vue';
-import redoIcon from 'vue-material-design-icons/Redo.vue';
-import alignLeftIcon from 'vue-material-design-icons/FormatAlignLeft.vue';
-import alignRightIcon from 'vue-material-design-icons/FormatAlignRight.vue';
-import alignCenterIcon from 'vue-material-design-icons/FormatAlignCenter.vue';
-import alignJustifyIcon from 'vue-material-design-icons/FormatAlignJustify.vue';
-import saveIcon from 'vue-material-design-icons/ContentSave.vue';
+import FormatBoldIcon from 'vue-material-design-icons/FormatBold.vue';
+import FormatItalicIcon from 'vue-material-design-icons/FormatItalic.vue';
+import FormatStrikethroughIcon from 'vue-material-design-icons/FormatStrikethrough.vue';
+import FormatHeader1Icon from 'vue-material-design-icons/FormatHeader1.vue';
+import FormatHeader2Icon from 'vue-material-design-icons/FormatHeader2.vue';
+import FormatHeader3Icon from 'vue-material-design-icons/FormatHeader3.vue';
+import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue';
+import FormatListNumberedIcon from 'vue-material-design-icons/FormatListNumbered.vue';
+import CodeBracesIcon from 'vue-material-design-icons/CodeBraces.vue';
+import CodeBlockBracesIcon from 'vue-material-design-icons/CodeBlockBraces.vue';
+import FormatQuoteCloseIcon from 'vue-material-design-icons/FormatQuoteClose.vue';
+import MinusIcon from 'vue-material-design-icons/Minus.vue';
+import YoutubeIcon from 'vue-material-design-icons/Youtube.vue';
+import ImageEditIcon from 'vue-material-design-icons/ImageEdit.vue';
+import LinkVariantIcon from 'vue-material-design-icons/LinkVariant.vue';
+import UndoIcon from 'vue-material-design-icons/Undo.vue';
+import RedoIcon from 'vue-material-design-icons/Redo.vue';
+import FormatAlignLeftIcon from 'vue-material-design-icons/FormatAlignLeft.vue';
+import FormatAlignRightIcon from 'vue-material-design-icons/FormatAlignRight.vue';
+import FormatAlignCenterIcon from 'vue-material-design-icons/FormatAlignCenter.vue';
+import FormatAlignJustifyIcon from 'vue-material-design-icons/FormatAlignJustify.vue';
+import ContentSaveIcon from 'vue-material-design-icons/ContentSave.vue';
 
 const content = ref('');
 const contentLesson = inject('contentLesson');
@@ -130,106 +130,106 @@ onBeforeUnmount(() => {
           :disabled="!editor.can().chain().focus().toggleBold().run()"
           :class="{ 'is-active': editor.isActive('bold') }"
         >
-          <BordIcon title="Bold" />
+          <FormatBoldIcon title="Bold" />
         </button>
         <button
           @click="editor.chain().focus().toggleItalic().run()"
           :disabled="!editor.can().chain().focus().toggleItalic().run()"
           :class="{ 'is-active': editor.isActive('italic') }"
         >
-          <ItalicIcon title="Italic" />
+          <FormatItalicIcon title="Italic" />
         </button>
         <button
           @click="editor.chain().focus().toggleStrike().run()"
           :disabled="!editor.can().chain().focus().toggleStrike().run()"
           :class="{ 'is-active': editor.isActive('strike') }"
         >
-          <StrikeIcon title="Strike" />
+          <FormatStrikethroughIcon title="Strike" />
         </button>
         <button
           @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
           :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
         >
-          <Header1Icon title="Heading 1" />
+          <FormatHeader1Icon title="Heading 1" />
         </button>
         <button
           @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
           :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
         >
-          <Header2Icon title="Heading 2" />
+          <FormatHeader2Icon title="Heading 2" />
         </button>
         <button
           @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
           :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
         >
-          <Header3Icon title="Heading 3" />
+          <FormatHeader3Icon title="Heading 3" />
         </button>
         <button
           @click="editor.chain().focus().setTextAlign('left').run()"
           :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }"
         >
-          <alignLeftIcon title="Align Left" />
+          <FormatAlignLeftIcon title="Align Left" />
         </button>
         <button
           @click="editor.chain().focus().setTextAlign('center').run()"
           :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }"
         >
-          <alignCenterIcon title="Align Center" />
+          <FormatAlignCenterIcon title="Align Center" />
         </button>
         <button
           @click="editor.chain().focus().setTextAlign('right').run()"
           :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }"
         >
-          <alignRightIcon title="Align Right" />
+          <FormatAlignRightIcon title="Align Right" />
         </button>
         <button
           @click="editor.chain().focus().setTextAlign('justify').run()"
           :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }"
         >
-          <alignJustifyIcon titl="Align Justify" />
+          <FormatAlignJustifyIcon titl="Align Justify" />
         </button>
         <button
           @click="editor.chain().focus().toggleBulletList().run()"
           :class="{ 'is-active': editor.isActive('bulletList') }"
         >
-          <ListBulletedIcon title="Bulleted List" />
+          <FormatListBulletedIcon title="Bulleted List" />
         </button>
         <button
           @click="editor.chain().focus().toggleOrderedList().run()"
           :class="{ 'is-active': editor.isActive('orderedList') }"
         >
-          <ListNumberedIcon title="Numbered List" />
+          <FormatListNumberedIcon title="Numbered List" />
         </button>
         <button
           @click="editor.chain().focus().toggleCode().run()"
           :disabled="!editor.can().chain().focus().toggleCode().run()"
           :class="{ 'is-active': editor.isActive('code') }"
         >
-          <codeBracesIcon title="Code" />
+          <CodeBracesIcon title="Code" />
         </button>
         <button
           @click="editor.chain().focus().toggleCodeBlock().run()"
           :class="{ 'is-active': editor.isActive('codeBlock') }"
         >
-          <codeBlcokBracesIcon title="Code Block" />
+          <CodeBlockBracesIcon title="Code Block" />
         </button>
         <button
           @click="editor.chain().focus().toggleBlockquote().run()"
           :class="{ 'is-active': editor.isActive('blockquote') }"
         >
-          <quoteIcon title="Quote" />
+          <FormatQuoteCloseIcon title="Quote" />
         </button>
         <button @click="editor.chain().focus().setHorizontalRule().run()">
-          <horizontalIcon title="Horizontal" />
+          <MinusIcon title="Horizontal" />
         </button>
         <button id="add" @click="addVideo">
-          <youtubeIcon title="Add Video Youtube" />
+          <YoutubeIcon title="Add Video Youtube" />
         </button>
         <button @click="addImage">
-          <imageIcon title="Add Image" />
+          <ImageEditIcon title="Add Image" />
         </button>
         <button @click="setLink" :class="{ 'is-active': editor.isActive('link') }">
-          <linkIcon title="Set Link" />
+          <LinkVariantIcon title="Set Link" />
         </button>
         <input
           type="color"
@@ -240,16 +240,16 @@ onBeforeUnmount(() => {
           @click="editor.chain().focus().undo().run()"
           :disabled="!editor.can().chain().focus().undo().run()"
         >
-          <undoIcon title="Undo" />
+          <UndoIcon title="Undo" />
         </button>
         <button
           @click="editor.chain().focus().redo().run()"
           :disabled="!editor.can().chain().focus().redo().run()"
         >
-          <redoIcon title="Redo" />
+          <RedoIcon title="Redo" />
         </button>
         <button @click="getContent()">
-          <saveIcon title="Save" />
+          <ContentSaveIcon title="Save" />
         </button>
       </div>
     </div>
