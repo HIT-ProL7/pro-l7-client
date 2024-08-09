@@ -94,9 +94,17 @@ function addImage() {
 }
 
 function getContent() {
-  content.value = editor.value.getHTML();
-  if (props.option == 'content') contentLesson.value = editor.value.getHTML();
-  else exerciseLesson.value = editor.value.getHTML();
+  if (contentLesson.value == null) contentLesson.value = '';
+  if (exerciseLesson.value == null) exerciseLesson.value = '';
+  // content.value = editor.value.getHTML();
+  if (props.option == 'content') {
+    contentLesson.value = editor.value.getHTML();
+  } else {
+    exerciseLesson.value = editor.value.getHTML();
+  }
+
+  console.log(contentLesson.value);
+  console.log(exerciseLesson.value);
   message.success('Lưu thành công!');
 }
 
