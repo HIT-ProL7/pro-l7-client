@@ -184,6 +184,17 @@ async function updateInforHandler() {
   }
 }
 
+const typeInput = ref(['password', 'password', 'password']);
+function showPassword(typeEye, index) {
+  if (typeEye == 'open') {
+    typeInput.value[index] = 'text';
+    console.log(typeInput.value[index]);
+  } else {
+    typeInput.value[index] = 'password';
+    console.log(typeInput.value[index]);
+  }
+}
+
 onMounted(() => {
   window.addEventListener('resize', setWidth);
 });
@@ -240,7 +251,7 @@ onBeforeUnmount(() => {
         </div>
       </div>
     </div>
-    <div class="option" @click="showModalHandler('cohort')">
+    <!-- <div class="option" @click="showModalHandler('cohort')">
       <div class="content-left">
         <div class="icon-wrap">
           <Icon icon="ph:student-bold" />
@@ -254,7 +265,7 @@ onBeforeUnmount(() => {
           <Icon icon="iconamoon:arrow-up-2-bold" />
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="option-v2" @click="showModalHandler('desc')">
       <p>Mô tả bản thân</p>
       <div class="content">
@@ -310,30 +321,72 @@ onBeforeUnmount(() => {
                 <label for="">Mật khẩu cũ</label>
               </p>
               <input
-                type="password"
+                :type="typeInput[0]"
                 placeholder="Nhập mật khẩu cũ"
                 v-model="changePasswordInfor.oldPassword"
               />
+              <div
+                class="eye-password eye-open"
+                v-if="typeInput[0] == 'text'"
+                @click="showPassword('close', 0)"
+              >
+                <Icon icon="ph:eye-fill" font-size="20px" />
+              </div>
+              <div
+                class="eye-password eye-close"
+                v-if="typeInput[0] == 'password'"
+                @click="showPassword('open', 0)"
+              >
+                <Icon icon="ph:eye-slash-fill" font-size="20px" />
+              </div>
             </div>
             <div>
               <p>
                 <label for="">Mật khẩu mới</label>
               </p>
               <input
-                type="password"
+                :type="typeInput[1]"
                 placeholder="Nhập mật khẩu mới"
                 v-model="changePasswordInfor.newPassword"
               />
+              <div
+                class="eye-password eye-open"
+                v-if="typeInput[1] == 'text'"
+                @click="showPassword('close', 1)"
+              >
+                <Icon icon="ph:eye-fill" font-size="20px" />
+              </div>
+              <div
+                class="eye-password eye-close"
+                v-if="typeInput[1] == 'password'"
+                @click="showPassword('open', 1)"
+              >
+                <Icon icon="ph:eye-slash-fill" font-size="20px" />
+              </div>
             </div>
             <div>
               <p>
                 <label for="">Nhập lại mật khẩu mới</label>
               </p>
               <input
-                type="password"
+                :type="typeInput[2]"
                 placeholder="Nhập lại mật khẩu mới"
                 v-model="changePasswordInfor.confirmNewPassword"
               />
+              <div
+                class="eye-password eye-open"
+                v-if="typeInput[2] == 'text'"
+                @click="showPassword('close', 2)"
+              >
+                <Icon icon="ph:eye-fill" font-size="20px" />
+              </div>
+              <div
+                class="eye-password eye-close"
+                v-if="typeInput[2] == 'password'"
+                @click="showPassword('open', 2)"
+              >
+                <Icon icon="ph:eye-slash-fill" font-size="20px" />
+              </div>
             </div>
           </div>
         </form>
@@ -384,8 +437,19 @@ onBeforeUnmount(() => {
     }
   }
   .change-password {
-    > div:not(:last-child) {
-      margin-bottom: 16px;
+    > div {
+      position: relative;
+      .eye-password {
+        position: absolute;
+        right: 3%;
+        bottom: 10%;
+        color: #000;
+        z-index: 10;
+        cursor: pointer;
+      }
+      &:not(:last-child) {
+        margin-bottom: 16px;
+      }
     }
   }
   form {
@@ -451,7 +515,7 @@ onBeforeUnmount(() => {
       width: 90%;
     }
     &:not(:last-child) {
-      margin-bottom: 32px;
+      margin-bottom: 16px;
     }
     .content-left {
       display: flex;
@@ -478,7 +542,7 @@ onBeforeUnmount(() => {
     padding: 16px;
     border-radius: 16px;
     cursor: pointer;
-    margin-bottom: 32px;
+    margin-bottom: 16px;
     @include mobile {
       width: 90%;
     }

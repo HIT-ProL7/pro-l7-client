@@ -160,8 +160,6 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 
-  // if (requiresAuth && !token) return next({ name: 'Login' });
-
   if (to.path == '/Login' && token) {
     return next({ name: 'Home' });
   }
