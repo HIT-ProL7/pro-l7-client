@@ -295,6 +295,20 @@ function downloadSheetHandler() {
   downloadSheet(registerMemberList.value, sheetHeader, sheetName);
 }
 
+const templateSheetHeader = ['Mã sinh viên', 'Mật khẩu', 'Họ và tên', 'Email'];
+const templateObject = [
+  {
+    studentCode: '1234567890',
+    password: 'Khang@123',
+    fullName: 'Khang Tran',
+    email: 'abc123@gmail.com'
+  }
+];
+
+function downloadSheetTemplateHandler() {
+  downloadSheet(templateObject, templateSheetHeader, 'DS đăng ký thành viên');
+}
+
 const showModal = ref(false);
 function handleCloseModal() {
   showModal.value = false;
@@ -368,6 +382,10 @@ function registerMemberHandler() {
         <n-select v-model:value="searchOption" :options="searchOptions" :style="{ width: '25%' }" />
       </n-input-group>
       <n-input-group style="gap: 8px; justify-content: flex-end">
+        <n-button @click="downloadSheetTemplateHandler" type="primary" class="download-sheet-btn">
+          <img :src="exportIcon" alt="Add" style="margin-right: 8px; transform: rotate(180deg)" />
+          Tải mẫu sheet
+        </n-button>
         <n-button type="primary" @click="registerMemberHandler">
           <img :src="addIcon" alt="Add" style="margin-right: 8px" /> Đăng ký
         </n-button>

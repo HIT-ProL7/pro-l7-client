@@ -4,6 +4,8 @@ import { ref, defineEmits } from 'vue';
 import { useClassStore } from '@/stores/classStore';
 import { read, utils, writeFileXLSX } from 'xlsx';
 import { useRoute } from 'vue-router';
+import { downloadSheet } from '@/utils/downloadSheet';
+import exportIcon from '@assets/icons/export.svg';
 
 const classStore = useClassStore();
 const message = useMessage();
@@ -39,30 +41,23 @@ async function showFile(file) {
   console.log(memberList.value);
 }
 
-async function downloadSheet() {
-  /* generate worksheet and workbook */
-  console.log(memberList.value);
-  const worksheet = utils.json_to_sheet(memberList.value);
-  const workbook = utils.book_new();
-  utils.book_append_sheet(workbook, worksheet, 'Thành viên');
-
-  /* fix headers */
-  utils.sheet_add_aoa(worksheet, [['Mã sinh viên', 'Vị trí', 'Trạng thái']], {
-    origin: 'A1'
-  });
-
-  /* calculate column width */
-  const header = Object.keys(memberList.value[0]);
-  var wscols = [];
-  console.log(memberList.value[0]);
-  for (var i = 0; i < header.length; i++) {
-    // columns length added
-    wscols.push({ wch: 20 });
+const templateSheetHeader = ['Mã sinh viên', 'Vị trí'];
+const templateObject = [
+  {
+    studentCode: '1234567890',
+    seatRole: 'Không có'
   }
-  worksheet['!cols'] = wscols;
+];
 
-  /* create an XLSX file and try to save to Presidents.xlsx */
-  writeFileXLSX(workbook, 'Danh sách thành viên mới.xlsx', { compression: true });
+function downloadSheetTemplateHandler() {
+  downloadSheet(templateObject, templateSheetHeader, 'DS thêm thành viên lớp xxx');
+}
+
+const sheetHeader = ['Mã sinh viên', 'Vị trí', 'Trạng thái'];
+const sheetName = ref('Danh sách thành viên mới.xlsx');
+
+function downloadSheetHandler() {
+  downloadSheet(memberList.value, sheetHeader, sheetName.value);
 }
 
 function addMemberHandler() {
@@ -89,7 +84,7 @@ function addMemberHandler() {
           }
         }
         emits('refreshMemberList');
-        await downloadSheet();
+        await downloadSheetHandler();
       }
     },
     onNegativeClick: () => {
@@ -100,7 +95,11 @@ function addMemberHandler() {
 </script>
 
 <template>
-  <div style="margin-top: 16px">
+  <div class="add-member-container">
+    <n-button @click="downloadSheetTemplateHandler" type="primary" class="download-sheet-btn">
+      <img :src="exportIcon" alt="Add" style="margin-right: 8px; transform: rotate(180deg)" /> Tải
+      mẫu sheet
+    </n-button>
     <input
       id="file"
       type="file"
@@ -114,4 +113,14 @@ function addMemberHandler() {
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.add-member-container {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  .download-sheet-btn {
+    width: 200px;
+  }
+}
+</style>

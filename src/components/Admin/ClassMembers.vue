@@ -69,17 +69,34 @@ const cohortColumns = reactive({
 
 const emailColumns = reactive({
   title: 'Email',
-  key: 'email'
+  key: 'email',
+  width: '300px'
 });
 
 const githubColumns = reactive({
   title: 'Github',
-  key: 'githubUrl'
+  key: 'githubUrl',
+  render(row) {
+    return h('a', {
+      href: row.githubUrl,
+      target: '_blank',
+      innerHTML: row.githubUrl
+    });
+  },
+  width: '250px'
 });
 
 const facebookColumns = reactive({
   title: 'FaceBook',
-  key: 'facebook'
+  key: 'facebook',
+  render(row) {
+    return h('a', {
+      href: row.facebookUrl,
+      target: '_blank',
+      innerHTML: row.facebookUrl
+    });
+  },
+  width: '250px'
 });
 
 const actionColumns = reactive({
@@ -210,7 +227,7 @@ const handlePageChange = (page) => {
 };
 
 const membersRef = ref(null);
-const sheetHeader = ['Mã sinh viên', 'Họ và tên', 'Khóa', 'Ngày bắt đầu', 'Số lượng thành viên'];
+const sheetHeader = ['Mã sinh viên', 'Họ và tên', 'Vị trí', 'Khóa', 'Email', 'Github', 'Facebook'];
 const sheetName = ref('');
 
 function downloadSheetHandler() {
