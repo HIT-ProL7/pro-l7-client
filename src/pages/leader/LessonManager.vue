@@ -57,14 +57,15 @@ function saveContent() {
             route.query.vId,
             {
               name: lessonName.value,
-              content: contentLesson.value.replace(/"/g, "'").replace(/({|})/g, '\\$1')
+              content:
+                contentLesson.value.replace(/"/g, "'").replace(/({|})/g, '\\$1') || null || ''
             },
             {
-              content: exerciseLesson.value.replace(/"/g, "'").replace(/({|})/g, '\\$1')
+              content: exerciseLesson.value.replace(/"/g, "'").replace(/({|})/g, '\\$1') || ''
             },
             {
               title: videoName.value,
-              url: videoIframe.value.replace(/"/g, "'").replace(/({|})/g, '\\$1'),
+              url: videoIframe.value.replace(/"/g, "'").replace(/({|})/g, '\\$1') || null || '',
               lessonId: route.query.lessonId
             }
           );
@@ -73,6 +74,8 @@ function saveContent() {
           message.success('Cập nhật bài học thành công');
         } catch (error) {
           console.log(error);
+          console.log(exerciseLesson.value.replace(/"/g, "'").replace(/({|})/g, '\\$1'));
+          console.log(contentLesson.value.replace(/"/g, "'").replace(/({|})/g, '\\$1'));
           message.error('Cập nhật bài học thất bại');
         }
       },
