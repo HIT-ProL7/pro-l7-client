@@ -120,7 +120,7 @@ function goToLessonDetail(classId, lsdId, option, optionId) {
     font-weight: 500;
     margin-left: 32px;
     @include mobile {
-      font-size: 28px;
+      font-size: 24px;
       margin: 24px 0;
       margin-left: 24px;
     }
@@ -147,6 +147,11 @@ function goToLessonDetail(classId, lsdId, option, optionId) {
       }
       .is-active {
         transform: rotate(90deg);
+      }
+      p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
 
@@ -175,6 +180,9 @@ function goToLessonDetail(classId, lsdId, option, optionId) {
           }
         }
         p {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           &:hover {
             color: $color-primary;
           }
