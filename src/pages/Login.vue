@@ -91,7 +91,6 @@ async function loginHandler() {
     return;
   } else {
     const res = await userStore.login(user);
-    console.log(res);
     if (res.status === 200) {
       message.success(
         'Đăng nhập thành công',
@@ -100,21 +99,18 @@ async function loginHandler() {
         },
         4000
       );
-
-      if (userStore.userRoles == 'ROLE_ADMIN' || userStore.userRoles == 'ROLE_USER') {
+      if (userStore.isLoggined) {
         router.push({ path: '', name: 'Home' });
-        await userStore.getInfor();
       }
+    } else if (res.response.status === 401) {
+      message.error(
+        'Mật khẩu hoặc tài khoản không đúng',
+        {
+          keepAliveOnHover: true
+        },
+        4000
+      );
     }
-    // if (res.response.status === 401) {
-    //   message.error(
-    //     'Mật khẩu hoặc tài khoản không đúng',
-    //     {
-    //       keepAliveOnHover: true
-    //     },
-    //     4000
-    //   );
-    // }
   }
 }
 
@@ -153,7 +149,13 @@ const formDataValidate = () => {
 
 const handleSubmit = () => {
   if (formDataValidate()) {
-    alert('Mật khẩu mới đã được gửi vào email của bạn');
+    message.success(
+      'Mật khẩu mới đã được gửi đến Gmail của bạn. Hãy mở Gmail và kiểm tra!',
+      {
+        keepAliveOnHover: true
+      },
+      4000
+    );
   }
 };
 </script>

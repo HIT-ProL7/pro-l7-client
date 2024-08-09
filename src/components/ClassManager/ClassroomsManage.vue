@@ -1,12 +1,48 @@
 <script setup lang="js">
 import { useRouter } from 'vue-router';
 import ClassLogo from '@/components/ClassManager/ClassManageLogo.vue';
-import { defineProps, onMounted } from 'vue';
+import { defineProps, onMounted, ref, computed } from 'vue';
 import { formatDate } from '@/utils/formatDate';
+import defaultLogo from '@assets/course-logo/default.png';
+import { NInput, NButton, NSelect } from 'naive-ui';
 
 const router = useRouter();
 const props = defineProps({
   classInfor: { type: Array, required: true }
+});
+
+// Lựa chọn tìm kiếm
+const searchOptions = [
+  {
+    label: 'Tìm kiếm',
+    value: ''
+  },
+  {
+    label: 'Tên lớp',
+    value: 'className'
+  },
+  {
+    label: 'Leader',
+    value: 'leader'
+  }
+];
+
+const searchOption = ref('');
+const searchInput = ref('');
+
+const myClassInfor = computed(() => {
+  if (searchInput.value == '') return props.classInfor;
+  else {
+    if (searchOption.value == 'className') {
+      return props.classInfor.filter((c) =>
+        c.name.toLowerCase().includes(searchInput.value.toLowerCase())
+      );
+    } else {
+      return props.classInfor.filter((c) =>
+        c.leaders.some((l) => l.fullName.toLowerCase().includes(searchInput.value.toLowerCase()))
+      );
+    }
+  }
 });
 
 function goToClassDetail(classId) {
@@ -18,11 +54,16 @@ function goToClassDetail(classId) {
   <div class="class-list-wrap">
     <div class="class-title">
       <p class="my-class">Quản lý lớp học</p>
+      <div class="search">
+        <n-input placeholder="Nhập tìm kiếm" class="n-input-custom" v-model:value="searchInput" />
+        <n-button type="primary" @click="console.log(search)">Tìm kiếm</n-button>
+        <n-select v-model:value="searchOption" :options="searchOptions" class="n-input-select" />
+      </div>
     </div>
     <div class="class-list">
       <p v-if="classInfor.length == 0">Không có lớp học nào</p>
-      <div class="class" v-for="c in classInfor" :key="c.id">
-        <ClassLogo :logo-name="c.logo" />
+      <div class="class" v-for="c in myClassInfor" :key="c.id">
+        <ClassLogo :logo-name="c.logo || defaultLogo" />
         <div class="class-infor">
           <p class="heading">{{ c.name }}</p>
           <p class="sub-heading">
@@ -61,12 +102,46 @@ function goToClassDetail(classId) {
 
 <style lang="scss" scoped>
 .class-list-wrap {
-  .my-class {
-    font-size: 36px;
+  .class-title {
     margin-bottom: 32px;
     @include mobile {
       font-size: 25px;
       text-align: center;
+    }
+    > p {
+      font-size: 36px;
+    }
+    .search {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      @include mobile {
+        flex-direction: column;
+      }
+      .n-input-custom {
+        width: 400px;
+        @include tablet {
+          width: 300px;
+        }
+        @include small-tablet {
+          width: 250px;
+        }
+        @include mobile {
+          width: 100%;
+        }
+      }
+      .n-input-select {
+        width: 10%;
+        @include tablet {
+          width: 20%;
+        }
+        @include small-tablet {
+          width: 30%;
+        }
+        @include mobile {
+          width: 100%;
+        }
+      }
     }
   }
 
@@ -95,6 +170,8 @@ function goToClassDetail(classId) {
       flex-direction: column;
       align-items: center;
       width: 254px;
+      align-self: self-end;
+
       .class-infor {
         width: 100%;
         padding: 16px;
@@ -102,7 +179,7 @@ function goToClassDetail(classId) {
         color: #2a2a2a;
         background-color: #fff;
         position: relative;
-        bottom: 20px;
+        bottom: 34px;
         border-radius: 0 25px 20px 20px;
         height: 210px;
         overflow: hidden;

@@ -25,8 +25,9 @@ apiInst.interceptors.response.use(
   },
   function (error) {
     if (error.response.status == 401) {
+      const router = useRouter();
       localStorage.removeItem('prol7-vuejs:access-token');
-      useRouter().push('/login');
+      router.push({ name: 'Login' });
     }
     return Promise.reject(error);
   }

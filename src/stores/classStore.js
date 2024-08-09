@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { api } from '@api/axios.js';
-import { useRoute } from 'vue-router';
 import { formatDate } from '@/utils/formatDate';
 
 export const useClassStore = defineStore('class', {
@@ -54,6 +53,83 @@ export const useClassStore = defineStore('class', {
       try {
         const response = await api.get(`/lessons/classroom/${classId}`);
         this.lessons = response.data.data;
+      } catch (error) {
+        return error;
+      }
+    },
+    async getAllClasses() {
+      try {
+        const response = await api.get(`/classrooms`);
+
+        this.allClasses = response.data.data;
+      } catch (error) {
+        return error;
+      }
+    },
+    async addClass(classInfor) {
+      try {
+        const response = await api.post('/classrooms/create', classInfor, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        return response;
+      } catch (error) {
+        return error;
+      }
+    },
+    async updateClass(classId, classInfor) {
+      try {
+        const response = await api.put(`classrooms/${classId}`, classInfor, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        return response;
+      } catch (error) {
+        return error;
+      }
+    },
+    async updateLogoClass(classId, classInfor) {
+      try {
+        const response = await api.put(`classrooms/${classId}`, classInfor, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        return response;
+      } catch (error) {
+        return error;
+      }
+    },
+    async closeClass(classId) {
+      try {
+        const response = await api.put(`/classrooms/${classId}/close`);
+        return response;
+      } catch (error) {
+        return error;
+      }
+    },
+    async registerMember(memberInfor) {
+      try {
+        const response = await api.post(`/auth/register`, memberInfor);
+        return response;
+      } catch (error) {
+        return error;
+      }
+    },
+    async addMember(classId, memberInfor) {
+      try {
+        const response = await api.post(`/classrooms/${classId}/members`, memberInfor);
+        return response;
+      } catch (error) {
+        return error;
+      }
+    },
+    async removeMember(classId, memberId) {
+      try {
+        const response = await api.delete(`classrooms/${classId}/members/${memberId}`);
+        return response;
       } catch (error) {
         return error;
       }

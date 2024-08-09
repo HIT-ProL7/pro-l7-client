@@ -6,11 +6,14 @@ const toggleMenu = ref(false);
 const toggleSidebar = ref(false);
 import { useUserStore } from '@/stores/userStore';
 import { useClassManageStore } from '@stores/classManageStore';
+import { useClassStore } from '@/stores/classStore';
 
 import avatarDefault from '@/assets/avatar-profile.png';
 
 const userStore = useUserStore();
 const classManageStore = useClassManageStore();
+const classStore = useClassStore();
+
 const res = ref(false);
 const setRes = () => {
   if (window.innerWidth < 480) {
@@ -42,11 +45,15 @@ function logoutHandler() {
 }
 
 async function getInfor() {
-  try {
-    await userStore.getInfor();
-    await classManageStore.getClassManage(userStore.studentCode);
-  } catch (error) {
-    return error;
+  await userStore.getInfor();
+  if (userStore.userRole == 'ROLE_USER') {
+    await userStore.getMyClass();
+    classManageStore.classManage = userStore.myClass.filter((c) => {
+      return c.leaders.some((l) => l.studentCode == userStore.studentCode);
+    });
+  } else {
+    await classStore.getAllClasses();
+    classManageStore.classManage = classStore.allClasses;
   }
 }
 
@@ -129,7 +136,20 @@ setRes();
           </svg>
           <p>Quản lý lớp</p>
         </div>
-        <div class="icon">
+        <div
+          class="icon"
+          @click="autoCloseSidebar(router.replace({ name: 'Classes' }))"
+          v-if="userStore.userRole == 'ROLE_ADMIN'"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
+            <path
+              fill="currentColor"
+              d="M12 14v8H4a8 8 0 0 1 8-8m0-1c-3.315 0-6-2.685-6-6s2.685-6 6-6s6 2.685 6 6s-2.685 6-6 6m9 4h1v5h-8v-5h1v-1a3 3 0 1 1 6 0zm-2 0v-1a1 1 0 1 0-2 0v1z"
+            />
+          </svg>
+          <p>Admin</p>
+        </div>
+        <!-- <div class="icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
             <path
               fill="currentColor"
@@ -151,7 +171,7 @@ setRes();
             </g>
           </svg>
           <p>Bạn bè</p>
-        </div>
+        </div> -->
         <div class="icon" v-if="res">
           <p>Chế độ sáng tối</p>
         </div>
