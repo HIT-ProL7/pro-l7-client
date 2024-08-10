@@ -15,6 +15,8 @@ const props = defineProps({
 <style lang="scss" scoped>
 .logo-container {
   width: 100%;
+  height: 140px;
+
   .logo-img {
     width: 100%;
     height: 100%;
