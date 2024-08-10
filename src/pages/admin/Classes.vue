@@ -46,7 +46,21 @@ const idColums = reactive({
 const nameColumns = reactive({
   title: 'Tên lớp',
   key: 'name',
-  sorter: (row1, row2) => row1.id - row2.id
+  sorter: (row1, row2) => row1.id - row2.id,
+  render(row) {
+    return h(
+      'span',
+      {
+        style: {
+          cursor: 'pointer',
+          color: 'blue', // Thêm kiểu dáng nếu cần
+          textDecoration: 'underline' // Hiển thị như liên kết
+        },
+        onClick: () => router.replace({ name: 'ClassManagement', params: { id: row.id } })
+      },
+      row.name
+    );
+  }
 });
 
 const leaderColumns = reactive({
