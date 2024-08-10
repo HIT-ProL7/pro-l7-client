@@ -108,7 +108,9 @@ const actionColumns = reactive({
       {
         onClick: () => removeMemberHandler(row)
       },
-      { icon: () => h('img', { src: delIcon, alt: 'Edit', class: 'icon' }) }
+      {
+        icon: () => h('img', { title: 'Xóa thành viên', src: delIcon, alt: 'Edit', class: 'icon' })
+      }
     );
   },
   width: 80

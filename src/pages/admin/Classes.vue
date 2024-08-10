@@ -94,7 +94,10 @@ const actionColumns = reactive({
         {
           onClick: () => editClass(row)
         },
-        { icon: () => h('img', { src: editIcon, alt: 'Edit', class: 'icon' }) }
+        {
+          icon: () =>
+            h('img', { title: 'Thông tin lớp học', src: editIcon, alt: 'Edit', class: 'icon' })
+        }
       ),
       h(
         NButton,
@@ -102,7 +105,10 @@ const actionColumns = reactive({
           onClick: () => closeClassHandler(row),
           style: { marginLeft: '8px' }
         },
-        { default: () => h('img', { src: delIcon, alt: 'Close', class: 'icon' }) }
+        {
+          default: () =>
+            h('img', { title: 'Đóng lớp học', src: delIcon, alt: 'Close', class: 'icon' })
+        }
       )
     ]);
   },

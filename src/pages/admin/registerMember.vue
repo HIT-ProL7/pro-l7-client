@@ -118,7 +118,7 @@ const actionColumns = reactive({
         onClick: () => delRegisterMemberHandler(row),
         style: { marginLeft: '8px' }
       },
-      { default: () => h('img', { src: delIcon, alt: 'Close', class: 'icon' }) }
+      { default: () => h('img', { title: 'Xóa', src: delIcon, alt: 'Close', class: 'icon' }) }
     );
   },
   width: 150
