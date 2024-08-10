@@ -8,7 +8,7 @@ import { useUserStore } from '@/stores/userStore';
 import { useClassManageStore } from '@stores/classManageStore';
 import { useClassStore } from '@/stores/classStore';
 
-import avatarDefault from '@/assets/avatar-profile.png';
+import avatarDefault from '@/assets/avatar.png';
 
 const userStore = useUserStore();
 const classManageStore = useClassManageStore();

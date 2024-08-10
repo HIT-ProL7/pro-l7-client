@@ -6,8 +6,8 @@ import { useUserStore } from '@/stores/userStore';
 import InforUpdate from '@/components/Profile/ProfileUpdate/InforUpdate.vue';
 import ImageUpdate from '@/components/Profile/ProfileUpdate/ImageUpdate.vue';
 
-import bannerDefault from '@/assets/banner-profile.png';
-import avatarDefault from '@/assets/avatar-profile.png';
+import bannerDefault from '@/assets/banner.png';
+import avatarDefault from '@/assets/avatar.png';
 
 const userStore = useUserStore();
 const props = defineProps({
