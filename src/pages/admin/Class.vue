@@ -198,7 +198,13 @@ onMounted(() => {
             />
           </div>
           <div class="logo-img">
-            <n-image :src="logoImg" width="100%" height="100%" style="width: 60%" v-if="logoImg" />
+            <n-image
+              :src="logoImg"
+              width="100%"
+              height="100%"
+              style="width: 450px; height: 250px; border-radius: 22px"
+              v-if="logoImg"
+            />
           </div>
         </div>
       </div>

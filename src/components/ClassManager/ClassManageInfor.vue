@@ -102,6 +102,8 @@ const props = defineProps({
   .class-img > img {
     width: 100%;
     max-width: 450px;
+    max-height: 250px;
+    border-radius: 22px;
 
     @media screen and (max-width: 1025px) {
       max-width: 350px;
