@@ -243,6 +243,7 @@ setRes();
   top: 0;
   left: 0;
   bottom: 0;
+  z-index: 1000;
   @include mobile {
     width: 100%;
     position: fixed;
@@ -253,7 +254,13 @@ setRes();
     flex-direction: column;
     align-items: center;
     position: fixed;
-    width: 100%;
+
+    @include mobile {
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
   }
   .exit-side-bar {
     font-size: 24px;
