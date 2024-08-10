@@ -26,7 +26,9 @@ export const useUserStore = defineStore('user', {
       try {
         const response = await api.post('/auth/login', loginInfor);
         this.isLoggined = true;
+
         localStorage.setItem('prol7-vuejs:access-token', response.data.data.accessToken);
+        localStorage.setItem('prol7-vuejs:refresh-token', response.data.data.refreshToken);
 
         return response;
       } catch (error) {
@@ -100,6 +102,19 @@ export const useUserStore = defineStore('user', {
       this.user = null;
       this.userRole = null;
       localStorage.removeItem('prol7-vuejs:access-token');
+    },
+    async refreshToken(refreshToken) {
+      try {
+        const response = await api.post('auth/refresh', { token: refreshToken });
+
+        localStorage.setItem('prol7-vuejs:access-token', response.data.data.accessToken);
+        localStorage.setItem('prol7-vuejs:refresh-token', response.data.data.refreshToken);
+
+        console.log(response);
+        return response.data.data.accessToken;
+      } catch (error) {
+        return error;
+      }
     }
   }
 });
