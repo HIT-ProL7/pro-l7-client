@@ -6,7 +6,7 @@ export function formatDate(stringDate) {
 
   const year = date.getUTCFullYear();
   const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-  const day = date.getUTCDate().toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
 
   const result = `${localHours}:${localMinutes} - ${day}/${month}/${year}`;
 
