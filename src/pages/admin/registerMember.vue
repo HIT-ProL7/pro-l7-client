@@ -204,10 +204,6 @@ const columns = [
 
 const searchOptions = [
   {
-    label: 'Tìm kiếm',
-    value: ''
-  },
-  {
     label: 'Mã sinh viên',
     value: 'studentCode'
   },
@@ -218,7 +214,7 @@ const searchOptions = [
 ];
 
 const registerMemberList = ref([]);
-const searchOption = ref('');
+const searchOption = ref(null);
 const inputSearch = ref('');
 
 // Lọc và tìm kiếm
@@ -379,7 +375,12 @@ function registerMemberHandler() {
           placeholder="Nhập tìm kiếm tại đây"
         />
         <n-button type="primary"> Search </n-button>
-        <n-select v-model:value="searchOption" :options="searchOptions" :style="{ width: '25%' }" />
+        <n-select
+          v-model:value="searchOption"
+          placeholder="Tìm kiếm theo..."
+          :options="searchOptions"
+          :style="{ width: '20%' }"
+        />
       </n-input-group>
       <n-input-group style="gap: 8px; justify-content: flex-end">
         <n-button @click="downloadSheetTemplateHandler" type="primary" class="download-sheet-btn">

@@ -14,10 +14,6 @@ const props = defineProps({
 // Lựa chọn tìm kiếm
 const searchOptions = [
   {
-    label: 'Tìm kiếm',
-    value: ''
-  },
-  {
     label: 'Tên lớp',
     value: 'className'
   },
@@ -27,11 +23,11 @@ const searchOptions = [
   }
 ];
 
-const searchOption = ref('');
+const searchOption = ref(null);
 const searchInput = ref('');
 
 const myClassInfor = computed(() => {
-  if (searchInput.value == '') return props.classInfor;
+  if (searchOption.value == null) return props.classInfor;
   else {
     if (searchOption.value == 'className') {
       return props.classInfor.filter((c) =>
@@ -57,7 +53,12 @@ function goToClassDetail(classId) {
       <div class="search">
         <n-input placeholder="Nhập tìm kiếm" class="n-input-custom" v-model:value="searchInput" />
         <n-button type="primary" @click="console.log(search)">Tìm kiếm</n-button>
-        <n-select v-model:value="searchOption" :options="searchOptions" class="n-input-select" />
+        <n-select
+          v-model:value="searchOption"
+          :options="searchOptions"
+          placeholder="Tìm kiếm bằng..."
+          class="n-input-select"
+        />
       </div>
     </div>
     <div class="class-list">
@@ -131,9 +132,9 @@ function goToClassDetail(classId) {
         }
       }
       .n-input-select {
-        width: 10%;
+        width: 12%;
         @include tablet {
-          width: 20%;
+          width: 12%;
         }
         @include small-tablet {
           width: 30%;
