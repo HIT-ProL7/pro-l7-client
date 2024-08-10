@@ -32,7 +32,24 @@ function toggleMenuHandler() {
   } else toggleMenu.value = !toggleMenu.value;
 }
 
-function autoCloseSidebar(action) {
+const selectedIndex = ref(null);
+
+const selectItem = (index) => {
+  // Nếu bấm lại vào li đang được chọn, thì bỏ chọn nó
+  if (selectedIndex.value === index) {
+    selectedIndex.value = null;
+  } else {
+    selectedIndex.value = index;
+  }
+};
+
+function autoCloseSidebar(action, index) {
+  if (selectedIndex.value === index) {
+    selectedIndex.value = null;
+  } else {
+    selectedIndex.value = index;
+  }
+
   if (res.value) {
     action;
     toggleSidebar.value = !toggleSidebar.value;
@@ -64,6 +81,7 @@ function closeMenuHandler(act) {
 
 onMounted(() => {
   window.addEventListener('resize', setRes);
+  selectedIndex.value = 0;
   getInfor();
 });
 
@@ -113,7 +131,11 @@ setRes();
         </div>
 
         <div class="icon-cha">
-          <div class="icon" @click="autoCloseSidebar(router.push('/'))">
+          <div
+            class="icon"
+            @click="autoCloseSidebar(router.push('/'), 0)"
+            :class="{ 'is-active': selectedIndex === 0 }"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
@@ -124,8 +146,9 @@ setRes();
           </div>
           <div
             class="icon"
-            @click="autoCloseSidebar(router.replace({ name: 'ClassesManagement' }))"
+            @click="autoCloseSidebar(router.replace({ name: 'ClassesManagement' }), 1)"
             v-if="classManageStore.classManage.length != 0"
+            :class="{ 'is-active': selectedIndex === 1 }"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 14 14">
               <path
@@ -139,8 +162,9 @@ setRes();
           </div>
           <div
             class="icon"
-            @click="autoCloseSidebar(router.replace({ name: 'Classes' }))"
+            @click="autoCloseSidebar(router.replace({ name: 'Classes' }), 2)"
             v-if="userStore.userRole == 'ROLE_ADMIN'"
+            :class="{ 'is-active': selectedIndex === 2 }"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
               <path
@@ -329,6 +353,7 @@ setRes();
     @include mobile {
       flex-direction: row;
       width: max-content;
+      width: 80%;
     }
     svg {
       @include mobile {
@@ -394,6 +419,10 @@ setRes();
       border-radius: 50%;
     }
   }
+}
+.is-active {
+  background-color: #f06c25;
+  color: white;
 }
 .slide-enter-active,
 .slide-leave-active {
