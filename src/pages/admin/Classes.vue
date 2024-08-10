@@ -154,10 +154,6 @@ const columns = [
 // Lựa chọn tìm kiếm
 const searchOptions = [
   {
-    label: 'Tìm kiếm',
-    value: ''
-  },
-  {
     label: 'Mã lớp',
     value: 'classId'
   },
@@ -171,7 +167,7 @@ const searchOptions = [
   }
 ];
 
-const searchOption = ref('');
+const searchOption = ref(null);
 const inputSearch = ref('');
 
 // Lọc và tìm kiếm
@@ -269,7 +265,12 @@ onMounted(() => {
           placeholder="Nhập tìm kiếm tại đây"
         />
         <n-button type="primary"> Search </n-button>
-        <n-select v-model:value="searchOption" :options="searchOptions" :style="{ width: '15%' }" />
+        <n-select
+          v-model:value="searchOption"
+          placeholder="Tìm kiếm theo..."
+          :options="searchOptions"
+          :style="{ width: '20%' }"
+        />
       </n-input-group>
       <n-input-group style="gap: 8px; justify-content: flex-end">
         <n-button @click="downloadSheetHandler">

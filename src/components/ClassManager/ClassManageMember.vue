@@ -77,10 +77,6 @@ const memberList = ref([]);
 // Lựa chọn tìm kiếm
 const searchOptions = [
   {
-    label: 'Tìm kiếm',
-    value: ''
-  },
-  {
     label: 'Mã sinh viên',
     value: 'studentCode'
   },
@@ -90,11 +86,11 @@ const searchOptions = [
   }
 ];
 
-const searchOption = ref('');
+const searchOption = ref(null);
 const searchInput = ref('');
 
 const filterMemberList = computed(() => {
-  if (searchInput.value == '') return memberList.value;
+  if (searchOption.value == null) return memberList.value;
   else {
     if (searchOption.value == '') return memberList.value;
     else if (searchOption.value == 'studentCode') {
@@ -154,7 +150,12 @@ onMounted(async () => {
     <div class="search">
       <n-input placeholder="Nhập tìm kiếm" class="n-input-custom" v-model:value="searchInput" />
       <n-button type="primary" @click="console.log(search)">Tìm kiếm</n-button>
-      <n-select v-model:value="searchOption" :options="searchOptions" class="n-input-select" />
+      <n-select
+        v-model:value="searchOption"
+        placeholder="Tìm kiếm theo..."
+        :options="searchOptions"
+        class="n-input-select"
+      />
     </div>
     <table class="member-list">
       <thead>
@@ -284,7 +285,7 @@ onMounted(async () => {
       }
     }
     .n-input-select {
-      width: 10%;
+      width: 12%;
       @include tablet {
         width: 20%;
       }

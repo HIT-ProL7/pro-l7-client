@@ -167,10 +167,6 @@ const columns = [
 // Lựa chọn tìm kiếm
 const searchOptions = [
   {
-    label: 'Tìm kiếm',
-    value: ''
-  },
-  {
     label: 'Mã sinh viên',
     value: 'studentCode'
   },
@@ -190,7 +186,7 @@ const searchOptions = [
 
 const foundedClass = ref({});
 const foundedClassMembers = ref([]);
-const searchOption = ref('');
+const searchOption = ref(null);
 const inputSearch = ref('');
 
 //Lọc và tìm kiếm
@@ -304,7 +300,12 @@ onMounted(() => {
           placeholder="Nhập tìm kiếm tại đây"
         />
         <n-button type="primary" @click="console.log(searchOption.value)"> Search </n-button>
-        <n-select v-model:value="searchOption" :options="searchOptions" :style="{ width: '20%' }" />
+        <n-select
+          v-model:value="searchOption"
+          placeholder="Tìm kiếm theo..."
+          :options="searchOptions"
+          :style="{ width: '20%' }"
+        />
       </n-input-group>
       <n-input-group style="gap: 8px; justify-content: flex-end">
         <n-button @click="showModalHandler('multi')">
