@@ -53,6 +53,7 @@ const limitedMemberList = computed(() => filterMemberList.value.slice(0, memberS
 
 onMounted(() => {
   memberListLength.value = memberList.value.length;
+  console.log(props.classMembers);
 });
 </script>
 
@@ -120,10 +121,44 @@ onMounted(() => {
                 <p class="member-name" style="font-size: 18px">{{ member.fullName }}</p>
               </div>
               <p style="display: flex; align-items: center; font-size: 18px">
-                <Icon icon="tabler:id" class="icon" />Mã SV: <span>{{ member.studentCode }}</span>
+                <Icon icon="ic:baseline-facebook" class="icon" /><span> Facebook: </span>
+                <span
+                  style="
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    word-break: break-word;
+                    max-width: 150px;
+                  "
+                  ><a
+                    :href="member.facebookUrl"
+                    target="_blank"
+                    style="color: #fff; text-decoration: underline"
+                    >{{ member.facebookUrl || 'Không có' }}</a
+                  ></span
+                >
               </p>
               <p style="display: flex; align-items: center; font-size: 18px">
-                <Icon icon="ph:student-bold" class="icon" />Khóa: <span>16</span>
+                <Icon icon="mdi:github" class="icon" /><span> Github: </span>
+                <span
+                  style="
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    word-break: break-word;
+                    max-width: 150px;
+                  "
+                  ><a
+                    :href="member.githubUrl"
+                    target="_blank"
+                    style="color: #fff; text-decoration: underline"
+                    >{{ member.githubUrl || 'Không có' }}</a
+                  ></span
+                >
+              </p>
+              <p style="display: flex; align-items: center; font-size: 18px">
+                <Icon icon="ph:student-bold" class="icon" />Khóa:
+                <span>{{ member.cohort || 17 }}</span>
               </p>
             </div>
           </n-popover>
