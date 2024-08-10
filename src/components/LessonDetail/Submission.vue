@@ -7,7 +7,7 @@ import { formatDate } from '@/utils/formatDate';
 
 import delIcon from '@assets/icons/delIcon.svg';
 import editIcon from '@assets/icons/editIcon.svg';
-import avatarDefault from '@/assets/avatar-profile.png';
+import avatarDefault from '@/assets/avatar.png';
 
 const submissionStore = useSubmissionStore();
 const route = useRoute();
