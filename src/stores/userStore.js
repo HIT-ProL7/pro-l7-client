@@ -102,6 +102,7 @@ export const useUserStore = defineStore('user', {
       this.user = null;
       this.userRole = null;
       localStorage.removeItem('prol7-vuejs:access-token');
+      localStorage.removeItem('prol7-vuejs:refresh-token');
     },
     async refreshToken(refreshToken) {
       try {

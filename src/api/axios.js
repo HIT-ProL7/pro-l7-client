@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { useUserStore } from '@/stores/userStore';
-import { useRouter } from '../../node_modules/vue-router/dist/vue-router';
+import router from '@/router/index';
 
 const apiInst = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}/api/v1`,
@@ -27,34 +26,37 @@ apiInst.interceptors.response.use(
   async function (error) {
     const originalRequest = error.config;
 
-    if (error.response.status === 401 && !originalRequest._retry) {
-      console.log(originalRequest);
-      originalRequest._retry = true;
+    if (error.response.status === 401) {
+      if (!originalRequest?.url?.includes('auth')) {
+        const refreshToken = localStorage.getItem('prol7-vuejs:refresh-token');
+        if (refreshToken) {
+          try {
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/auth/refresh`, {
+              token: refreshToken
+            });
 
-      const refreshToken = localStorage.getItem('prol7-vuejs:refresh-token');
-      // console.log('Refresh Token:', refreshToken);
+            const newAccessToken = res.data.data.accessToken;
+            localStorage.setItem('prol7-vuejs:access-token', newAccessToken);
 
-      const userStore = useUserStore();
-      const newAccessToken = await userStore.refreshToken(refreshToken);
-      // console.log('New Access Token:', newAccessToken);
-
-      if (newAccessToken) {
-        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-        return apiInst(originalRequest);
+            return new Promise((resolve, reject) => {
+              axios
+                .request({
+                  ...originalRequest,
+                  headers: {
+                    ...originalRequest?.headers,
+                    Authorization: `Bearer ${newAccessToken}`
+                  }
+                })
+                .then(async (response) => resolve(response))
+                .catch((error) => reject(error));
+            });
+          } catch (error) {
+            router.push({ name: 'Login' });
+            return Promise.reject(error);
+          }
+        }
       }
     }
-
-    if (error.response.status === 401 && originalRequest._retry) {
-      localStorage.removeItem('prol7-vuejs:access-token');
-      localStorage.removeItem('prol7-vuejs:refresh-token');
-
-      console.log('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại.');
-
-      const router = useRouter();
-      router.push({ name: 'Login' });
-    }
-
-    return Promise.reject(error);
   }
 );
 
