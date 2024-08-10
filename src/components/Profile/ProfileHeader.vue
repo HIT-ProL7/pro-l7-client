@@ -195,7 +195,7 @@ watch([showModal, inforUpdate, avatar], () => {
   padding: 16px;
   background: #fff;
   border-radius: 20px;
-  font-size: 36px;
+  font-size: 28px;
   text-align: center;
   font-weight: bold;
   display: flex;

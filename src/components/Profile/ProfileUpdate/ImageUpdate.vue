@@ -164,7 +164,7 @@ async function updateImageHandler() {
       align-self: flex-start;
       width: fit-content;
       display: flex;
-      font-size: 20px;
+      font-size: 18px;
       align-items: center;
       padding: 16px;
       background: #fff;
