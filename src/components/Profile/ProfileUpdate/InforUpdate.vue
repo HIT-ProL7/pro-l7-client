@@ -15,7 +15,7 @@ const props = defineProps({
 
 const showModal = ref(false);
 const bodyStyle = ref({
-  width: '40%',
+  width: '35%',
   'text-align': 'center',
   'border-radius': '20px',
   background: 'linear-gradient(135deg, rgba(255, 126, 87, 1) 0%, rgba(254, 180, 123, 1) 100%)'
@@ -53,11 +53,11 @@ function showModalHandler(name) {
 
 const setWidth = () => {
   if (window.innerWidth >= 480 && window.innerWidth <= 1280) {
-    bodyStyle.value.width = '80%';
+    bodyStyle.value.width = '50%';
   } else if (window.innerWidth < 480) {
     bodyStyle.value.width = '100%';
   } else {
-    bodyStyle.value.width = '40%';
+    bodyStyle.value.width = '35%';
   }
 };
 
@@ -407,7 +407,7 @@ onBeforeUnmount(() => {
     padding: 16px;
     background: #fff;
     border-radius: 20px;
-    font-size: 36px;
+    font-size: 28px;
     text-align: center;
     font-weight: bold;
     position: relative;
@@ -433,7 +433,7 @@ onBeforeUnmount(() => {
   .content {
     padding: 16px 64px 32px;
     @include mobile {
-      padding: 32px 16px;
+      padding: 0 16px 32px 16px;
     }
   }
   .change-password {
@@ -502,7 +502,7 @@ onBeforeUnmount(() => {
   padding: 0 0 32px;
   .option {
     width: 80%;
-    font-size: 24px;
+    font-size: 18px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -547,11 +547,11 @@ onBeforeUnmount(() => {
       width: 90%;
     }
     > p {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 500;
     }
     .content {
-      font-size: 20px;
+      font-size: 18px;
       p {
         text-align: justify;
       }

@@ -50,11 +50,11 @@ const setWidth = () => {
     } else bodyStyle.value.width = 'fit-content';
   } else {
     if (window.innerWidth >= 480 && window.innerWidth <= 1440) {
-      bodyStyle.value.width = '80%';
+      bodyStyle.value.width = '50%';
     } else if (window.innerWidth < 480) {
       bodyStyle.value.width = '100%';
     } else {
-      bodyStyle.value.width = '40%';
+      bodyStyle.value.width = '35%';
     }
   }
 };
@@ -174,7 +174,7 @@ watch([showModal, inforUpdate, avatar], () => {
 .custom-header {
   width: 100%;
   padding: 16px;
-  font-size: 36px;
+  font-size: 28px;
   text-align: center;
   font-weight: bold;
   color: #fff;
@@ -184,7 +184,7 @@ watch([showModal, inforUpdate, avatar], () => {
   align-items: center;
   justify-content: space-between;
   @include mobile {
-    font-size: 28px;
+    font-size: 24px;
   }
   p {
     flex: 1;
