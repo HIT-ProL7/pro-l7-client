@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useRouter } from 'vue-router';
+import router from '@/router/index';
 
 const apiInst = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}/api/v1`,
@@ -23,13 +23,40 @@ apiInst.interceptors.response.use(
   function (response) {
     return response;
   },
-  function (error) {
-    if (error.response.status == 401) {
-      // const router = useRouter();
-      localStorage.removeItem('prol7-vuejs:access-token');
-      // router.push({ name: 'Login' });
+  async function (error) {
+    const originalRequest = error.config;
+
+    if (error.response.status === 401) {
+      if (!originalRequest?.url?.includes('auth')) {
+        const refreshToken = localStorage.getItem('prol7-vuejs:refresh-token');
+        if (refreshToken) {
+          try {
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/auth/refresh`, {
+              token: refreshToken
+            });
+
+            const newAccessToken = res.data.data.accessToken;
+            localStorage.setItem('prol7-vuejs:access-token', newAccessToken);
+
+            return new Promise((resolve, reject) => {
+              axios
+                .request({
+                  ...originalRequest,
+                  headers: {
+                    ...originalRequest?.headers,
+                    Authorization: `Bearer ${newAccessToken}`
+                  }
+                })
+                .then(async (response) => resolve(response))
+                .catch((error) => reject(error));
+            });
+          } catch (error) {
+            router.push({ name: 'Login' });
+            return Promise.reject(error);
+          }
+        }
+      }
     }
-    return Promise.reject(error);
   }
 );
 
