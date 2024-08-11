@@ -23,17 +23,13 @@ export const useUserStore = defineStore('user', {
   },
   actions: {
     async login(loginInfor) {
-      try {
-        const response = await api.post('/auth/login', loginInfor);
-        this.isLoggined = true;
+      const response = await api.post('/auth/login', loginInfor);
+      this.isLoggined = true;
 
-        localStorage.setItem('prol7-vuejs:access-token', response.data.data.accessToken);
-        localStorage.setItem('prol7-vuejs:refresh-token', response.data.data.refreshToken);
+      localStorage.setItem('prol7-vuejs:access-token', response.data.data.accessToken);
+      localStorage.setItem('prol7-vuejs:refresh-token', response.data.data.refreshToken);
 
-        return response;
-      } catch (error) {
-        return error;
-      }
+      return response;
     },
     async getInfor() {
       try {
