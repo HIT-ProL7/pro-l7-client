@@ -1,4 +1,4 @@
-# ProJ7
+# ProL7
 
 Giao diện website quản lí lớp học CLB Tin học HIT
 
