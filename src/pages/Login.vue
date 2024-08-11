@@ -11,8 +11,8 @@ const router = useRouter();
 const userStore = useUserStore();
 const forget = ref(false);
 const user = reactive({
-  studentCode: '',
-  password: ''
+  studentCode: '2022600905',
+  password: 'Khang@123'
 });
 
 const rgxUsername = /^\d{10}$/;
