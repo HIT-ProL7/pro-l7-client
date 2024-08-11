@@ -90,8 +90,8 @@ async function loginHandler() {
   if (!usernameValidate() || !passwordValidate()) {
     return;
   } else {
-    const res = await userStore.login(user);
-    if (res.status === 200) {
+    try {
+      const res = await userStore.login(user);
       message.success(
         'Đăng nhập thành công',
         {
@@ -102,7 +102,7 @@ async function loginHandler() {
       if (userStore.isLoggined) {
         router.push({ path: '', name: 'Home' });
       }
-    } else if (res.response.status === 401) {
+    } catch (error) {
       message.error(
         'Mật khẩu hoặc tài khoản không đúng',
         {
