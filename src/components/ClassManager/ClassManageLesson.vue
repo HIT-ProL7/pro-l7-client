@@ -132,15 +132,12 @@ function goToLessonDetail(classId, lsdId, option, optionId) {
 
 <style lang="scss" scoped>
 .icon-title-wrap {
-  width: 42px;
-  height: 42px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-right: 8px;
   svg {
-    width: 100%;
-    height: 100%;
+    font-size: 36px;
   }
 }
 .class-lesson-wrap {
@@ -192,6 +189,14 @@ function goToLessonDetail(classId, lsdId, option, optionId) {
       }
       .is-active {
         transform: rotate(90deg);
+      }
+      p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @include mobile {
+          max-width: 260px;
+        }
       }
       > div:first-child {
         display: flex;

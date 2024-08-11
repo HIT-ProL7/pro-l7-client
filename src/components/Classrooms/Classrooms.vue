@@ -109,8 +109,11 @@ function goToClassDetail(classId) {
       font-size: 25px;
       text-align: center;
     }
-    > p {
+    .my-class {
       font-size: 36px;
+      @include mobile {
+        font-size: 24px;
+      }
     }
     .search {
       display: flex;
